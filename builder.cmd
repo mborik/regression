@@ -16,6 +16,12 @@ lzxpack -t36o7o14 final.bin
 del /Q /F final.pak
 ren final-t36o7o14.lzx final.pak
 
+@cd ..\reglogo
+sjasmplus --lst=reglogo.lst reglogo.a80
+lzxpack -t36o7o14 final.bin
+del /Q /F final.pak
+ren final-t36o7o14.lzx final.pak
+
 @cd ..
 sjasmplus pg1fx.a80
 lzxpack -t36o7o14 output

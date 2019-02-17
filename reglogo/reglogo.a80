@@ -1,0 +1,105 @@
+		device	zxspectrum128
+
+@DEBUG = 1
+
+		include "../kernel/constants.inc"
+
+stlpce = #C000
+@col.Risk	= stlpce + 0
+@col.Variable	= stlpce + 1638
+@col.Negative	= stlpce + 3276
+@col.Linear	= stlpce + 4914
+@col.Unresolved	= stlpce + 6552
+@col.Analysis	= stlpce + 8190
+@col.Estimated	= stlpce + 9828
+@col.Positive	= stlpce + 11466
+@col.Moment	= stlpce + 13104
+@col.Dependent	= stlpce + 14742
+
+;;-----------------------------------------------------------------------------
+	macro border n
+	  if DEBUG
+	    if n > 0
+		ld	a,n
+	    else
+		xor	a
+	    endif
+		out	(254),a
+	  endif
+	endm
+
+;;-----------------------------------------------------------------------------
+		org	RUNZONE
+
+start:		ld	a,#10
+		call	xchg.bnk
+		ld	hl,stlpce.packed
+		ld	de,#C000
+		call	depack
+
+.loop:		ei
+		halt
+		call	render
+		jr	.loop
+
+render:		border	6
+		ld	de,col.Negative
+		call	prilet
+		border	7
+		ret
+
+prilet:		ld	hl,prilet.up
+		ld	a,(hl)
+		or	a
+		ret	z
+		inc	l
+		ld	c,(hl)
+		inc	l
+		ld	(prilet+1),hl
+		ld	l,a
+		ld	h,c
+		add	hl,de
+		ex	hl,de
+.offset:	ld	bc,6
+		di
+		ld	(.retsp+1),sp
+		ld	sp,scradrtab
+		ld	a,28
+.loop:		ex	af,af'
+	rept 8
+		pop	hl
+		ld	a,(de)
+		or	a
+		jp	m,$+14
+		add	hl,bc
+		ld	(hl),a
+		inc	de
+		inc	l
+		ld	a,(de)
+		ld	(hl),a
+		inc	de
+		inc	l
+		ld	a,(de)
+		ld	(hl),a
+		db	#21 ; ld hl,#1313 ;)
+		inc	de
+		inc	de
+		inc	de
+	endm
+		ex	af,af'
+		dec	a
+		jp	nz,.loop
+.retsp:		ld	sp,0
+		ret
+
+stlpce.packed:	incbin "gfx/stlpce.pak"
+
+;;-----------------------------------------------------------------------------
+		align	256
+
+prilet.up:	include "tables/prilet.up.a80"
+
+scradrtab:	include "tables/view.scradrtab.a80"
+
+
+		savebin "final.bin",start,$-start

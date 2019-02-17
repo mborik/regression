@@ -420,6 +420,10 @@ fxtable:	db	#11
 		dw	#C000
 		dw	0
 
+		db	#11
+		dw	#C000+7068
+		dw	836
+
 		db	0
 
 @len = $ - start

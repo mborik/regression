@@ -3,6 +3,7 @@
 
 @start
 fx_city		incbin "cityflyout/final.pak"
+fx_reglogo	incbin "reglogo/final.pak"
 
 
 	if $ > #FFFF
