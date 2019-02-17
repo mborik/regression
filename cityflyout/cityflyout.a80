@@ -1,0 +1,611 @@
+		device	zxspectrum128
+
+@DEBUG = 0
+
+		include "../kernel/constants.inc"
+
+;;-----------------------------------------------------------------------------
+	macro border n
+	  if DEBUG
+	    if n > 0
+		ld	a,n
+	    else
+		xor	a
+	    endif
+		out	(254),a
+	  endif
+	endm
+
+;;-----------------------------------------------------------------------------
+		org	#8400
+
+start		di
+		call	xchg.vram
+		ld	hl,#D800
+		ld	de,#D801
+		ld	bc,#2FF
+		push	hl
+		push	de
+		push	bc
+		ld	(hl),#47
+		ldir
+		call	xchg.vram
+		pop	bc
+		pop	de
+		pop	hl
+		ld	(hl),#47
+		ldir
+		ld	hl,scradrtabs.begin ; presun tabulky
+		ld	de,scradrtabs.target
+		ld	bc,scradrtabs.length
+		ldir
+		ld	hl,blitspace	; vymaz blitspace
+		ld	de,blitspace+1
+		ld	bc,2559
+		ld	(hl),l
+		ldir
+
+		ld	b,127
+		ld	hl,tab.intro.prichod
+.introloop:	push	bc
+		ld	e,(hl)
+		inc	l
+		ld	d,(hl)
+		inc	l
+		ld	(render.jmpptr+1),de
+		push	hl
+		ei
+		halt
+		call	xchg.vram
+		border	1
+		call	render
+		border	0
+		pop	hl
+		pop	bc
+		djnz	.introloop
+		ld	hl,28 * 96
+		ld	(render.addiconst+1),hl
+		ld	a,12
+		ld	(render.pgcounter+1),a
+		ld	(render.resetconst+1),a
+		ld	a,#21 ; ld hl,*
+		ld	(render.jmpptr),a
+
+		ld	a,#38
+		call	fillattrs ; 2 halts
+		ld	b,8
+		call	waitrender
+		ld	a,#47
+		call	fillattrs ; 2 halts
+		ld	b,6
+		call	waitrender
+		ld	a,#38
+		call	fillattrs ; 2 halts
+		ld	b,4
+		call	waitrender
+		ld	a,#47
+		call	fillattrs ; 2 halts
+		ld	b,5
+		call	waitrender
+		ld	a,#38
+		call	fillattrs ; 2 halts
+		ld	b,7
+		call	waitrender
+		ld	a,#47
+		call	fillattrs ; 2 halts
+		ld	b,2
+		call	waitrender
+
+		ld	hl,tab.prilet.n
+		ld	de,gfx.drawspr.n
+		ld	a,high gfx.sprite.n
+		call	prilet
+		ld	hl,tab.prilet.g
+		ld	de,gfx.drawspr.ng
+		ld	a,high gfx.sprite.g
+		call	prilet
+
+		ld	b,8		; domazanie chvostu G
+		call	prilet.loop
+
+		ld	hl,priletA
+		ld	(prilet.renderer+1),hl
+		ld	b,41
+		call	prilet.loop
+		ld	a,8
+		call	shakinRender
+
+		ld	a,#37 ; scf
+		ld	(fillattrs.flakajfarby),a
+
+		ld	a,#38
+		call	fillattrs ; 2 halts
+		ld	b,8
+		call	prilet.loop
+		ld	a,#47
+		call	fillattrs ; 2 halts
+		ld	a,4
+		call	shakinRender
+		ld	b,6
+		call	prilet.loop
+		ld	a,#38
+		call	fillattrs ; 2 halts
+		ld	a,-2
+		call	shakinRender
+		ld	b,4
+		call	prilet.loop
+		ld	a,#47
+		call	fillattrs ; 2 halts
+
+		xor	a
+		call	shakinRender
+		ld	a,#FE ; cp *
+		ld	(render.resetloop),a
+
+		ld	a,#2C ; inc l
+		ld	(priletA.faster),a
+		ld	b,24
+		call	prilet.loop
+		xor	a
+		ld	(priletA.faster),a
+		ld	b,20
+		call	prilet.loop
+
+		ld	b,24
+		call	finRender
+
+		ld	a,#CD
+		ld	(customRender.enableTx),a
+		ld	(fillattrs.customrender),a
+		ld	a,#21
+		ld	(flakacfarieb.disable1),a
+		ld	(flakacfarieb.disable2),a
+		ld	a,#38
+		call	fillattrs ; 2 halts
+		ld	b,8
+		call	finRender
+		ld	a,#47
+		call	fillattrs ; 2 halts
+		ld	b,6
+		call	finRender
+
+		ld	a,#38
+		call	fillattrs ; 2 halts
+		ld	b,4
+		call	finRender
+		ld	a,#47
+		call	fillattrs ; 2 halts
+		ld	b,5
+		call	finRender
+
+		ld	a,#CD
+		ld	(customRender.enablePr),a
+		ld	a,#38
+		call	fillattrs ; 2 halts
+		ld	b,7
+		call	finRender
+		ld	a,#47
+		call	fillattrs ; 2 halts
+
+		ld	b,128
+		call	finRender
+
+		ld	a,#4F ; blue
+		call	fillattrs
+		ld	a,#57 ; red
+		call	fillattrs
+		ld	a,#BF ; cp a
+		ld	(fillattrs.flakajfarby),a
+		ld	a,#1F
+		call	fillattrs
+		ld	a,#27
+		call	fillattrs
+		ld	a,#2F
+		call	fillattrs
+		ld	a,#37
+		call	fillattrs
+		ld	a,#3F
+		call	fillattrs
+		ei
+		ld	a,#38
+		push	af
+		ld	hl,#C000
+		ld	de,#C001
+		ld	bc,#1800
+		ld	(hl),l
+		push	hl
+		push	de
+		push	bc
+		ldir
+		ld	(hl),a
+		ld	bc,#2FF
+		ldir
+		call	xchg.vram
+		pop	bc
+		pop	de
+		pop	hl
+		ld	(hl),l
+		ldir
+		pop	af
+		ld	(hl),a
+		ld	bc,#2FF
+		ldir
+		ret
+
+waitrender:	push	bc
+		ei
+		halt
+		call	xchg.vram
+		border	1
+		call	render
+		border	0
+		pop	bc
+		djnz	waitrender
+		ret
+
+shakinRender:	ld	hl,0
+		ld	(render+1),hl
+		ld	(render.mb02pg+1),a
+		ld	a,12
+		ld	(render.pgcounter+1),a
+		ret
+
+finRender:	push	bc
+		ei
+		halt
+		call	xchg.vram
+		border	1
+		call	render
+		call	customRender
+		border	0
+		pop	bc
+		djnz	finRender
+		ret
+
+customRender:	border	2
+		call	gfx.drawspr.nag
+		border	3
+.enableTx:	ld	bc,odletText
+		border	4
+.enablePr:	ld	bc,odletPres
+		ret
+
+;;-----------------------------------------------------------------------------
+prilet:		ld	(priletUpdate+1),hl
+		ld	(priletUpdate.sprite+1),a
+		push	de
+		ld	a,#CD
+		ld	(.updater),a
+		ld	b,140
+		call	.loop
+		ld	a,#01 ; ld bc,*
+		ld	(.updater),a
+		pop	hl
+		ld	(.drawspr+1),hl
+
+		ei
+		halt
+		call	xchg.vram
+		call	render
+
+		ld	a,#38
+		call	fillattrs ; 2 halts
+		ld	b,7
+		call	.loop
+		ld	a,#47
+		call	fillattrs ; 2 halts
+		ld	b,5
+		call	.loop
+		ld	a,#38
+		call	fillattrs ; 2 halts
+		ld	b,4
+		call	.loop
+		ld	a,#47
+		call	fillattrs ; 2 halts
+		ld	b,16
+
+.loop:		push	bc
+		ei
+		halt
+		call	xchg.vram
+		border	1
+		call	render
+		border	2
+.renderer:	call	renderCleanNG
+		border	3
+.updater:	call	priletUpdate
+		border	4
+.drawspr:	call	noop
+		border	0
+		pop	bc
+		djnz	.loop
+		ret
+
+renderCleanNG:	ld	bc,#7FF7
+		ld	(.rstsp+1),sp
+		di
+		ld	hl,blitspace.prilet.ptr
+		ld	sp,tab.prilety.scradr
+		ld	a,5
+.loop0:		ex	af,af'
+		pop	de
+	rept 31
+		ld	a,(hl)
+		ld	(de),a
+		and	b
+		ld	(hl),a
+		inc	l
+		inc	e
+	endm
+		ld	a,(hl)
+		ld	(de),a
+		and	b
+		ld	(hl),a
+		inc	h
+		pop	de
+	rept 31
+		ld	a,(hl)
+		ld	(de),a
+		and	c
+		ld	(hl),a
+		dec	l
+		dec	e
+	endm
+		ld	a,(hl)
+		ld	(de),a
+		and	c
+		ld	(hl),a
+		inc	h
+		ex	af,af'
+		dec	a
+		jp	nz,.loop0
+		rrc	b
+		rrc	c
+		rrc	b
+		rrc	c
+		rrc	b
+		rrc	c
+		ld	(renderCleanNG+1),bc
+.rstsp:		ld	sp,0
+		ret
+
+priletUpdate:	ld	hl,tab.prilet.n
+		ld	a,(hl)
+		and	#3F
+		ld	d,high blitspace
+		ld	e,a
+		ld	a,(hl)
+		and	#C0
+		inc	hl
+		ld	(priletUpdate+1),hl
+.sprite:	ld	h,high gfx.sprite.n
+		ld	l,a
+		ex	de,hl
+		ld	b,5
+.loop	rept 5
+		ld	a,(de)
+		or	(hl)
+		ld	(hl),a
+		inc	l
+		inc	e
+	endm
+		ld	a,(de)
+		or	(hl)
+		ld	(hl),a
+		inc	h
+		inc	e
+	rept 5
+		ld	a,(de)
+		or	(hl)
+		ld	(hl),a
+		dec	l
+		inc	e
+	endm
+		ld	a,(de)
+		or	(hl)
+		ld	(hl),a
+		inc	h
+		inc	e
+		djnz	.loop
+		ret
+
+;;-----------------------------------------------------------------------------
+fillattrs:	ld	l,7
+		ld	d,a
+		ld	e,a
+		rrca
+		rrca
+		rrca
+		and	l
+		ld	(actborder),a
+		ld	a,(act128page)
+		and	#F8
+		bit	3,a
+		jr	z,.pg7:
+		ld	l,5
+.pg7:		or	l
+		ld	h,a
+		ld	bc,page128
+		out	(c),a
+.clean:		di
+		ld	(.rstsp+1),sp
+		ld	sp,#DB00
+		ld	l,12
+.loop:	rept 32
+		push	de
+	endm
+		dec	l
+		jr	nz,.loop
+.rstsp:		ld	sp,0
+.flakajfarby:	cp	a
+		call	c,flakacfarieb
+		cp	h
+		jr	nz,.end
+		ei
+		halt
+		xor	#0A
+		out	(c),a
+		push	af
+		push	de
+		push	hl
+		call	render
+.customrender:	ld	bc,customRender
+		pop	hl
+		pop	de
+		pop	af
+		jr	.clean
+
+.end:		ld	a,(act128page)
+		jp	xchg.bnk+3
+
+flakacfarieb:	push	de
+		ex	hl,de
+		res	0,l
+		res	2,l
+		ld	h,l
+		ld	(#D94F),hl
+		ld	(#D96E),hl
+		ld	(#D970),hl
+		ld	(#D98E),hl
+		ld	(#D990),hl
+.disable1:	ld	(#D9AE),hl
+.disable2:	ld	(#D9B0),hl
+		ex	hl,de
+		pop	de
+		ret
+
+render:		ld	hl,0
+.mb02pg:	ld	a,0
+		add	a,#42
+		out	(mb02ram),a
+		di
+		ld	(.restoresp+1),sp
+		ld	sp,hl
+.jmpptr:	jp	.routine
+.routine	incbin "cityfly.render.bin"
+
+.pgcounter:	ld	a,6
+		dec	a
+		jr	z,.nextpg
+		bit	0,a
+		jr	nz,.storeptrs+3
+
+		ld	hl,(render+1)
+.addiconst:	ld	de,2 * 28 * 96
+		add	hl,de
+.storeptrs:	ld	(render+1),hl
+		ld	(.pgcounter+1),a
+.restoresp:	ld	sp,0
+		ret
+
+.nextpg:	ld	a,(.mb02pg+1)
+		inc	a
+.resetloop:	and	15
+		ld	(.mb02pg+1),a
+.resetconst:	ld	a,6
+		ld	hl,0
+		jr	.storeptrs
+
+
+priletA:	ld	hl,tab.prilet.a
+		inc	l
+.faster:	nop
+		ld	(priletA+1),hl
+.run		ld	l,(hl)
+		ld	de,tab.prilet.a.scradr
+		ld	h,e
+		add	hl,de
+		ld	(.rstsp+1),sp
+		di
+		ld	sp,hl
+		include "gfx/a.sprite.a80"
+.rstsp:		ld	sp,0
+		ret
+
+odletText:	ld	hl,tab.odlet.tx
+		xor	a
+		cp	(hl)
+		jr	z,.nomore
+		inc	hl
+		ld	(odletText+1),hl
+.nomore:	ld	l,(hl)
+		ld	h,a
+		ld	de,tab.odlet.tx.scradr
+		add	hl,de
+		ld	(.rstsp+1),sp
+		di
+		ld	sp,hl
+		include "gfx/text.sprite.a80"
+.rstsp:		ld	sp,0
+		ret
+
+odletPres:	ld	hl,tab.odlet.pr
+		bit	7,(hl)
+		jr	z,.more
+		ld	a,#7F
+		and	(hl)
+		ld	l,a
+		jr	.more2
+
+.more		inc	hl
+		ld	(odletPres+1),hl
+		ld	l,(hl)
+.more2		ld	h,0
+		ld	de,tab.odlet.pr.scradr
+		add	hl,de
+		ld	(.rstsp+1),sp
+		di
+		ld	sp,hl
+		include "gfx/presents.sprite.a80"
+.rstsp:		ld	sp,0
+		ret
+
+;;-----------------------------------------------------------------------------
+gfx.drawspr.n:	include "gfx/n.sprite.a80"
+		ret
+gfx.drawspr.ng:	include "gfx/ng.sprite.a80"
+		ret
+gfx.drawspr.nag	include "gfx/nag.sprite.a80"
+@noop		ret
+
+;;-----------------------------------------------------------------------------
+	module gfx
+		align	256
+sprite.n	incbin "gfx/n.prilet.bin"
+sprite.g	incbin "gfx/g.prilet.bin"
+	endmod
+
+	module tab
+		align	256
+intro.prichod	include "tables/intro_prichod.a80"
+prilet.n	include "tables/priletN.a80"
+prilet.g	include "tables/priletG.a80"
+prilet.a	include "tables/priletA.a80"
+odlet.tx	include "tables/odletText.a80"
+odlet.pr	include "tables/odletPres.a80"
+
+@scradrtabs.begin
+@scradrtabs.target = #7D00
+	phase	scradrtabs.target
+		align	256
+prilety.scradr:	include "tables/prilety.scradr.a80"
+		align	32
+odlet.tx.scradr	include "tables/odletText.scradr.a80"
+odlet.pr.scradr	include "tables/odletPres.scradr.a80"
+		align	256
+prilet.a.scradr	include "tables/priletA.scradr.a80"
+@scradrtabs.length = $-prilety.scradr
+	dephase
+	endmod
+
+		savebin "final.bin",start,$-start
+
+;;-----------------------------------------------------------------------------
+
+		org	#B600
+
+blitspace:	ds	2560
+.prilet.ptr	=	blitspace + 8
+.prilet.pusher	=	blitspace.prilet.ptr + (9 * 256) + 32 + 8
+.priletA.ptr	=	blitspace + (4 * 12)
+.priletA.pusher	=	blitspace + (4 * 128)

@@ -1,0 +1,10 @@
+		dw	#CB40
+		dw	#CD40 + 31
+		dw	#CF40
+		dw	#C960 + 31
+		dw	#CB60
+		dw	#CD60 + 31
+		dw	#CF60
+		dw	#C980 + 31
+		dw	#CB80
+		dw	#CD80 + 31

@@ -1,0 +1,16 @@
+		device	zxspectrum48
+		org	#C000
+
+@start
+fx_city		incbin "cityflyout/final.pak"
+
+
+	if $ > #FFFF
+		display "Too long! ",/D,($-#10000)," bytes out!"
+		end
+	else
+		display /D,(#10000-$)," bytes free..."
+	endif
+
+		align	16384
+		savebin "output",start,$-start

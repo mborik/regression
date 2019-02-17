@@ -1,0 +1,139 @@
+		cpu	z80undoc
+		relaxed	on
+
+xormode		equ	1
+
+		org	$8000
+
+demo		di
+		ld	hl,screen
+		ld	de,$4000
+		ld	bc,$1800
+		ldir
+		ld	h,d
+		ld	l,e
+		inc	e
+		ld	bc,$2ff
+		ld	(hl),64+7
+		ldir
+
+begin		call	waitf
+		ld	hl,bufdat
+		ld	b,23
+		call	slucka
+		ld	b,26
+		call	slucka
+		call	slucka
+		jr	begin
+
+slucka		ei
+		halt
+		halt
+		ld	a,(hl)
+		dec	a
+		ret	z
+		push	bc
+		call	play
+		pop	bc
+		inc	hl
+		djnz	slucka
+
+waitf		ld	b,1
+wait		ei
+		halt
+		djnz	wait
+		ret
+
+play0		call	drawchunk
+play		ld	a,(hl)
+		and	$1F
+		sub	$08
+		inc	a
+		jr	z,linearchunk
+		ret	m
+		add	a,$3F
+		ld	d,a
+		ld	a,(hl)
+		inc	hl
+		ld	e,(hl)
+		inc	hl
+		and	$E0
+		jr	nz,play0
+playref		ld	a,(hl)
+		and	$1F
+		ld	b,a
+		ld	a,(hl)
+		inc	hl
+		ld	c,(hl)
+		inc	hl
+		push	hl
+		sbc	hl,bc
+		call	drawchunk
+		pop	hl
+		jr	play
+
+drawchunk	rrca
+		rrca
+		rrca
+		cpl
+		and	$1C
+	if xormode
+		ld	c,a
+		rrca
+		rrca
+		add	a,c
+	endif
+		ld	($+4),a
+		jr	$
+		rept	8
+	if xormode
+		ld	a,(de)
+		xor	(hl)
+	else
+		ld	a,(hl)
+	endif
+		ld	(de),a
+		inc	hl
+		inc	d
+		endm
+		org	$-1
+		ret
+
+linearchunk	ld	a,(hl)
+		and	$E0
+		rrca
+		add	a,$10
+		rrca
+		rrca
+		rrca
+		ld	b,a
+		inc	hl
+		ld	e,(hl)
+		inc	hl
+		ld	a,$40
+		add	a,(hl)
+		ld	d,a
+linearchunk1	inc	hl
+	if xormode
+		ld	a,(de)
+		xor	(hl)
+	else
+		ld	a,(hl)
+	endif
+		ld	(de),a
+		inc	e
+		djnz	linearchunk1
+		inc	hl
+		jr	play
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+screen		binclude "oneplusani000.scr",0,6144
+
+
+cntrun		dw	0
+cntsam		dw	0
+cnttot		dw	0
+cnt8bt		dw	0
+
+bufdat		binclude "oneplusani.ani.bin"

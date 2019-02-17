@@ -1,0 +1,145 @@
+; https://arachnoid.com/polysolve/
+; 527 192
+; 572 80
+; 605 82
+; 654 83
+; (3 degree)
+
+	macro priletAPath val
+		db	((val - 67) << 1)
+	endm
+
+		priletAPath 191 ; 527
+		priletAPath 187 ; 528
+		priletAPath 183 ; 529
+		priletAPath 178 ; 530
+		priletAPath 174 ; 531
+		priletAPath 169 ; 532
+		priletAPath 165 ; 533
+		priletAPath 161 ; 534
+		priletAPath 157 ; 535
+		priletAPath 153 ; 536
+		priletAPath 149 ; 537
+		priletAPath 146 ; 538
+		priletAPath 142 ; 539
+		priletAPath 139 ; 540
+		priletAPath 136 ; 541
+		priletAPath 133 ; 542
+		priletAPath 129 ; 543
+		priletAPath 127 ; 544
+		priletAPath 124 ; 545
+		priletAPath 121 ; 546
+		priletAPath 118 ; 547
+		priletAPath 116 ; 548
+		priletAPath 113 ; 549
+		priletAPath 111 ; 550
+		priletAPath 109 ; 551
+		priletAPath 107 ; 552
+		priletAPath 104 ; 553
+		priletAPath 102 ; 554
+		priletAPath 101 ; 555
+		priletAPath 99 ; 556
+		priletAPath 97 ; 557
+		priletAPath 95 ; 558
+		priletAPath 94 ; 559
+		priletAPath 92 ; 560
+		priletAPath 91 ; 561
+		priletAPath 90 ; 562
+		priletAPath 88 ; 563
+		priletAPath 87 ; 564
+		priletAPath 86 ; 565
+		priletAPath 85 ; 566
+		priletAPath 84 ; 567
+		priletAPath 83 ; 568
+		priletAPath 82 ; 569
+		priletAPath 81 ; 570
+		priletAPath 81 ; 571
+		priletAPath 80 ; 572
+		priletAPath 80 ; <alt 79 ; 573
+		priletAPath 80 ; <alt 79 ; 574
+		priletAPath 80 ; <alt 78 ; 575
+		priletAPath 80 ; <alt 78 ; 576
+		priletAPath 80 ; <alt 78 ; 577
+		priletAPath 80 ; <alt 77 ; 578
+		priletAPath 80 ; <alt 77 ; 579
+		priletAPath 80 ; <alt 77 ; 580
+		priletAPath 80 ; <alt 77 ; 581
+		priletAPath 80 ; <alt 76 ; 582
+		priletAPath 80 ; <alt 76 ; 583
+		priletAPath 80 ; <alt 76 ; 584
+		priletAPath 80 ; <alt 76 ; 585
+		priletAPath 80 ; <alt 76 ; 586
+		priletAPath 80 ; <alt 76 ; 587
+		priletAPath 80 ; <alt 76 ; 588
+		priletAPath 80 ; <alt 77 ; 589
+		priletAPath 80 ; <alt 77 ; 590
+		priletAPath 80 ; <alt 77 ; 591
+		priletAPath 80 ; <alt 77 ; 592
+		priletAPath 80 ; <alt 77 ; 593
+		priletAPath 80 ; <alt 78 ; 594
+		priletAPath 80 ; <alt 78 ; 595
+		priletAPath 80 ; <alt 78 ; 596
+		priletAPath 80 ; <alt 79 ; 597
+		priletAPath 80 ; <alt 79 ; 598
+		priletAPath 80 ; <alt 79 ; 599
+		priletAPath 80 ; 600
+		priletAPath 80 ; 601
+		priletAPath 81 ; 602
+		priletAPath 81 ; 603
+		priletAPath 82 ; 604
+		priletAPath 82 ; 605
+		priletAPath 82 ; 606
+		priletAPath 83 ; 607
+		priletAPath 83 ; 608
+		priletAPath 84 ; 609
+		priletAPath 84 ; 610
+		priletAPath 85 ; 611
+		priletAPath 85 ; 612
+		priletAPath 86 ; 613
+		priletAPath 86 ; 614
+		priletAPath 87 ; 615
+		priletAPath 87 ; 616
+		priletAPath 88 ; 617
+		priletAPath 88 ; 618
+		priletAPath 89 ; 619
+		priletAPath 89 ; 620
+		priletAPath 89 ; 621
+		priletAPath 90 ; 622
+		priletAPath 90 ; 623
+		priletAPath 90 ; 624
+		priletAPath 91 ; 625
+		priletAPath 91 ; 626
+		priletAPath 91 ; 627
+		priletAPath 92 ; 628
+		priletAPath 92 ; 629
+		priletAPath 92 ; 630
+		priletAPath 92 ; 631
+		priletAPath 92 ; 632
+		priletAPath 92 ; 633
+		priletAPath 92 ; 634
+		priletAPath 92 ; 635
+		priletAPath 92 ; 636
+		priletAPath 92 ; 637
+		priletAPath 92 ; 638
+		priletAPath 92 ; 639
+		priletAPath 92 ; 640
+		priletAPath 91 ; 641
+		priletAPath 91 ; 642
+		priletAPath 91 ; 643
+		priletAPath 90 ; 644
+		priletAPath 90 ; 645
+		priletAPath 89 ; 646
+		priletAPath 89 ; 647
+		priletAPath 88 ; 648
+		priletAPath 87 ; 649
+		priletAPath 87 ; 650
+		priletAPath 86 ; 651
+		priletAPath 85 ; 652
+		priletAPath 84 ; 653
+		priletAPath 83 ; 654
+		priletAPath 83
+		priletAPath 83
+		priletAPath 83
+		priletAPath 83
+		priletAPath 83
+		priletAPath 83

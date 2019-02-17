@@ -1,0 +1,449 @@
+		device	zxspectrum128
+
+numberOfNeedles = 2
+
+page128		equ	#7FFD
+act128page	equ	#5B5C
+actborder	equ	#5C48
+FRAMES		equ	23672
+mb02ram		equ	#17
+MUSIC.page	equ	6
+MUSIC.init	equ	#C000
+MUSIC.play	equ	#C005
+
+
+		org	#8000
+
+@start:		di
+		ld	sp,basesp
+		xor	a
+		out	(254),a
+		ld	(actborder),a
+		ld	a,#10
+		call	xchg.bnk
+restart:	ld	hl,screen.lzx
+		ld	de,#4000
+		call	depack
+
+		ld	a,#61
+		out	(mb02ram),a
+
+loader:		ld	e,0	; (0 = root)
+		ld	a,#14	; SETDIR
+		rst	#20
+
+		ld	hl,fn.haystack
+		ld	e,#03
+		ld	a,#19	; SEASX
+		rst	#20
+		jp	nz,error ; not found!
+
+		ld	a,#12	; GETCST
+		rst	#20
+		ld	(.fcursor+1),hl
+		ld	(needle.fcursor+1),hl
+
+.fcursor:	ld	hl,0
+.fpos:		ld	bc,0
+		ld	ix,#C000
+		ld	e,16
+		ld	a,c
+		add	a,e
+		ld	(.fpos+1),a
+		ld	a,#23	; LOA2X
+		rst	#20
+
+.blktabptr:	ld	hl,blocktable
+.targetpg:	ld	bc,#0462	; 4 packages, SRAM page 2 (WR)
+.depk6:		ld	e,(hl)
+		inc	hl
+		ld	d,(hl)
+		inc	hl
+		push	hl
+		ex	hl,de
+		ld	de,0
+		ld	a,c
+		inc	c
+		push	bc
+		out	(mb02ram),a	; switch bank
+		call	depack
+
+.prgptr:	ld	hl,#55A1
+		ld	(hl),#FF	; draw progress
+		inc	l
+		ld	(.prgptr+1),hl
+
+		pop	bc
+		pop	hl
+		djnz	.depk6
+		ld	(.blktabptr+1),hl
+
+.countptr:	ld	hl,blocktable.counts
+		ld	b,(hl)
+		inc	hl
+		ld	(.countptr+1),hl
+		xor	a
+		or	b
+		jr	z,.fullfilprg-3
+		ld	(.targetpg+1),bc
+		ld	a,#61
+		out	(mb02ram),a
+		jr	.fcursor
+
+		ld	hl,(.prgptr+1)
+.fullfilprg:	ld	a,c
+		and	#1F
+		jr	z,needle
+		ld	(hl),#FF
+		inc	l
+		inc	c
+		jr	.fullfilprg
+
+needle:		ld	a,#61
+		out	(mb02ram),a
+		ld	a,numberOfNeedles
+.loop:		push	af
+.fcursor:	ld	bc,0
+		inc	bc
+		ld	(.fcursor+1),bc
+		push	bc
+		ld	ix,direntrybuf
+		ld	a,#16	; GETSUB
+		rst	#20
+		jr	z,error
+
+		ld	a,(ix+0)
+		cp	#B0
+		jr	nz,.invalidfile
+		ld	xl,6
+		ld	de,fn.needle
+.fncompare:	ld	a,(de)
+		or	a
+		jr	z,.rightname
+		cp	(ix+0)
+		jr	nz,.invalidfile
+		inc	e
+		inc	xl
+		jr	.fncompare
+
+.invalidfile:	pop	af
+		pop	af
+		jr	.loop
+
+.rightname:	ld	a,(ix+0)
+		sub	('0' - #10)
+		ld	(.targetpg+1),a
+		ld	a,(ix+1)
+		sub	' '
+		jr	nz,error
+		ld	h,a
+		ld	l,a
+		ld	e,(ix+4)
+		ld	d,(ix+5)
+		ex	hl,de
+		ld	a,#0F	; HOWSEC
+		rst	#20
+		jr	nz,error
+
+		ld	e,c
+		ld	bc,0
+		pop	hl
+		ld	ix,RUNZONE
+		push	ix
+		ld	a,#22	; LOA1X
+		rst	#20
+
+.prgptr:	ld	hl,#56A1 ; #5AA1
+		ld	bc,((30 / numberOfNeedles) << 8) | #FF
+.pgprog:	ld	(hl),c	; draw 2nd progress
+		inc	l
+		djnz	.pgprog
+		ld	(.prgptr+1),hl
+
+.targetpg:	ld	a,0
+		call	xchg.bnk
+		pop	hl
+		ld	de,#C000
+		call	depack
+		pop	af
+		dec	a
+		jr	nz,.loop
+		jp	kernel
+
+error:		ld	hl,txterr
+		ld	a,#34	;; MESSX
+		rst	#20
+		jp	c,restart
+		rst	0
+
+	if $ > #8128
+		display "Too long! ",/D,($-#8128)," bytes out!"
+	else
+		display /D,(#8128-$)," bytes free..."
+	endif
+
+		org	#8128
+
+;; Setting for depacker according to compression identification -tXYoAoB
+
+com	=	3	;; Compression type - one from TYPZX7 TYPBLK TYPBS1
+pos	=	6	;; Offset coding - one from POSOF4 POSOF1 POSOF2 POSOFD
+ofs1	=	7	;; Number of bits for 1st offset - required for POSOF1 POSOF2 POSOF4
+ofs2	=	14	;; Number of bits for 2nd offset - required for POSOF2 only
+
+;; This is needed to set according to compression ID string from name of compressed file:
+;;  -tXYoAoB ... means setting  com=X, pos=Y, ofs1=A, ofs2=B   (ofs1 ofs2 only when required)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Set optimization of depacker
+
+spd	=	2
+
+;; Possible values:
+;;  0 ... optimized for code length - short but slow
+;;  1 ... compromise between length and speed
+;;  2+ .. optimized for speed - but longer code
+
+		include "lzx.a80"
+
+;;- INTERRUPT -----------------------------------------------------------------
+;		org	#8181
+
+interrupt:	push	af		; zakladne osetrenie prerusenia
+		ld	a,(actborder)	; s volanim hudobneho hradla
+		out	(254),a
+		push	bc
+		push	de
+		push	hl
+		exx
+		ex	af,af'
+		push	ix
+		push	iy
+		push	af
+		push	bc
+		push	de
+		push	hl
+
+@IMCALL		db	0,0,0
+
+		ld	a,(act128page)
+		push	af
+		and	$F8		; ponechame nastavenu vram
+		or	MUSIC.page	; a prestrankujeme na banku s muzikou
+		ld	bc,page128
+		out	(c),a
+		call	MUSIC.play
+		pop	af
+		ld	bc,page128
+		out	(c),a
+
+		ld	hl,(FRAMES)
+		inc	hl
+		ld	(FRAMES),hl
+
+		pop	hl
+		pop	de
+		pop	bc
+		pop	af
+		pop	iy
+		pop	ix
+		ex	af,af'
+		exx
+		pop	hl
+		pop	de
+		pop	bc
+		pop	af
+		ei
+		ret
+
+xchg.vram:	ld	a,#1D
+		xor	#0A
+		ld	(xchg.vram+1),a
+xchg.bnk:	ld	(act128page),a
+		ld	bc,page128
+		out	(c),a
+		ret
+
+attrhide:	ld	hl,22528
+		ld	c,24
+attrhide2:	ld	b,32
+		push	bc
+attrhide3:	ld	a,(hl)
+		and	7
+		jr	z,attrhide4
+		dec	a
+attrhide4:	push	af
+		ld	a,(hl)
+		and	56
+		jr	z,attrhide5
+		ld	c,8
+		sub	c
+		ld	c,a
+		pop	af
+		or	c
+		jr	attrhide6
+attrhide5:	ld	a,(hl)
+		and	248
+		ld	c,a
+		pop	af
+		or	c
+attrhide6:	ld	(hl),a
+		inc	hl
+		djnz	attrhide3
+		pop	bc
+		dec	c
+		jr	nz,attrhide2
+		ex	af,af'
+		ret
+
+
+;;-----------------------------------------------------------------------------
+		align	256
+
+im2vector:
+direntrybuf:
+screen.lzx:	incbin "loading.lzx"
+
+txterr		db	"DEMO-KERNEL LOADING FAILED!"
+		dw	#C900
+
+fn.needle:	db	"needle",0
+fn.haystack:	db	"haystack  "
+blocktable:
+.t00:		dw	#c000
+.t01:		dw	#cfeb
+.t02:		dw	#dec7
+.t03:		dw	#ed4c
+.t04:		dw	#c000
+.t05:		dw	#cf77
+.t06:		dw	#de53
+.t07:		dw	#ecfb
+.t08:		dw	#c000
+.t09:		dw	#cf4a
+.t10:		dw	#de7c
+.t11:		dw	#eed2
+.t12:		dw	#c000
+.t13:		dw	#ce2e
+.t14:		dw	#dcb8
+.t15:		dw	#ec6e
+.t16:		dw	#c000
+.t17:		dw	#d68d
+.t18:		dw	#ea9d
+.t19:		dw	#c000
+
+.counts		db	4,4,4,3,1,0
+
+
+		align	256
+
+		nop
+kernel:		ld	b,25
+.fadeout:	ei
+		halt
+		halt
+		push	bc
+		call	attrhide
+		pop	bc
+		djnz	.fadeout
+
+		di
+		ld	hl,im2vector
+		ld	a,h
+		ld	i,a
+		im	2
+		ld	a,high interrupt
+.mkim2:		ld	(hl),a
+		inc	l
+		jr	nz,.mkim2
+		inc	h
+		ld	(hl),a
+; init music
+		ld	a,MUSIC.page | #10
+		call	xchg.bnk
+		call	MUSIC.init
+; clear both vrams
+		ld	a,#17
+		call	xchg.bnk
+		ld	hl,#4000
+		ld	de,#4001
+		ld	bc,6911
+		ld	(hl),l
+		ldir
+		ld	hl,#4000
+		ld	d,#C0
+		ld	b,high 6912
+		ldir
+		ld	(FRAMES),bc
+		ld	a,#10
+		call	xchg.bnk
+
+.run:		ld	hl,fxtable
+		ld	a,(hl)
+		or	a
+		jr	z,.end
+		inc	l
+		ld	e,(hl)
+		inc	l
+		ld	d,(hl)
+		push	hl
+		ex	de,hl
+		ld	de,RUNZONE
+		ld	b,a
+		ld	a,(act128page)
+		and	#F8
+		push	af
+		or	b
+		ld	bc,page128
+		ld	(act128page),a
+		out	(c),a
+		push	bc
+		call	depack
+		pop	bc
+		pop	af
+		ld	(act128page),a
+		out	(c),a
+		pop	hl
+		inc	l
+		ld	e,(hl)
+		inc	l
+		ld	d,(hl)
+		inc	l
+		ld	(.run+1),hl
+		call	RUNZONE
+		jr	.run
+
+.end		di
+		halt
+
+fxtable:	db	#11
+		dw	#C000
+		dw	0
+
+		db	0
+
+@len = $ - start
+
+		align	256
+@RUNZONE	equ	$
+basesp
+
+
+		emptytap "REGRESSION.tap"
+		savetap  "REGRESSION.tap",CODE,"autosys",start,len
+
+
+		export page128
+		export act128page
+		export actborder
+		export FRAMES
+		export mb02ram
+		export MUSIC.page
+		export MUSIC.init
+		export MUSIC.play
+		export IMCALL
+		export RUNZONE
+		export depack
+		export xchg.vram
+		export xchg.bnk
+		export attrhide

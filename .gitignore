@@ -1,0 +1,8 @@
+*.lst
+*.exe
+*.mbd
+*.sna
+*.tap
+
+/!pripravy
+**/frames/
