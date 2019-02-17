@@ -142,17 +142,8 @@ start		di
 		ld	a,#FE ; cp *
 		ld	(render.resetloop),a
 
-		ld	a,#2C ; inc l
-		ld	(priletA.faster),a
-		ld	b,24
+		ld	b,68
 		call	prilet.loop
-		xor	a
-		ld	(priletA.faster),a
-		ld	b,20
-		call	prilet.loop
-
-		ld	b,24
-		call	finRender
 
 		ld	a,#CD
 		ld	(customRender.enableTx),a
@@ -509,7 +500,6 @@ render:		ld	hl,0
 
 priletA:	ld	hl,tab.prilet.a
 		inc	l
-.faster:	nop
 		ld	(priletA+1),hl
 .run		ld	l,(hl)
 		ld	de,tab.prilet.a.scradr
