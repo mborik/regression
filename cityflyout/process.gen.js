@@ -1,4 +1,4 @@
-fs = require('fs');
+const fs = require('fs');
 
 const downHL = (hl) => {
 	let h = hl >>> 8,

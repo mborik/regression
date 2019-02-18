@@ -1,13 +1,10 @@
 const fs = require('fs');
-const { spawnSync } = require('child_process');
-
-let fd, log;
-let i, j, k;
 
 const src = fs.readFileSync(`stlpce_v.bin`);
-const dst = new Buffer(src.length);
+const dst = new Buffer(16384);
 const lines = src.length / (10 * 3);
 
+let i, j, k;
 for (i = 0; i < 10; i++) {
 	for (j = 0; j < lines; j++) {
 		k = 3 * ((j * 10) + i);
@@ -15,9 +12,4 @@ for (i = 0; i < 10; i++) {
 	}
 }
 
-const mode = '-t36o7o14';
-const a = 'stlpce.bin';
-fs.writeFileSync(a, dst, { flag: 'w' });
-spawnSync('cmd.exe', ['/c', 'lzxpack', mode, a], { cwd: '.' });
-
-fs.renameSync(`stlpce${mode}.lzx`, a.replace('.bin', '.pak'));
+fs.writeFileSync('stlpce.bin', dst, { flag: 'w' });

@@ -12,7 +12,7 @@
 
 ;------------------------------------------------------------------------------
 
-start
+@music
 music_init	jr	p3x_init
 music_stop	jp	p3x_mute
 music_play	jp	p3x_play
@@ -1033,11 +1033,12 @@ p3x_setup:	db	1
 
 ;------------------------------------------------------------------------------
 ; music in ProTracker 3.6 (Vortex Tracker II) format (without 99 byte header)
-songdata	incbin	"final.pt3",99
+songdata
 MDLADDR		equ	songdata-99
 
-		emptytap "music.tap"
-		savetap "music.tap",CODE,"music",start,$-start
+	ifndef fx
+		incbin	"final.pt3",99
 
-		align	16384
-		savebin "music.bin",start,$-start
+		emptytap "music.tap"
+		savetap "music.tap",CODE,"music",music,$-music
+	endif

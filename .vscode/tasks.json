@@ -54,11 +54,11 @@
 			"isBackground": false,
 			"presentation": {
 				"echo": false,
-				"reveal": "silent",
+				"reveal": "always",
 				"focus": false,
-				"panel": "shared"
+				"panel": "dedicated"
 			},
-			"problemMatcher": []
+			"problemMatcher": "$errmatcher-sjasmplus"
 		}
 	]
 }

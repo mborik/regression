@@ -1,0 +1,26 @@
+;; haystack block table (pointers and counts)
+
+.pg02:		dw	#C000	; (4075)
+.pg03:		dw	#CFEB	; (3804)
+.pg04:		dw	#DEC7	; (3717)
+.pg05:		dw	#ED4C	; (4036)
+.pg06:		dw	#C000	; (3959)
+.pg07:		dw	#CF77	; (3804)
+.pg08:		dw	#DE53	; (3752)
+.pg09:		dw	#ECFB	; (3873)
+.pg0A:		dw	#C000	; (3914)
+.pg0B:		dw	#CF4A	; (3890)
+.pg0C:		dw	#DE7C	; (4182)
+.pg0D:		dw	#EED2	; (4075)
+.pg0E:		dw	#C000	; (3630)
+.pg0F:		dw	#CE2E	; (3722)
+.pg10:		dw	#DCB8	; (4022)
+.pg11:		dw	#EC6E	; (4000)
+.pg12:		dw	#C000	; (5773)
+.pg13:		dw	#D68D	; (5136)
+.pg14:		dw	#EA9D	; (5147)
+.pg15:		dw	#C000	; (4477)
+.pg16:		dw	#D17D	; (437)
+
+.firstct:		equ	4
+.counts:		db	4,4,4,3,2,0

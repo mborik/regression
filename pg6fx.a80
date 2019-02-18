@@ -2,17 +2,16 @@
 		org	#C000
 		define fx 1
 
-@_fxpage = #11
+@_fxpage = #16
 @_fxpage_start
 
 ;;-----------------------------------------------------------------------------
-fx_city:	incbin "cityflyout/final.pak"
-.pg = _fxpage
-.sync = 0
+		include "music/pt3extra.a80"
+		incbin "music/final.pt3",99
 
-fx_reglogo:	incbin "reglogo/final.pak"
-.pg = _fxpage
-.sync = 836
+MUSIC.page = _fxpage
+MUSIC.init = music_init
+MUSIC.play = music_play
 
 ;;-----------------------------------------------------------------------------
 	if $ > #FFFF
@@ -26,10 +25,7 @@ fx_reglogo:	incbin "reglogo/final.pak"
 		savebin "output",(_fxpage_start),$-(_fxpage_start)
 
 ;;-----------------------------------------------------------------------------
-		export fx_city
-		export fx_city.pg
-		export fx_city.sync
 
-		export fx_reglogo
-		export fx_reglogo.pg
-		export fx_reglogo.sync
+		export	MUSIC.page
+		export	MUSIC.init
+		export	MUSIC.play

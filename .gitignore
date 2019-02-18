@@ -6,3 +6,10 @@
 
 /!pripravy
 **/frames/
+
+/haystack
+/needle*
+/output
+
+final.bin
+final.pak

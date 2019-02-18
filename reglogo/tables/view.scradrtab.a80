@@ -6,7 +6,7 @@
 ; (3 degree reverse)
 
 	macro viewportScradr y
-		dw	(((y & #C0) | ((y & #38) >> 3) | ((y & 7) << 3)) << 5) + #4000
+		dw	(((y & #C0) | ((y & #38) >> 3) | ((y & 7) << 3)) << 5) + #C000
 	endm
 
 		viewportScradr 0 ; 0

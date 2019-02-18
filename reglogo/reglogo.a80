@@ -4,17 +4,16 @@
 
 		include "../kernel/constants.inc"
 
-stlpce = #C000
-@col.Risk	= stlpce + 0
-@col.Variable	= stlpce + 1638
-@col.Negative	= stlpce + 3276
-@col.Linear	= stlpce + 4914
-@col.Unresolved	= stlpce + 6552
-@col.Analysis	= stlpce + 8190
-@col.Estimated	= stlpce + 9828
-@col.Positive	= stlpce + 11466
-@col.Moment	= stlpce + 13104
-@col.Dependent	= stlpce + 14742
+@col.Risk	= 0 * 1638
+@col.Variable	= 1 * 1638
+@col.Negative	= 2 * 1638
+@col.Linear	= 3 * 1638
+@col.Unresolved	= 4 * 1638
+@col.Analysis	= 5 * 1638
+@col.Estimated	= 6 * 1638
+@col.Positive	= 7 * 1638
+@col.Moment	= 8 * 1638
+@col.Dependent	= 9 * 1638
 
 ;;-----------------------------------------------------------------------------
 	macro border n
@@ -31,14 +30,12 @@ stlpce = #C000
 ;;-----------------------------------------------------------------------------
 		org	RUNZONE
 
-start:		ld	a,#10
-		call	xchg.bnk
-		ld	hl,stlpce.packed
-		ld	de,#C000
-		call	depack
+start:		ld	a,#16+#60	; SRAM page (WR)
+		out	(mb02ram),a
 
 .loop:		ei
 		halt
+		call	xchg.vram
 		call	render
 		jr	.loop
 
@@ -91,8 +88,6 @@ prilet:		ld	hl,prilet.up
 		jp	nz,.loop
 .retsp:		ld	sp,0
 		ret
-
-stlpce.packed:	incbin "gfx/stlpce.pak"
 
 ;;-----------------------------------------------------------------------------
 		align	256

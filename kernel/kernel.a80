@@ -1,15 +1,15 @@
 		device	zxspectrum128
 
 numberOfNeedles = 2
+		include "pg1fx.inc"
+		include "pg6fx.inc"
+
 
 page128		equ	#7FFD
 act128page	equ	#5B5C
 actborder	equ	#5C48
 FRAMES		equ	23672
 mb02ram		equ	#17
-MUSIC.page	equ	6
-MUSIC.init	equ	#C000
-MUSIC.play	equ	#C005
 
 
 		org	#8000
@@ -54,7 +54,7 @@ loader:		ld	e,0	; (0 = root)
 		rst	#20
 
 .blktabptr:	ld	hl,blocktable
-.targetpg:	ld	bc,#0462	; 4 packages, SRAM page 2 (WR)
+.targetpg:	ld	bc,(blocktable.firstct << 8) | #62 ; SRAM page 2 (WR)
 .depk6:		ld	e,(hl)
 		inc	hl
 		ld	d,(hl)
@@ -310,29 +310,7 @@ txterr		db	"DEMO-KERNEL LOADING FAILED!"
 
 fn.needle:	db	"needle",0
 fn.haystack:	db	"haystack  "
-blocktable:
-.t00:		dw	#c000
-.t01:		dw	#cfeb
-.t02:		dw	#dec7
-.t03:		dw	#ed4c
-.t04:		dw	#c000
-.t05:		dw	#cf77
-.t06:		dw	#de53
-.t07:		dw	#ecfb
-.t08:		dw	#c000
-.t09:		dw	#cf4a
-.t10:		dw	#de7c
-.t11:		dw	#eed2
-.t12:		dw	#c000
-.t13:		dw	#ce2e
-.t14:		dw	#dcb8
-.t15:		dw	#ec6e
-.t16:		dw	#c000
-.t17:		dw	#d68d
-.t18:		dw	#ea9d
-.t19:		dw	#c000
-
-.counts		db	4,4,4,3,1,0
+blocktable:	include "../haystack.inc"
 
 
 		align	256
@@ -416,13 +394,13 @@ kernel:		ld	b,25
 .end		di
 		halt
 
-fxtable:	db	#11
-		dw	#C000
-		dw	0
+fxtable:	db	fx_city.pg
+		dw	fx_city
+		dw	fx_city.sync
 
-		db	#11
-		dw	#C000+7068
-		dw	836
+		db	fx_reglogo.pg
+		dw	fx_reglogo
+		dw	fx_reglogo.sync
 
 		db	0
 
