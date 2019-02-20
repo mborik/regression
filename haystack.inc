@@ -20,7 +20,7 @@
 .pg13:		dw	#D68D	; (5136)
 .pg14:		dw	#EA9D	; (5147)
 .pg15:		dw	#C000	; (4477)
-.pg16:		dw	#D17D	; (437)
+.pg16:		dw	#D17D	; (460)
 
 .firstct:		equ	4
 .counts:		db	4,4,4,3,2,0

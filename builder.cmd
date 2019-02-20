@@ -2,15 +2,15 @@ mbdnew regression.mbd 82 11 "REGRESSION demo by NAG/svk"
 
 @cd kernel
 @cd ..\cityflyout
+del /Q /F final.pak
 sjasmplus --lst=cityflyout.lst cityflyout.a80
 lzxpack -t36o7o14 final.bin
-del /Q /F final.pak
 ren final-t36o7o14.lzx final.pak
 
 @cd ..\reglogo
+del /Q /F final.pak
 sjasmplus --lst=reglogo.lst reglogo.a80
 lzxpack -t36o7o14 final.bin
-del /Q /F final.pak
 ren final-t36o7o14.lzx final.pak
 
 @cd ..

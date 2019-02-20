@@ -1,90 +1,95 @@
 ; https://arachnoid.com/polysolve/
 ; 0 0
+; 0 8
+; 0 16
 ; 88 104
 ; 104 120
+; 191 207
+; 191 215
 ; 191 223
-; (3 degree reverse)
+; (5 degree reverse)
 
 	macro viewportScradr y
-		dw	(((y & #C0) | ((y & #38) >> 3) | ((y & 7) << 3)) << 5) + #C000
+		ld	hl,(((y & #C0) | ((y & #38) >> 3) | ((y & 7) << 3)) << 5) + #C000
+		ld	a,(de)
+		or	a
+		jp	m,$+14
+		add	hl,bc
+		ld	(hl),a
+		inc	de
+		inc	l
+		ld	a,(de)
+		ld	(hl),a
+		inc	de
+		inc	l
+		ld	a,(de)
+		ld	(hl),a
+		db	#21 ; ld hl,#1313 ;)
+		inc	de
+		inc	de
+		inc	de
 	endm
 
-		viewportScradr 0 ; 0
-		viewportScradr 1 ; 1
-		viewportScradr 1 ; 2
-		viewportScradr 2 ; 3
-		viewportScradr 2 ; 4
-		viewportScradr 3 ; 5
-		viewportScradr 4 ; 6
-		viewportScradr 4 ; 7
-		viewportScradr 5 ; 8
-		viewportScradr 5 ; 9
-		viewportScradr 6 ; 10
-		viewportScradr 7 ; 11
-		viewportScradr 7 ; 12
-		viewportScradr 8 ; 13
-		viewportScradr 9 ; 14
-		viewportScradr 9 ; 15
-		viewportScradr 10 ; 16
-		viewportScradr 11 ; 17
-		viewportScradr 11 ; 18
-		viewportScradr 12 ; 19
-		viewportScradr 13 ; 20
-		viewportScradr 14 ; 21
-		viewportScradr 14 ; 22
-		viewportScradr 15 ; 23
-		viewportScradr 16 ; 24
-		viewportScradr 16 ; 25
-		viewportScradr 17 ; 26
-		viewportScradr 18 ; 27
-		viewportScradr 19 ; 28
-		viewportScradr 19 ; 29
-		viewportScradr 20 ; 30
-		viewportScradr 21 ; 31
-		viewportScradr 22 ; 32
-		viewportScradr 23 ; 33
-		viewportScradr 23 ; 34
-		viewportScradr 24 ; 35
-		viewportScradr 25 ; 36
-		viewportScradr 26 ; 37
-		viewportScradr 27 ; 38
-		viewportScradr 27 ; 39
-		viewportScradr 28 ; 40
-		viewportScradr 29 ; 41
-		viewportScradr 30 ; 42
-		viewportScradr 31 ; 43
-		viewportScradr 32 ; 44
-		viewportScradr 32 ; 45
-		viewportScradr 33 ; 46
-		viewportScradr 34 ; 47
-		viewportScradr 35 ; 48
-		viewportScradr 36 ; 49
-		viewportScradr 37 ; 50
-		viewportScradr 38 ; 51
-		viewportScradr 38 ; 52
-		viewportScradr 39 ; 53
-		viewportScradr 40 ; 54
-		viewportScradr 41 ; 55
-		viewportScradr 42 ; 56
-		viewportScradr 43 ; 57
-		viewportScradr 44 ; 58
-		viewportScradr 45 ; 59
-		viewportScradr 46 ; 60
-		viewportScradr 46 ; 61
-		viewportScradr 47 ; 62
-		viewportScradr 48 ; 63
-		viewportScradr 49 ; 64
-		viewportScradr 50 ; 65
-		viewportScradr 51 ; 66
-		viewportScradr 52 ; 67
-		viewportScradr 53 ; 68
-		viewportScradr 54 ; 69
-		viewportScradr 55 ; 70
-		viewportScradr 56 ; 71
-		viewportScradr 57 ; 72
-		viewportScradr 58 ; 73
-		viewportScradr 59 ; 74
-		viewportScradr 60 ; 75
+		viewportScradr 0 ; 16
+		viewportScradr 1 ; 17
+		viewportScradr 2 ; 18
+		viewportScradr 3 ; 19
+		viewportScradr 4 ; 20
+		viewportScradr 5 ; 21
+		viewportScradr 6 ; 22
+		viewportScradr 7 ; 23
+		viewportScradr 8 ; 24
+		viewportScradr 9 ; 25
+		viewportScradr 10 ; 26
+		viewportScradr 11 ; 27
+		viewportScradr 12 ; 28
+		viewportScradr 13 ; 29
+		viewportScradr 14 ; 30
+		viewportScradr 15 ; 31
+		viewportScradr 16 ; 32
+		viewportScradr 17 ; 33
+		viewportScradr 18 ; 34
+		viewportScradr 19 ; 35
+		viewportScradr 20 ; 36
+		viewportScradr 21 ; 37
+		viewportScradr 22 ; 38
+		viewportScradr 23 ; 39
+		viewportScradr 24 ; 40
+		viewportScradr 25 ; 41
+		viewportScradr 26 ; 42
+		viewportScradr 27 ; 43
+		viewportScradr 28 ; 44
+		viewportScradr 29 ; 45
+		viewportScradr 30 ; 46
+		viewportScradr 31 ; 47
+		viewportScradr 32 ; 48
+		viewportScradr 33 ; 49
+		viewportScradr 34 ; 50
+		viewportScradr 35 ; 51
+		viewportScradr 36 ; 52
+		viewportScradr 37 ; 53
+		viewportScradr 38 ; 54
+		viewportScradr 39 ; 55
+		viewportScradr 40 ; 56
+		viewportScradr 41 ; 57
+		viewportScradr 42 ; 58
+		viewportScradr 43 ; 59
+		viewportScradr 44 ; 60
+		viewportScradr 45 ; 61
+		viewportScradr 46 ; 62
+		viewportScradr 47 ; 63
+		viewportScradr 48 ; 64
+		viewportScradr 49 ; 65
+		viewportScradr 50 ; 66
+		viewportScradr 51 ; 67
+		viewportScradr 52 ; 68
+		viewportScradr 53 ; 69
+		viewportScradr 54 ; 70
+		viewportScradr 55 ; 71
+		viewportScradr 56 ; 72
+		viewportScradr 57 ; 73
+		viewportScradr 58 ; 74
+		viewportScradr 59 ; 75
 		viewportScradr 60 ; 76
 		viewportScradr 61 ; 77
 		viewportScradr 62 ; 78
@@ -157,79 +162,63 @@
 		viewportScradr 129 ; 145
 		viewportScradr 130 ; 146
 		viewportScradr 131 ; 147
-		viewportScradr 131 ; 148
-		viewportScradr 132 ; 149
-		viewportScradr 133 ; 150
-		viewportScradr 134 ; 151
-		viewportScradr 135 ; 152
-		viewportScradr 136 ; 153
-		viewportScradr 137 ; 154
-		viewportScradr 138 ; 155
-		viewportScradr 139 ; 156
-		viewportScradr 140 ; 157
-		viewportScradr 141 ; 158
-		viewportScradr 142 ; 159
-		viewportScradr 143 ; 160
-		viewportScradr 144 ; 161
-		viewportScradr 145 ; 162
-		viewportScradr 145 ; 163
-		viewportScradr 146 ; 164
-		viewportScradr 147 ; 165
-		viewportScradr 148 ; 166
-		viewportScradr 149 ; 167
-		viewportScradr 150 ; 168
-		viewportScradr 151 ; 169
-		viewportScradr 152 ; 170
-		viewportScradr 153 ; 171
-		viewportScradr 153 ; 172
-		viewportScradr 154 ; 173
-		viewportScradr 155 ; 174
-		viewportScradr 156 ; 175
-		viewportScradr 157 ; 176
-		viewportScradr 158 ; 177
-		viewportScradr 159 ; 178
-		viewportScradr 159 ; 179
-		viewportScradr 160 ; 180
-		viewportScradr 161 ; 181
-		viewportScradr 162 ; 182
-		viewportScradr 163 ; 183
-		viewportScradr 164 ; 184
-		viewportScradr 164 ; 185
-		viewportScradr 165 ; 186
-		viewportScradr 166 ; 187
-		viewportScradr 167 ; 188
-		viewportScradr 168 ; 189
-		viewportScradr 168 ; 190
-		viewportScradr 169 ; 191
-		viewportScradr 170 ; 192
-		viewportScradr 171 ; 193
-		viewportScradr 172 ; 194
-		viewportScradr 172 ; 195
-		viewportScradr 173 ; 196
-		viewportScradr 174 ; 197
-		viewportScradr 175 ; 198
-		viewportScradr 175 ; 199
-		viewportScradr 176 ; 200
-		viewportScradr 177 ; 201
-		viewportScradr 177 ; 202
-		viewportScradr 178 ; 203
-		viewportScradr 179 ; 204
-		viewportScradr 180 ; 205
-		viewportScradr 180 ; 206
-		viewportScradr 181 ; 207
-		viewportScradr 182 ; 208
-		viewportScradr 182 ; 209
-		viewportScradr 183 ; 210
-		viewportScradr 184 ; 211
-		viewportScradr 184 ; 212
-		viewportScradr 185 ; 213
-		viewportScradr 186 ; 214
-		viewportScradr 186 ; 215
-		viewportScradr 187 ; 216
-		viewportScradr 187 ; 217
-		viewportScradr 188 ; 218
-		viewportScradr 189 ; 219
-		viewportScradr 189 ; 220
-		viewportScradr 190 ; 221
-		viewportScradr 190 ; 222
-		viewportScradr 191 ; 223
+		viewportScradr 132 ; 148
+		viewportScradr 133 ; 149
+		viewportScradr 134 ; 150
+		viewportScradr 135 ; 151
+		viewportScradr 136 ; 152
+		viewportScradr 137 ; 153
+		viewportScradr 138 ; 154
+		viewportScradr 139 ; 155
+		viewportScradr 140 ; 156
+		viewportScradr 141 ; 157
+		viewportScradr 142 ; 158
+		viewportScradr 143 ; 159
+		viewportScradr 144 ; 160
+		viewportScradr 145 ; 161
+		viewportScradr 146 ; 162
+		viewportScradr 147 ; 163
+		viewportScradr 148 ; 164
+		viewportScradr 149 ; 165
+		viewportScradr 150 ; 166
+		viewportScradr 151 ; 167
+		viewportScradr 152 ; 168
+		viewportScradr 153 ; 169
+		viewportScradr 154 ; 170
+		viewportScradr 155 ; 171
+		viewportScradr 156 ; 172
+		viewportScradr 157 ; 173
+		viewportScradr 158 ; 174
+		viewportScradr 159 ; 175
+		viewportScradr 160 ; 176
+		viewportScradr 161 ; 177
+		viewportScradr 162 ; 178
+		viewportScradr 163 ; 179
+		viewportScradr 164 ; 180
+		viewportScradr 165 ; 181
+		viewportScradr 166 ; 182
+		viewportScradr 167 ; 183
+		viewportScradr 168 ; 184
+		viewportScradr 169 ; 185
+		viewportScradr 170 ; 186
+		viewportScradr 171 ; 187
+		viewportScradr 172 ; 188
+		viewportScradr 173 ; 189
+		viewportScradr 174 ; 190
+		viewportScradr 175 ; 191
+		viewportScradr 176 ; 192
+		viewportScradr 177 ; 193
+		viewportScradr 178 ; 194
+		viewportScradr 179 ; 195
+		viewportScradr 180 ; 196
+		viewportScradr 181 ; 197
+		viewportScradr 182 ; 198
+		viewportScradr 183 ; 199
+		viewportScradr 184 ; 200
+		viewportScradr 185 ; 201
+		viewportScradr 186 ; 202
+		viewportScradr 187 ; 203
+		viewportScradr 188 ; 204
+		viewportScradr 189 ; 205
+		viewportScradr 190 ; 206
+		viewportScradr 191 ; 207
