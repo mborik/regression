@@ -1,0 +1,41 @@
+; https://arachnoid.com/polysolve/
+; 1165 0
+; 1176 25
+; 1187 87
+; (2 degree)
+
+	macro maznakScradrs from, to
+.i = from
+	dup (to - from)
+.yt = .i
+.yb = 191 - .i
+		dw	(((.yt & #C0) | ((.yt & #38) >> 3) | ((.yt & 7) << 3)) << 5) + #C01F
+		dw	(((.yb & #C0) | ((.yb & #38) >> 3) | ((.yb & 7) << 3)) << 5) + #C01F
+.i = .i + 1
+	edup
+		db	0
+	endm
+
+		maznakScradrs 0, 1 ; 1166
+		maznakScradrs 0, 2 ; 1167
+		maznakScradrs 1, 3 ; 1168
+		maznakScradrs 2, 5 ; 1169
+		maznakScradrs 3, 7 ; 1170
+		maznakScradrs 5, 9 ; 1171
+		maznakScradrs 7, 12 ; 1172
+		maznakScradrs 9, 15 ; 1173
+		maznakScradrs 12, 18 ; 1174
+		maznakScradrs 15, 21 ; 1175
+		maznakScradrs 18, 25 ; 1176
+		maznakScradrs 21, 29 ; 1177
+		maznakScradrs 25, 34 ; 1178
+		maznakScradrs 29, 38 ; 1179
+		maznakScradrs 34, 43 ; 1180
+		maznakScradrs 38, 49 ; 1181
+		maznakScradrs 43, 54 ; 1182
+		maznakScradrs 49, 60 ; 1183
+		maznakScradrs 54, 66 ; 1184
+		maznakScradrs 60, 73 ; 1185
+		maznakScradrs 66, 80 ; 1186
+		maznakScradrs 73, 88 ; 1187
+		maznakScradrs 80, 88 ; 1188

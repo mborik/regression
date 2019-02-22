@@ -30,7 +30,7 @@
 ;;-----------------------------------------------------------------------------
 		org	RUNZONE
 
-start:		ld	a,#16+#60	; SRAM page (WR)
+start:		ld	a,#16|#60	; SRAM page (WR)
 		out	(mb02ram),a
 
 .loop:		ei
@@ -53,6 +53,7 @@ render:		ei
 .ph.Positive:	call	let.Positive
 .ph.Moment:	ld	bc,let.Moment
 .ph.Dependent:	ld	bc,let.Dependent
+.maznak:	ld	bc,maznak
 		border	7
 		ret
 
@@ -64,7 +65,7 @@ makeblik:	ld	a,1
 		dec	a
 		jr	z,.blit
 
-		ld	de,#7878
+.permanent0:	ld	de,#7878
 .blit:		di
 		ld	hl,0
 		add	hl,sp
@@ -76,6 +77,9 @@ makeblik:	ld	a,1
 		ei
 		ret
 
+.permanent1:	xor	a
+		ld	(actborder),a
+		ld	de,#7878
 .end		pop	iy
 		inc	a
 		ld	(iy-3),a
@@ -160,8 +164,13 @@ scenar:		dw	880
 
 		dw	1166
 		dw	render.makeblik
-		dw	makeblik+1
-		db	#CD,11
+		dw	render.makeblik + 1
+		db	#CD,low makeblik.permanent0
+
+		dw	1167
+		dw	render.maznak
+		dw	render.makeblik + 1
+		db	#CD,low makeblik.permanent1
 
 		dw	0
 
@@ -251,6 +260,44 @@ let.Dependent:	ld	hl,prilet.down
 		ld	(let.Dependent+1),hl
 		ret
 
+maznak:		ld	hl,maznak.addrs
+		ld	a,(hl)
+		or	a
+		jr	z,let.disable
+		ld	bc,-1
+		ld	(.retsp+1),sp
+		di
+.loop:		ld	e,a
+		inc	hl
+		ld	d,(hl)
+		ex	hl,de
+		inc	hl
+		ld	sp,hl
+	rept 16
+		push	bc
+	endm
+		ex	hl,de
+		inc	hl
+		ld	e,(hl)
+		inc	hl
+		ld	d,(hl)
+		ex	hl,de
+		inc	hl
+		ld	sp,hl
+	rept 16
+		push	bc
+	endm
+		ex	hl,de
+		inc	hl
+		ld	a,(hl)
+		or	a
+		jr	nz,.loop
+		inc	hl
+		ld	(maznak+1),hl
+.retsp:		ld	sp,0
+		ei
+		ret
+
 prilet:		ld	a,(hl)
 		or	a
 		ret	z
@@ -269,6 +316,9 @@ prilet:		ld	a,(hl)
 		pop	hl
 		or	h ; = nz
 		ret
+
+maznak.addrs:	include "tables/maznak.a80"
+		db	0
 
 ;;-----------------------------------------------------------------------------
 		align	256
