@@ -22,7 +22,9 @@ let a, b, c, i, j, l;
 
 const pages = [
 	...[...Array(20).keys()].map(cityflyPath),
-	'reglogo\\gfx\\stlpce.bin'
+	'reglogo\\gfx\\stlpce.bin',
+	'reglogo\\gfx\\squashy.pg0',
+	'reglogo\\gfx\\squashy.pg1'
 ];
 
 for (i = 0, j = 0, l = 0, c = 0; i < pages.length; i++, c++) {

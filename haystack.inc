@@ -21,6 +21,8 @@
 .pg14:		dw	#EA9D	; (5147)
 .pg15:		dw	#C000	; (4477)
 .pg16:		dw	#D17D	; (460)
+.pg17:		dw	#D349	; (3009)
+.pg18:		dw	#DF0A	; (2970)
 
 .firstct:		equ	4
-.counts:		db	4,4,4,3,2,0
+.counts:		db	4,4,4,3,4,0

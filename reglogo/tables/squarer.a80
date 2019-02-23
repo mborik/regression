@@ -1,0 +1,39 @@
+; https://arachnoid.com/polysolve/
+; 1256 87
+; 1280 86
+; 1300 80
+; 1320 64
+; (3 degree)
+
+	macro squarerEntry timeCode,y
+.yt = y
+.yb = 191 - y
+		dw	timeCode
+		dw	(((.yt & #C0) | ((.yt & #38) >> 3) | ((.yt & 7) << 3)) << 5) + #4000 + 20
+		dw	(((.yb & #C0) | ((.yb & #38) >> 3) | ((.yb & 7) << 3)) << 5) + #4000 + 20
+	endm
+
+		squarerEntry 1275, 87
+		squarerEntry 1283, 86
+		squarerEntry 1287, 85
+		squarerEntry 1291, 84
+		squarerEntry 1294, 83
+		squarerEntry 1296, 82
+		squarerEntry 1298, 81
+		squarerEntry 1300, 80
+		squarerEntry 1302, 79
+		squarerEntry 1304, 78
+		squarerEntry 1305, 77
+		squarerEntry 1307, 76
+		squarerEntry 1308, 75
+		squarerEntry 1310, 74
+		squarerEntry 1311, 73
+		squarerEntry 1312, 72
+		squarerEntry 1313, 71
+		squarerEntry 1314, 70
+		squarerEntry 1315, 69
+		squarerEntry 1316, 68
+		squarerEntry 1317, 67
+		squarerEntry 1318, 66
+		squarerEntry 1319, 65
+		squarerEntry 1320, 64

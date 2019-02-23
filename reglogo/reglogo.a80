@@ -30,7 +30,7 @@
 ;;-----------------------------------------------------------------------------
 		org	RUNZONE
 
-start:		ld	a,#16|#60	; SRAM page (WR)
+start:		ld	a,#16|#40	; SRAM page (RO)
 		out	(mb02ram),a
 
 .loop:		ei
@@ -38,7 +38,34 @@ start:		ld	a,#16|#60	; SRAM page (WR)
 		call	citajScenar
 		call	xchg.vram
 		call	render
-		jr	.loop
+.pass2end	jr	.loop
+
+		ld	a,#17|#40
+		out	(mb02ram),a
+		call	animator
+		ld	a,#18|#40
+		out	(mb02ram),a
+		call	animator
+		ld	a,#40 ; back to ROM
+		out	(mb02ram),a
+
+		ei
+		ld	hl,stvorcek.pack
+		ld	de,#C000
+		call	depack
+		halt
+		call	xchg.vram
+		ld	hl,stvorcek.pack
+		ld	de,#C000
+		call	depack
+
+		ld	a,#10
+		call	xchg.bnk
+.squarer:	ei
+		halt
+		call	squarer
+		jr	nz,.squarer
+		ret
 
 render:		ei
 .makeblik	ld	bc,makeblik
@@ -107,10 +134,39 @@ citajScenar:	di
 		ei
 		ret
 
+squarer:	di
+		ld	(.retsp+1),sp
+.ptr:		ld	sp,squarer.data
+		pop	de
+		ld	a,e
+		or	d
+		jr	z,.retsp
+		ld	bc,#FFFF
+		ld	hl,(FRAMES)
+		sbc	hl,de
+		jr	c,.exit
+		pop	hl
+		pop	de
+		ld	(.ptr+1),sp
+		ld	sp,hl
+		push	bc
+		push	bc
+		push	bc
+		push	bc
+		ex	hl,de
+		ld	sp,hl
+		push	bc
+		push	bc
+		push	bc
+		push	bc
+.exit:		or	c
+.retsp:		ld	sp,0
+		ret
+
 scenar:		dw	880
 		dw	render.makeblik
 		dw	makeblik+1
-		db	#CD,11 ; pocet svietivych framov
+		db	#CD,9 ; pocet svietivych framov
 
 		dw	902
 		dw	render.ph.Variable
@@ -172,6 +228,10 @@ scenar:		dw	880
 		dw	render.makeblik + 1
 		db	#CD,low makeblik.permanent1
 
+		dw	1190
+		dw	start.pass2end
+		dw	start.pass2end + 1
+		dw	0
 		dw	0
 
 ;;-----------------------------------------------------------------------------
@@ -317,8 +377,35 @@ prilet:		ld	a,(hl)
 		or	h ; = nz
 		ret
 
+animator:	ld	b,32
+.loop:		ei
+		halt
+		push	bc
+		call	xchg.vram
+		call	.draw
+		pop	bc
+		djnz	.loop
+		ret
+
+.draw:		ld	hl,0
+		ld	(.retsp+1),sp
+		di
+		ld	sp,hl
+		include "tables/animator.a80"
+		ld	hl,0
+		add	hl,sp
+		res	6,h
+		ld	(.draw+1),hl
+.retsp:		ld	sp,0
+		ret
+
 maznak.addrs:	include "tables/maznak.a80"
 		db	0
+
+squarer.data:	include "tables/squarer.a80"
+		dw	0
+
+stvorcek.pack:	incbin "gfx/stvorcek.lzx"
 
 ;;-----------------------------------------------------------------------------
 		align	256

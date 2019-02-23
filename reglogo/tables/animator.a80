@@ -1,0 +1,27 @@
+; input SP = address of gfx data
+
+	macro animateOnScradr y
+.basey = (((y & #C0) | ((y & #38) >> 3) | ((y & 7) << 3)) << 5) + #C000
+	dup 16
+		pop	hl
+		ld	(.basey),hl
+.basey = .basey + 2
+	edup
+	endm
+
+		animateOnScradr 88
+		animateOnScradr 89
+		animateOnScradr 90
+		animateOnScradr 91
+		animateOnScradr 92
+		animateOnScradr 93
+		animateOnScradr 94
+		animateOnScradr 95
+		animateOnScradr 96
+		animateOnScradr 97
+		animateOnScradr 98
+		animateOnScradr 99
+		animateOnScradr 100
+		animateOnScradr 101
+		animateOnScradr 102
+		animateOnScradr 103
