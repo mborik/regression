@@ -1,0 +1,16 @@
+		device	zxspectrum128
+		include "../kernel/constants.inc"
+
+@bufdat = #BEBA
+
+		org	RUNZONE
+
+start:		ld	a,#10
+		call	xchg.bnk
+		ld	hl,bufdat.packed
+		ld	de,bufdat
+		jp	depack
+
+bufdat.packed:	incbin "oneplusani.ani.lzx"
+
+		savebin "oneplusani.pak",start,$-start

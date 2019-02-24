@@ -1,7 +1,8 @@
 		device	zxspectrum128
 
-numberOfNeedles = 2
+numberOfNeedles = 3
 		include "pg1fx.inc"
+		include "pg3fx.inc"
 		include "pg6fx.inc"
 
 
@@ -205,7 +206,7 @@ spd	=	2
 ;;  1 ... compromise between length and speed
 ;;  2+ .. optimized for speed - but longer code
 
-		include "lzx.a80"
+depack:		include "lzx.a80"
 
 ;;- INTERRUPT -----------------------------------------------------------------
 ;		org	#8181
@@ -366,7 +367,8 @@ kernel:		ld	b,25
 		ld	d,(hl)
 		push	hl
 		ex	de,hl
-		ld	de,RUNZONE
+		ld	e,a
+		and	#17
 		ld	b,a
 		ld	a,(act128page)
 		and	#F8
@@ -375,7 +377,10 @@ kernel:		ld	b,25
 		ld	bc,page128
 		ld	(act128page),a
 		out	(c),a
+		bit	7,e
+		jr	nz,.ldir
 		push	bc
+		ld	de,RUNZONE
 		call	depack
 		pop	bc
 		pop	af
@@ -391,6 +396,24 @@ kernel:		ld	b,25
 		call	RUNZONE
 		jr	.run
 
+.ldir:		pop	af
+		ex	de,hl
+		pop	hl
+		inc	l
+		ld	c,(hl)
+		inc	l
+		ld	b,(hl)
+		inc	l
+		ld	(.run+1),hl
+		ex	de,hl
+		ld	de,RUNZONE
+		ldir
+		ld	bc,page128
+		ld	(act128page),a
+		out	(c),a
+		call	RUNZONE
+		jr	.run
+
 .end		di
 		halt
 
@@ -401,6 +424,14 @@ fxtable:	db	fx_city.pg
 		db	fx_reglogo.pg
 		dw	fx_reglogo
 		dw	fx_reglogo.sync
+
+		db	fx_oneplusani.pg | #80 ; data transfer flag
+		dw	fx_oneplusani
+		dw	fx_oneplusani.length
+
+		db	fx_oneplus.pg
+		dw	fx_oneplus
+		dw	fx_oneplus.sync
 
 		db	0
 

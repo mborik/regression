@@ -37,3 +37,6 @@
 		squarerEntry 1318, 66
 		squarerEntry 1319, 65
 		squarerEntry 1320, 64
+
+		org	$-2
+		dw	0,0

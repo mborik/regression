@@ -21,7 +21,7 @@ POSOFD	=	7	// Simple elias-gama coding offset (ofs1,ofs2 not used)
 ;;  HL = address of source packed data
 ;;  DE = address of destination to depack data
 
-depack	ld	a,#80		;; Initial value what means there are no bits from bitstream in A
+	ld	a,#80		;; Initial value what means there are no bits from bitstream in A
 
 ;; Processing of compression types
 

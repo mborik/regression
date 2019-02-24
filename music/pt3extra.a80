@@ -5,10 +5,9 @@
 ; improved and reformated for AS by mborik/GembaBoys (c) 2016
 ; simplified aj adopted to sjasmplus by mborik/NAG (c) 2019
 
-		device	zxspectrum128
-
-
+	ifndef fx
 		org	#C000
+	endif
 
 ;------------------------------------------------------------------------------
 
@@ -17,9 +16,11 @@ music_init	jr	p3x_init
 music_stop	jp	p3x_mute
 music_play	jp	p3x_play
 
+	ifdef fx
 		; description
 		db	0
-		incbin	"final.pt3",31,64
+		incbin	"music/final.pt3",31,64
+	endif
 
 p3x_init:	ld	hl,MDLADDR
 p3x_initv0:	ld	(modaddr+1),hl
@@ -1037,8 +1038,12 @@ songdata
 MDLADDR		equ	songdata-99
 
 	ifndef fx
+	ifndef ukernel
 		incbin	"final.pt3",99
 
 		emptytap "music.tap"
 		savetap "music.tap",CODE,"music",music,$-music
+	else
+		incbin	"../music/final.pt3",99
+	endif
 	endif

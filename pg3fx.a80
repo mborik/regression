@@ -1,22 +1,14 @@
 		device	zxspectrum48
 		org	#C000
-		define fx 1
+		define fx 3
 
-@_fxpage = #11
+@_fxpage = #13
 @_fxpage_start
 
 ;;-----------------------------------------------------------------------------
-fx_city:	incbin "cityflyout/final.pak"
+fx_oneplusani:	incbin "oneplus/oneplusani.pak"
 .pg = _fxpage
-.sync = 0
-
-fx_reglogo:	incbin "reglogo/final.pak"
-.pg = _fxpage
-.sync = 836
-
-fx_oneplus:	incbin "oneplus/final.pak"
-.pg = _fxpage
-.sync = 1322
+.length = $-fx_oneplusani
 
 ;;-----------------------------------------------------------------------------
 	if $ > #FFFF
@@ -30,14 +22,6 @@ fx_oneplus:	incbin "oneplus/final.pak"
 		savebin "output",(_fxpage_start),$-(_fxpage_start)
 
 ;;-----------------------------------------------------------------------------
-		export fx_city
-		export fx_city.pg
-		export fx_city.sync
-
-		export fx_reglogo
-		export fx_reglogo.pg
-		export fx_reglogo.sync
-
-		export fx_oneplus
-		export fx_oneplus.pg
-		export fx_oneplus.sync
+		export fx_oneplusani
+		export fx_oneplusani.pg
+		export fx_oneplusani.length

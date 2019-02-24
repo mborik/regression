@@ -65,6 +65,7 @@ start:		ld	a,#16|#40	; SRAM page (RO)
 		halt
 		call	squarer
 		jr	nz,.squarer
+		ei
 		ret
 
 render:		ei
@@ -148,13 +149,15 @@ squarer:	di
 		pop	hl
 		pop	de
 		ld	(.ptr+1),sp
+		bit	6,d
+		jr	z,.nobottom
 		ld	sp,hl
 		push	bc
 		push	bc
 		push	bc
 		push	bc
 		ex	hl,de
-		ld	sp,hl
+.nobottom:	ld	sp,hl
 		push	bc
 		push	bc
 		push	bc
@@ -400,10 +403,8 @@ animator:	ld	b,32
 		ret
 
 maznak.addrs:	include "tables/maznak.a80"
-		db	0
 
 squarer.data:	include "tables/squarer.a80"
-		dw	0
 
 stvorcek.pack:	incbin "gfx/stvorcek.lzx"
 

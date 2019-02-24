@@ -1,6 +1,6 @@
 		device	zxspectrum48
 		org	#C000
-		define fx 1
+		define fx 6
 
 @_fxpage = #16
 @_fxpage_start

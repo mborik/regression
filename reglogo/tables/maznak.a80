@@ -39,3 +39,5 @@
 		maznakScradrs 66, 80 ; 1186
 		maznakScradrs 73, 88 ; 1187
 		maznakScradrs 80, 88 ; 1188
+
+		db	0

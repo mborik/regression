@@ -4,3 +4,6 @@ fx_city.sync: EQU 0x00000000
 fx_reglogo: EQU 0x0000DB9C
 fx_reglogo.pg: EQU 0x00000011
 fx_reglogo.sync: EQU 0x00000344
+fx_oneplus: EQU 0x0000E81C
+fx_oneplus.pg: EQU 0x00000011
+fx_oneplus.sync: EQU 0x0000052A
