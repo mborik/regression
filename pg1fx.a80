@@ -16,7 +16,7 @@ fx_reglogo:	incbin "reglogo/final.pak"
 
 fx_oneplus:	incbin "oneplus/final.pak"
 .pg = _fxpage
-.sync = 1322
+.sync = 1417
 
 ;;-----------------------------------------------------------------------------
 	if $ > #FFFF

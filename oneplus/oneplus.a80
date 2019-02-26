@@ -19,9 +19,10 @@
 ;;-----------------------------------------------------------------------------
 
 		org	RUNZONE
-		define	MUSIC.waitfor 1321
+		define	MUSIC.waitfor 1417
 
 @bufdat = #BEBA
+@odkalisko = bufdat - 6912
 
 begin:
 	ifndef fx
@@ -29,6 +30,19 @@ begin:
 		ld	de,#4000
 		call	depack
 	endif
+		ld	a,#17
+		call	xchg.bnk
+		ld	a,#38
+		ld	hl,#D800
+		ld	de,#D801
+		ld	bc,#2FF
+		ld	(hl),#38
+		ldir
+		ld	hl,credit.n1ko.flash
+		ld	de,#C000
+		call	depack
+		ld	a,#10
+		call	xchg.bnk
 
 		ld	hl,bufdat
 		ld	b,75
@@ -39,7 +53,13 @@ begin:
 		ld	hl,bufdat
 		ld	b,23+26
 		call	slucka
-		call	waitf	; urob lasku!
+
+		push	hl
+		ld	hl,credit.n1ko
+		ld	de,credit.busy.flash
+		call	showcredit
+		pop	hl
+
 		ld	b,26
 		call	slucka
 		ld	hl,bufdat
@@ -51,7 +71,13 @@ begin:
 		ld	hl,bufdat
 		ld	b,23
 		call	slucka
-		call	waitf	; urob lasku!
+
+		push	hl
+		ld	hl,credit.busy
+		ld	de,credit.mbr.flash
+		call	showcredit
+		pop	hl
+
 		ld	b,26+26
 		call	slucka
 		ld	hl,bufdat
@@ -60,11 +86,55 @@ begin:
 		ld	hl,bufdat
 		ld	b,75
 		call	slucka
-		call	waitf	; urob lasku!
+
+		push	hl
+		ld	hl,credit.mbr
+		ld	de,clrscr
+		call	showcredit
+		pop	hl
 
 .loop		ei
 		halt
 		jr	.loop
+
+showcredit:	push	de
+		push	hl
+		ld	a,#07
+		ld	(actborder),a
+		xor	#1A
+		ld	(xchg.vram+1),a
+		call	xchg.bnk
+		halt
+		ld	hl,#4000
+		ld	de,odkalisko
+		ld	bc,#1B00
+		ldir
+		pop	hl
+		ld	de,#C000
+		call	depack
+		xor	a
+		ld	(actborder),a
+		call	xchg.vram
+		call	waitf
+		ld	a,#07
+		ld	(actborder),a
+		call	xchg.vram
+		halt
+		ld	hl,odkalisko
+		ld	de,#4000
+		ld	bc,#1B00
+		ldir
+		halt
+		xor	a
+		ld	(actborder),a
+		ld	a,#17
+		call	xchg.bnk
+		halt
+		pop	hl
+		ld	de,#C000
+		call	depack
+		ld	a,#10
+		jp	xchg.bnk
 
 slucka:		ei
 		halt
@@ -80,7 +150,7 @@ slucka:		ei
 		djnz	slucka
 		ret
 
-waitf:		ld	b,44
+waitf:		ld	b,88
 .loop		ei
 		halt
 		djnz	.loop
@@ -157,6 +227,17 @@ linearchunk:	ld	a,(hl)
 		djnz	.loop
 		inc	hl
 		jr	play
+
+;;-----------------------------------------------------------------------------
+clrscr:		db	#00,#00,#05,#FF,#A0,#20,#47,#05,#FD,#00,#00,#00,#80
+
+credit:
+.n1ko:		incbin "gfx/credit_n1ko.lzx"
+.n1ko.flash:	incbin "gfx/credit_n1ko_flash.lzx"
+.busy:		incbin "gfx/credit_busy.lzx"
+.busy.flash:	incbin "gfx/credit_busy_flash.lzx"
+.mbr:		incbin "gfx/credit_mbr.lzx"
+.mbr.flash:	incbin "gfx/credit_mbr_flash.lzx"
 
 	ifndef fx
 initscreen:	incbin "gfx/oneplusani000.scr.lzx"
