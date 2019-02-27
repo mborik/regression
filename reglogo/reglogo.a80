@@ -55,10 +55,9 @@ start:		ld	a,#16|#40	; SRAM page (RO)
 		call	depack
 		halt
 		call	xchg.vram
-		ld	hl,stvorcek.pack
+		ld	hl,vyblik.pack
 		ld	de,#C000
 		call	depack
-
 		ld	a,#10
 		call	xchg.bnk
 .squarer:	ei
@@ -66,6 +65,15 @@ start:		ld	a,#16|#40	; SRAM page (RO)
 		call	squarer
 		jr	nz,.squarer
 		ei
+		ld	hl,vyblikator
+		ld	de,vyblikator.start
+		push	de
+		ld	bc,vyblikator.length
+		ldir
+		pop	hl
+		ld	(IMCALL+1),hl
+		ld	a,#CD
+		ld	(IMCALL),a
 		ret
 
 render:		ei
@@ -407,10 +415,49 @@ maznak.addrs:	include "tables/maznak.a80"
 squarer.data:	include "tables/squarer.a80"
 
 stvorcek.pack:	incbin "gfx/stvorcek.lzx"
+vyblik.pack:	incbin "gfx/vyblikator.lzx"
 
 ;;-----------------------------------------------------------------------------
 		align	256
 prilet.up:	include "tables/prilet.up.a80"
+
+vyblikator:
+	phase #7777
+.start:		ld	hl,.table
+		ld	a,(hl)
+		or	a
+		jr	z,.end
+		ld	c,a
+		inc	l
+		ld	b,(hl)
+		inc	l
+		ex	hl,de
+		ld	hl,(FRAMES)
+		xor	a
+		sbc	hl,bc
+		ret	c
+		ld	(.start+1),de
+		ld	a,(act128page)
+		xor	8
+		ld	(act128page),a
+		ret
+
+.end:		ld	hl,IMCALL
+		ld	(hl),a
+		inc	l
+		ld	(hl),a
+		inc	l
+		ld	(hl),a
+		ret
+
+.table:		dw	1342, 1342 + 3
+		dw	1364, 1364 + 3
+		dw	1386, 1386 + 3
+		dw	1408, 1408 + 3
+		dw	0
+
+.length = $-.start
+	dephase
 
 		align	256
 prilet.down:	include "tables/prilet.down.a80"

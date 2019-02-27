@@ -32,6 +32,9 @@ begin:
 	endif
 		ld	a,#17
 		call	xchg.bnk
+		ei
+		halt
+
 		ld	a,#38
 		ld	hl,#D800
 		ld	de,#D801
@@ -57,6 +60,7 @@ begin:
 		push	hl
 		ld	hl,credit.n1ko
 		ld	de,credit.busy.flash
+		ld	b,100
 		call	showcredit
 		pop	hl
 
@@ -75,6 +79,7 @@ begin:
 		push	hl
 		ld	hl,credit.busy
 		ld	de,credit.mbr.flash
+		ld	b,77
 		call	showcredit
 		pop	hl
 
@@ -90,6 +95,7 @@ begin:
 		push	hl
 		ld	hl,credit.mbr
 		ld	de,clrscr
+		ld	b,111
 		call	showcredit
 		pop	hl
 
@@ -98,12 +104,16 @@ begin:
 		jr	.loop
 
 showcredit:	push	de
+		push	bc
 		push	hl
 		ld	a,#07
 		ld	(actborder),a
+		out	(254),a
 		xor	#1A
 		ld	(xchg.vram+1),a
 		call	xchg.bnk
+		halt
+		halt
 		halt
 		ld	hl,#4000
 		ld	de,odkalisko
@@ -114,11 +124,16 @@ showcredit:	push	de
 		call	depack
 		xor	a
 		ld	(actborder),a
+		out	(254),a
 		call	xchg.vram
+		pop	bc
 		call	waitf
 		ld	a,#07
 		ld	(actborder),a
+		out	(254),a
 		call	xchg.vram
+		halt
+		halt
 		halt
 		ld	hl,odkalisko
 		ld	de,#4000
@@ -127,6 +142,7 @@ showcredit:	push	de
 		halt
 		xor	a
 		ld	(actborder),a
+		out	(254),a
 		ld	a,#17
 		call	xchg.bnk
 		halt
@@ -150,7 +166,7 @@ slucka:		ei
 		djnz	slucka
 		ret
 
-waitf:		ld	b,88
+waitf:
 .loop		ei
 		halt
 		djnz	.loop
