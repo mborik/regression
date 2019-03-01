@@ -37,6 +37,7 @@
 		call	MUSIC.init
 	ifdef MUSIC.waitfor
 		ld	bc,MUSIC.waitfor
+		ld	(FRAMES),bc
 .muswaiter:	push	bc
 		call	MUSIC.play
 		pop	bc

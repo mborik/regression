@@ -59,8 +59,8 @@ begin:
 
 		push	hl
 		ld	hl,credit.n1ko
-		ld	de,credit.busy.flash
-		ld	b,100
+		ld	de,credit.support.flash
+		ld	b,77
 		call	showcredit
 		pop	hl
 
@@ -77,9 +77,9 @@ begin:
 		call	slucka
 
 		push	hl
-		ld	hl,credit.busy
+		ld	hl,credit.support
 		ld	de,credit.mbr.flash
-		ld	b,77
+		ld	b,100
 		call	showcredit
 		pop	hl
 
@@ -94,14 +94,33 @@ begin:
 
 		push	hl
 		ld	hl,credit.mbr
-		ld	de,clrscr
+		ld	de,vyblikator.gfx
 		ld	b,111
 		call	showcredit
 		pop	hl
 
-.loop		ei
+.vyblik:	ei
 		halt
-		jr	.loop
+		call	vyblikator
+		jr	nz,.vyblik
+
+		ld	hl,stvorcekani.cd
+		ld	de,#C000
+		call	depack
+
+		ld	bc,2497
+.waitfswish:	ei
+		halt
+		ld	hl,(FRAMES)
+		xor	a
+		sbc	hl,bc
+		jr	c,.waitfswish
+
+.stvorcek:	ei
+		halt
+		call	stvorcekani
+		jr	nz,.stvorcek
+		ret
 
 showcredit:	push	de
 		push	bc
@@ -171,6 +190,32 @@ waitf:
 		halt
 		djnz	.loop
 		ret
+
+vyblikator:	ld	hl,.table
+		ld	a,(hl)
+		or	a
+		ret	z
+		ld	c,a
+		inc	l
+		ld	b,(hl)
+		inc	l
+		ex	hl,de
+		ld	hl,(FRAMES)
+		xor	a
+		sbc	hl,bc
+		ret	c
+		ld	(vyblikator+1),de
+		ld	a,(act128page)
+		xor	8
+		ld	(act128page),a
+		ret
+
+.table:		dw	2376, 2376 + 3
+		dw	2398, 2398 + 3
+		dw	2420, 2420 + 3
+		dw	2442, 2442 + 3
+		dw	2464, 2464 + 3
+		dw	0
 
 play0:		call	drawchunk
 play:		ld	a,(hl)
@@ -244,16 +289,57 @@ linearchunk:	ld	a,(hl)
 		inc	hl
 		jr	play
 
+
+stvorcekani:	ld	hl,.table
+		ld	e,(hl)
+		inc	hl
+		ld	a,(hl)
+		or	a
+		ret	z
+		inc	hl
+		ld	(stvorcekani+1),hl
+		ld	h,a
+		ld	l,e
+		ld	(.retsp+1),sp
+		di
+		ld	sp,#5000
+		ld	de,0
+		ld	b,32
+.clear:	rept 32
+		push	de
+	endm
+		djnz	.clear
+		ld	a,e
+		dec	a
+		ld	de,.retsp
+		ld	sp,scradrtab
+		jp	(hl)
+.retsp:		ld	sp,0
+		ei
+		ret
+
+.table:		include "stvorcek.flyout.inc"
+		dw	0
+
+scradrtab
+.i = 64
+	dup 64
+		dw	(((.i & #C0) | ((.i & #38) >> 3) | ((.i & 7) << 3)) << 5) + #4000
+.i = .i + 1
+	edup
+
 ;;-----------------------------------------------------------------------------
-clrscr:		db	#00,#00,#05,#FF,#A0,#20,#47,#05,#FD,#00,#00,#00,#80
+stvorcekani.cd:	incbin "stvorcek.flyout.pak"
+vyblikator.gfx:	incbin "../reglogo/gfx/vyblikator.lzx"
 
 credit:
 .n1ko:		incbin "gfx/credit_n1ko.lzx"
 .n1ko.flash:	incbin "gfx/credit_n1ko_flash.lzx"
-.busy:		incbin "gfx/credit_busy.lzx"
-.busy.flash:	incbin "gfx/credit_busy_flash.lzx"
+.support:	incbin "gfx/credit_support.lzx"
+.support.flash:	incbin "gfx/credit_support_flash.lzx"
 .mbr:		incbin "gfx/credit_mbr.lzx"
 .mbr.flash:	incbin "gfx/credit_mbr_flash.lzx"
+
 
 	ifndef fx
 initscreen:	incbin "gfx/oneplusani000.scr.lzx"

@@ -422,7 +422,7 @@ vyblik.pack:	incbin "gfx/vyblikator.lzx"
 prilet.up:	include "tables/prilet.up.a80"
 
 vyblikator:
-	phase #7777
+	phase #8000
 .start:		ld	hl,.table
 		ld	a,(hl)
 		or	a
