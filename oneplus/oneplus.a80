@@ -104,9 +104,11 @@ begin:
 		call	vyblikator
 		jr	nz,.vyblik
 
-		ld	hl,stvorcekani.cd
-		ld	de,#C000
-		call	depack
+		ld	hl,#5800
+		ld	de,#5801
+		ld	bc,#2FF
+		ld	(hl),7
+		ldir
 
 		ld	bc,2497
 .waitfswish:	ei
@@ -289,17 +291,20 @@ linearchunk:	ld	a,(hl)
 		inc	hl
 		jr	play
 
-
-stvorcekani:	ld	hl,.table
-		ld	e,(hl)
-		inc	hl
+stvorcekani:	ld	hl,stvorcekani.table
 		ld	a,(hl)
 		or	a
 		ret	z
+		ld	c,a
+		inc	hl
+		ld	b,(hl)
+		inc	hl
+		ld	e,(hl)
+		inc	hl
+		ld	d,(hl)
 		inc	hl
 		ld	(stvorcekani+1),hl
-		ld	h,a
-		ld	l,e
+		exx
 		ld	(.retsp+1),sp
 		di
 		ld	sp,#5000
@@ -309,27 +314,141 @@ stvorcekani:	ld	hl,.table
 		push	de
 	endm
 		djnz	.clear
-		ld	a,e
-		dec	a
-		ld	de,.retsp
-		ld	sp,scradrtab
-		jp	(hl)
 .retsp:		ld	sp,0
+		exx
 		ei
+
+; c=x1 < e=x2, b=y1 < d=y2
+kvadro:		ld	a,d
+		sub	b
+		inc	a
+		ld	d,a
+		ld	a,c
+		and	#F8
+		ld	xh,a
+		ld	a,e
+		and	#F8
+		cp	xh
+		ld	xh,b
+		jr	nz,.r2
+		call	addbod
+		ld	b,a
+		ld	a,#FF
+		jr	z,.lbrdnone1
+.lbrdloop1:	srl	a
+		djnz	.lbrdloop1
+.lbrdnone1:	ld	c,a
+		ld	a,e
+		and	7
+		ld	b,a
+		ld	a,#80
+		jr	z,.rbrdnone1
+.rbrdloop1:	scf
+		rra
+		djnz	.rbrdloop1
+.rbrdnone1:	and	c
+		ld	e,a
+		ld	a,xh
+		cpl
+		and	7
+		inc	a
+		ld	b,a
+.zv1:		ld	(hl),e
+		inc	h
+		dec	d
+		jr	z,.nzret
+		djnz	.zv1
+		ld	b,8
+		ld	a,#20
+		add	a,l
+		ld	l,a
+		jr	c,.zv1
+		ld	a,#F8
+		add	a,h
+		ld	h,a
+		jr	.zv1
+
+.nzret:		or	h
 		ret
 
-.table:		include "stvorcek.flyout.inc"
+.r2:		dec	a
+		sub	c
+		rrca
+		rrca
+		rrca
+		and	#1F
+		inc	a
+		ld	(.kvainc+1),a
+		call	addbod
+		ld	b,a
+		ld	a,#FF
+		jr	z,.lbrdnone2
+.lbrdloop2:	srl	a
+		djnz	.lbrdloop2
+.lbrdnone2:	ld	(.kvazac+1),a
+		ld	a,e
+		and	7
+		ld	b,a
+		inc	b
+		xor	a
+.rbrdloop2:	scf
+		rra
+		djnz	.rbrdloop2
+		ld	(.kvaend+1),a
+		ld	a,xh
+		cpl
+		and	7
+		inc	a
+		ld	b,a
+
+.kva11:		push	hl
+.kvazac:	ld	a,#FF
+		ld	(hl),a
+.kvainc:	ld	e,0
+		inc	l
+		dec	e
+		jr	z,.kvaend
+		or	#FF
+.kvaline:	ld	(hl),a
+		inc	l
+		dec	e
+		jr	nz,.kvaline
+.kvaend:	ld	a,#FF
+		ld	(hl),a
+		pop	hl
+		inc	h
+		dec	d
+		jr	z,.nzret
+		djnz	.kva11
+		ld	b,8
+		ld	a,#20
+		add	a,l
+		ld	l,a
+		jr	c,.kva11
+		ld	a,#F8
+		add	a,h
+		ld	h,a
+		jr	.kva11
+
+addbod:		ld	h,high scradrtab
+		ld	l,b
+		ld	a,c
+		rrca
+		rrca
+		rrca
+		and	#1F
+		or	(hl)
+		inc	h
+		ld	h,(hl)
+		ld	l,a
+		ld	a,c
+		and	7
+		ret
+
+stvorcekani.table:
+		include "stvorcek.path.inc"
 		dw	0
 
-scradrtab
-.i = 64
-	dup 64
-		dw	(((.i & #C0) | ((.i & #38) >> 3) | ((.i & 7) << 3)) << 5) + #4000
-.i = .i + 1
-	edup
-
-;;-----------------------------------------------------------------------------
-stvorcekani.cd:	incbin "stvorcek.flyout.pak"
 vyblikator.gfx:	incbin "../reglogo/gfx/vyblikator.lzx"
 
 credit:
@@ -340,6 +459,21 @@ credit:
 .mbr:		incbin "gfx/credit_mbr.lzx"
 .mbr.flash:	incbin "gfx/credit_mbr_flash.lzx"
 
+		align	256
+scradrtab:
+.i = 0
+	dup 256
+		db	((((.i & #C0) | ((.i & #38) >> 3) | ((.i & 7) << 3)) << 5) & #FF)
+.i = .i + 1
+	edup
+.i = 0
+	dup 256
+		db	((((.i & #C0) | ((.i & #38) >> 3) | ((.i & 7) << 3)) << 5) >> 8) | #40
+.i = .i + 1
+	edup
+
+
+;;-----------------------------------------------------------------------------
 
 	ifndef fx
 initscreen:	incbin "gfx/oneplusani000.scr.lzx"

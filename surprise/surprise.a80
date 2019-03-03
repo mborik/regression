@@ -1,0 +1,187 @@
+		device	zxspectrum128
+
+@DEBUG = 0
+
+		include "../kernel/constants.inc"
+
+;;-----------------------------------------------------------------------------
+	macro border n
+	  if DEBUG
+	    if n > 0
+		ld	a,n
+	    else
+		xor	a
+	    endif
+		out	(254),a
+	  endif
+	endm
+
+;;-----------------------------------------------------------------------------
+
+		org	RUNZONE
+		define	MUSIC.waitfor 2551
+
+@attr_story = #6000
+
+surprise:	ei
+		ld	hl,attrs1
+		ld	de,attrs1+1
+		ld	bc,#5ff
+		ld	(hl),l
+		ldir
+
+		ld	hl,attr_story_pak
+		ld	de,attr_story
+		call	depack
+
+		xor	a
+		ld	(actborder),a
+		ld	a,$CD
+		ld	(IMCALL),a
+		ld	hl,surprise_rut
+		ld	(IMCALL+1),hl
+
+.loop:		ei
+		halt
+		jr	.loop
+
+;; ----------------------------------------------------------------------------
+surprise_rut:	ld	a,#AA
+		rrca
+		ld	(surprise_rut+1),a
+		jp	c,flakejbarvy
+
+		call	xchg.vram
+		border	2
+		ld	(.retsp+1),sp
+
+.ptr_pattern:	ld	sp,pattern
+		include "surprise.blitter.a80"
+.retsp:		ld	sp,#3131
+		border	0
+		ret
+
+;;~~~~~
+
+flakejbarvy	border	2
+		ld	a,(act128page)
+		call	xchg.bnk+3
+
+		ld	hl,attrs1
+		ld	de,attrs2
+		ld	bc,#D800
+.loop0:		inc	l
+	rept 30
+		ld	a,(hl)
+		dec	l
+		ex	af,af'
+		ld	a,(hl)
+		or	a
+		jr	nz,$+3
+		ld	a,(de)
+		ld	(bc),a
+		ex	af,af'
+		ld	(hl),a
+		inc	l
+		inc	l
+		inc	e
+		inc	c
+	endm
+		ld	a,(hl)
+		dec	l
+		ex	af,af'
+		ld	a,(hl)
+		or	a
+		jr	nz,$+3
+		ld	a,(de)
+		ld	(bc),a
+		ex	af,af'
+		ld	(hl),a
+		inc	l
+		inc	e
+		inc	c
+		ld	a,(hl)
+		or	a
+		jr	nz,$+3
+		ld	a,(de)
+		ld	(bc),a
+		inc	hl
+		inc	de
+		inc	bc
+		ld	a,#DB
+		cp	b
+		jp	nz,.loop0
+
+		border	5
+		dec	hl
+.ptr:		ld	de,attr_story
+		ld	a,(de)
+		or	a
+		jr	z,.a
+		cp	$ff
+		jr	z,.q
+		dec	a
+		ld	(de),a
+		jr	.storede+4
+
+.q:		ld	bc,$0218 ;; jr $+4
+		ld	(.storede),bc
+		xor	a
+.a:		ld	(hl),a
+		ld	bc,-32
+		add	hl,bc
+		inc	de
+	rept 22
+		ld	a,(de)
+		inc	de
+		ld	(hl),a
+		add	hl,bc
+	endm
+		ld	a,(de)
+		inc	de
+		ld	(hl),a
+.storede:	ld	(.ptr+1),de
+
+		border	3
+.ypos:		ld	a,0
+		inc	a
+		ld	(.ypos+1),a
+		ld	l,a
+		ld	h,high sintab
+		ld	a,(hl)
+		and	63	; 62 ak bude predrotovana predloha ob-dva
+		rlca
+		rlca
+		ld	bc,pattern
+		ld	l,a
+		ld	h,c
+		add	hl,hl
+		add	hl,hl
+		add	hl,bc
+		ld	(surprise_rut.ptr_pattern+1),hl
+		border	0
+		ret
+
+attr_story_pak:	incbin "atributy.story.lzx"
+
+
+		align	256
+
+pattern		include "tables/pixeldata.a80"
+sintab		incbin  "tables/sintab.bin"
+
+
+		savebin "final.bin",surprise,$-surprise
+
+attrs1		ds	768	; sinusovka
+attrs2		ds	768	; farebny zaklad
+
+;;-----------------------------------------------------------------------------
+	ifndef fx
+		slot 3
+		page 6
+
+		include "../kernel/kernel.micro.inc"
+
+		savesna "surprise.sna",microkernel
+	endif

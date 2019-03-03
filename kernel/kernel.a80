@@ -433,6 +433,10 @@ fxtable:	db	fx_city.pg
 		dw	fx_oneplus
 		dw	fx_oneplus.sync
 
+		db	fx_surprise.pg
+		dw	fx_surprise
+		dw	fx_surprise.sync
+
 		db	0
 
 @len = $ - start

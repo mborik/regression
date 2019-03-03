@@ -20,6 +20,12 @@ sjasmplus -Dfx --lst=oneplus.lst oneplus.a80
 lzxpack -t36o7o14 final.bin
 ren final-t36o7o14.lzx final.pak
 
+@cd ..\surprise
+del /Q /F final.pak
+sjasmplus -Dfx --lst=surprise.lst surprise.a80
+lzxpack -t36o7o14 final.bin
+ren final-t36o7o14.lzx final.pak
+
 @cd ..
 del /Q /F output needle*
 

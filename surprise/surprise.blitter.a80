@@ -1,0 +1,4968 @@
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0001+1),sp
+		ld	sp,#C060
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0001	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0002+1),sp
+		ld	sp,#C160
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0002	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0003+1),sp
+		ld	sp,#C260
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0003	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0004+1),sp
+		ld	sp,#C360
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0004	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0005+1),sp
+		ld	sp,#C460
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0005	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0006+1),sp
+		ld	sp,#C560
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0006	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0007+1),sp
+		ld	sp,#C660
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0007	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0008+1),sp
+		ld	sp,#C760
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0008	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0009+1),sp
+		ld	sp,#C080
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0009	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0010+1),sp
+		ld	sp,#C180
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0010	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0011+1),sp
+		ld	sp,#C280
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0011	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0012+1),sp
+		ld	sp,#C380
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0012	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0013+1),sp
+		ld	sp,#C480
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0013	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0014+1),sp
+		ld	sp,#C580
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0014	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0015+1),sp
+		ld	sp,#C680
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0015	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0016+1),sp
+		ld	sp,#C780
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0016	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0017+1),sp
+		ld	sp,#C0A0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0017	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0018+1),sp
+		ld	sp,#C1A0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0018	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0019+1),sp
+		ld	sp,#C2A0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0019	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0020+1),sp
+		ld	sp,#C3A0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0020	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0021+1),sp
+		ld	sp,#C4A0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0021	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0022+1),sp
+		ld	sp,#C5A0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0022	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0023+1),sp
+		ld	sp,#C6A0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0023	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0024+1),sp
+		ld	sp,#C7A0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0024	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0025+1),sp
+		ld	sp,#C0C0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0025	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0026+1),sp
+		ld	sp,#C1C0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0026	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0027+1),sp
+		ld	sp,#C2C0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0027	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0028+1),sp
+		ld	sp,#C3C0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0028	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0029+1),sp
+		ld	sp,#C4C0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0029	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0030+1),sp
+		ld	sp,#C5C0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0030	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0031+1),sp
+		ld	sp,#C6C0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0031	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0032+1),sp
+		ld	sp,#C7C0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0032	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0033+1),sp
+		ld	sp,#C0E0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0033	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0034+1),sp
+		ld	sp,#C1E0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0034	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0035+1),sp
+		ld	sp,#C2E0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0035	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0036+1),sp
+		ld	sp,#C3E0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0036	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0037+1),sp
+		ld	sp,#C4E0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0037	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0038+1),sp
+		ld	sp,#C5E0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0038	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0039+1),sp
+		ld	sp,#C6E0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0039	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0040+1),sp
+		ld	sp,#C7E0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0040	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0041+1),sp
+		ld	sp,#C100
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0041	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0042+1),sp
+		ld	sp,#C200
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0042	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0043+1),sp
+		ld	sp,#C300
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0043	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0044+1),sp
+		ld	sp,#C400
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0044	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0045+1),sp
+		ld	sp,#C500
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0045	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0046+1),sp
+		ld	sp,#C600
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0046	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0047+1),sp
+		ld	sp,#C700
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0047	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0048+1),sp
+		ld	sp,#C800
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0048	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0049+1),sp
+		ld	sp,#C820
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0049	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0050+1),sp
+		ld	sp,#C920
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0050	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0051+1),sp
+		ld	sp,#CA20
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0051	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0052+1),sp
+		ld	sp,#CB20
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0052	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0053+1),sp
+		ld	sp,#CC20
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0053	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0054+1),sp
+		ld	sp,#CD20
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0054	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0055+1),sp
+		ld	sp,#CE20
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0055	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0056+1),sp
+		ld	sp,#CF20
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0056	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0057+1),sp
+		ld	sp,#C840
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0057	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0058+1),sp
+		ld	sp,#C940
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0058	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0059+1),sp
+		ld	sp,#CA40
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0059	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0060+1),sp
+		ld	sp,#CB40
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0060	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0061+1),sp
+		ld	sp,#CC40
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0061	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0062+1),sp
+		ld	sp,#CD40
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0062	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0063+1),sp
+		ld	sp,#CE40
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0063	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0064+1),sp
+		ld	sp,#CF40
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0064	ld	hl,#2121
+		dec	h
+		dec	h
+		dec	h
+		dec	h
+		ld	sp,hl
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0065+1),sp
+		ld	sp,#C860
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0065	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0066+1),sp
+		ld	sp,#C960
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0066	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0067+1),sp
+		ld	sp,#CA60
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0067	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0068+1),sp
+		ld	sp,#CB60
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0068	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0069+1),sp
+		ld	sp,#CC60
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0069	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0070+1),sp
+		ld	sp,#CD60
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0070	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0071+1),sp
+		ld	sp,#CE60
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0071	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0072+1),sp
+		ld	sp,#CF60
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0072	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0073+1),sp
+		ld	sp,#C880
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0073	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0074+1),sp
+		ld	sp,#C980
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0074	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0075+1),sp
+		ld	sp,#CA80
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0075	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0076+1),sp
+		ld	sp,#CB80
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0076	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0077+1),sp
+		ld	sp,#CC80
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0077	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0078+1),sp
+		ld	sp,#CD80
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0078	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0079+1),sp
+		ld	sp,#CE80
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0079	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0080+1),sp
+		ld	sp,#CF80
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0080	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0081+1),sp
+		ld	sp,#C8A0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0081	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0082+1),sp
+		ld	sp,#C9A0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0082	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0083+1),sp
+		ld	sp,#CAA0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0083	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0084+1),sp
+		ld	sp,#CBA0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0084	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0085+1),sp
+		ld	sp,#CCA0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0085	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0086+1),sp
+		ld	sp,#CDA0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0086	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0087+1),sp
+		ld	sp,#CEA0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0087	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0088+1),sp
+		ld	sp,#CFA0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0088	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0089+1),sp
+		ld	sp,#C8C0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0089	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0090+1),sp
+		ld	sp,#C9C0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0090	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0091+1),sp
+		ld	sp,#CAC0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0091	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0092+1),sp
+		ld	sp,#CBC0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0092	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0093+1),sp
+		ld	sp,#CCC0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0093	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0094+1),sp
+		ld	sp,#CDC0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0094	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0095+1),sp
+		ld	sp,#CEC0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0095	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0096+1),sp
+		ld	sp,#CFC0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0096	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0097+1),sp
+		ld	sp,#C8E0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0097	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0098+1),sp
+		ld	sp,#C9E0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0098	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0099+1),sp
+		ld	sp,#CAE0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0099	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0100+1),sp
+		ld	sp,#CBE0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0100	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0101+1),sp
+		ld	sp,#CCE0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0101	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0102+1),sp
+		ld	sp,#CDE0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0102	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0103+1),sp
+		ld	sp,#CEE0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0103	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0104+1),sp
+		ld	sp,#CFE0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0104	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0105+1),sp
+		ld	sp,#C900
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0105	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0106+1),sp
+		ld	sp,#CA00
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0106	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0107+1),sp
+		ld	sp,#CB00
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0107	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0108+1),sp
+		ld	sp,#CC00
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0108	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0109+1),sp
+		ld	sp,#CD00
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0109	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0110+1),sp
+		ld	sp,#CE00
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0110	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0111+1),sp
+		ld	sp,#CF00
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0111	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0112+1),sp
+		ld	sp,#D000
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0112	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0113+1),sp
+		ld	sp,#D020
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0113	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0114+1),sp
+		ld	sp,#D120
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0114	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0115+1),sp
+		ld	sp,#D220
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0115	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0116+1),sp
+		ld	sp,#D320
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0116	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0117+1),sp
+		ld	sp,#D420
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0117	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0118+1),sp
+		ld	sp,#D520
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0118	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0119+1),sp
+		ld	sp,#D620
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0119	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0120+1),sp
+		ld	sp,#D720
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0120	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0121+1),sp
+		ld	sp,#D040
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0121	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0122+1),sp
+		ld	sp,#D140
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0122	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0123+1),sp
+		ld	sp,#D240
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0123	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0124+1),sp
+		ld	sp,#D340
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0124	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0125+1),sp
+		ld	sp,#D440
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0125	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0126+1),sp
+		ld	sp,#D540
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0126	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0127+1),sp
+		ld	sp,#D640
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0127	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0128+1),sp
+		ld	sp,#D740
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0128	ld	hl,#2121
+		dec	h
+		dec	h
+		dec	h
+		dec	h
+		ld	sp,hl
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0129+1),sp
+		ld	sp,#D060
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0129	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0130+1),sp
+		ld	sp,#D160
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0130	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0131+1),sp
+		ld	sp,#D260
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0131	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0132+1),sp
+		ld	sp,#D360
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0132	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0133+1),sp
+		ld	sp,#D460
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0133	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0134+1),sp
+		ld	sp,#D560
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0134	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0135+1),sp
+		ld	sp,#D660
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0135	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0136+1),sp
+		ld	sp,#D760
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0136	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0137+1),sp
+		ld	sp,#D080
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0137	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0138+1),sp
+		ld	sp,#D180
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0138	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0139+1),sp
+		ld	sp,#D280
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0139	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0140+1),sp
+		ld	sp,#D380
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0140	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0141+1),sp
+		ld	sp,#D480
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0141	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0142+1),sp
+		ld	sp,#D580
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0142	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0143+1),sp
+		ld	sp,#D680
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0143	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0144+1),sp
+		ld	sp,#D780
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0144	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0145+1),sp
+		ld	sp,#D0A0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0145	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0146+1),sp
+		ld	sp,#D1A0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0146	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0147+1),sp
+		ld	sp,#D2A0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0147	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0148+1),sp
+		ld	sp,#D3A0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0148	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0149+1),sp
+		ld	sp,#D4A0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0149	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0150+1),sp
+		ld	sp,#D5A0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0150	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0151+1),sp
+		ld	sp,#D6A0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0151	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0152+1),sp
+		ld	sp,#D7A0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0152	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0153+1),sp
+		ld	sp,#D0C0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0153	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0154+1),sp
+		ld	sp,#D1C0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0154	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0155+1),sp
+		ld	sp,#D2C0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0155	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0156+1),sp
+		ld	sp,#D3C0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0156	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0157+1),sp
+		ld	sp,#D4C0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0157	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0158+1),sp
+		ld	sp,#D5C0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0158	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	(.line0159+1),sp
+		ld	sp,#D6C0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+.line0159	ld	sp,#3131
+		pop	bc
+		pop	de
+		pop	hl
+		pop	ix
+		exx
+		pop	bc
+		pop	de
+		pop	hl
+		pop	iy
+		ld	sp,#D7C0
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	iy
+		push	hl
+		push	de
+		push	bc
+		exx
+		push	ix
+		push	hl
+		push	de
+		push	bc

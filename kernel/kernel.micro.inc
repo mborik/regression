@@ -48,7 +48,13 @@
 	endif
 		ld	a,#10
 		call	bnk
-		jp	RUNZONE
+		call	RUNZONE
+
+		ld	a,2
+		ld	(actborder),a
+.deadend:	ei
+		halt
+		jr	.deadend
 
 		org	#8128
 

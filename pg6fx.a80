@@ -14,6 +14,11 @@ MUSIC.init = music_init
 MUSIC.play = music_play
 
 ;;-----------------------------------------------------------------------------
+fx_surprise:	incbin "surprise/final.pak"
+.pg = _fxpage
+.sync = 2540
+
+;;-----------------------------------------------------------------------------
 	if $ > #FFFF
 		display "Too long! ",/D,($-#10000)," bytes out!"
 		end
@@ -29,3 +34,7 @@ MUSIC.play = music_play
 		export	MUSIC.page
 		export	MUSIC.init
 		export	MUSIC.play
+
+		export fx_surprise
+		export fx_surprise.pg
+		export fx_surprise.sync
