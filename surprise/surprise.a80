@@ -43,7 +43,149 @@ surprise:	ei
 
 .loop:		ei
 		halt
+.color:		ld	a,0
+.processor:	ld	bc,0
+.citajscenar:	ld	hl,.table
+		ld	a,(hl)
+		or	a
+		ret	z
+		ld	c,a
+		inc	l
+		ld	b,(hl)
+		ex	hl,de
+		ld	hl,(FRAMES)
+		xor	a
+		sbc	hl,bc
+		jr	c,.loop
+		ex	hl,de
+		inc	l
+		ld	c,(hl)
+		inc	l
+		ld	a,(hl)
+		inc	l
+		ld	(.citajscenar+1),hl
+		rlca
+		rlca
+		rlca
+		ld	e,a
+		ld	d,0
+		ld	hl,.jumpers
+		add	hl,de
+		ex	hl,de
+		ld	hl,.processor+2
+		ld	(hl),d
+		dec	hl
+		ld	(hl),e
+		dec	hl
+		ld	(hl),#CD
+		dec	hl
+		ld	(hl),c
 		jr	.loop
+
+	macro blik frames, place, color
+		dw	frames + 0,	 place << 8 | color
+		dw	frames + 8,	 place << 8 | 0
+	endm
+
+.table:		blik	3300,  5, 011q
+		blik	3322,  4, 044q
+		blik	3344,  7, 122q
+		blik	3366,  1, 166q
+		blik	3388, 12, 033q
+		blik	3410,  2, 111q
+		blik	3432,  9, 022q
+		blik	3454,  3, 055q
+		blik	3476,  6, 133q
+		blik	3498, 11, 066q
+		blik	3520,  8, 155q
+		blik	3542, 10, 144q
+		blik	3564,  5, 177q
+		dw	3586,  4 << 8 | 077q
+		dw	3608,  7 << 8 | 077q
+		dw	3630,  1 << 8 | 077q
+		dw	3652, 12 << 8 | 077q
+		dw	3674,  2 << 8 | 077q
+		dw	3696,  9 << 8 | 077q
+		dw	3718,  3 << 8 | 077q
+		dw	3740,  6 << 8 | 077q
+		dw	3762, 11 << 8 | 077q
+		dw	3784,  8 << 8 | 077q
+		dw	3806, 10 << 8 | 077q
+		dw	3828,  5 << 8 | 077q
+		dw	4000,0
+		dw	0
+
+.jumpers:	jp	drawcube.reset
+		ds	5
+
+		ld	hl,attrs2+0
+		ld	de,(attrs2+0)+128
+		jr	drawcube
+
+		ld	hl,attrs2+8
+		ld	de,(attrs2+8)+128
+		jr	drawcube
+
+		ld	hl,attrs2+16
+		ld	de,(attrs2+16)+128
+		jr	drawcube
+
+		ld	hl,attrs2+24
+		ld	de,(attrs2+24)+128
+		jr	drawcube
+
+		ld	hl,attrs2+256
+		ld	de,(attrs2+256)+128
+		jr	drawcube
+
+		ld	hl,attrs2+256+8
+		ld	de,(attrs2+256+8)+128
+		jr	drawcube
+
+		ld	hl,attrs2+256+16
+		ld	de,(attrs2+256+16)+128
+		jr	drawcube
+
+		ld	hl,attrs2+256+24
+		ld	de,(attrs2+256+24)+128
+		jr	drawcube
+
+		ld	hl,attrs2+512
+		ld	de,(attrs2+512)+128
+		jr	drawcube
+
+		ld	hl,attrs2+512+8
+		ld	de,(attrs2+512+8)+128
+		jr	drawcube
+
+		ld	hl,attrs2+512+16
+		ld	de,(attrs2+512+16)+128
+		jr	drawcube
+
+		ld	hl,attrs2+512+24
+		ld	de,(attrs2+512+24)+128
+		jr	drawcube
+
+drawcube:	ld	bc,33 - 8
+	dup 4
+	dup 7
+		ld	(hl),a
+		ld	(de),a
+		inc	l
+		inc	e
+	edup
+		ld	(hl),a
+		ld	(de),a
+		add	hl,bc
+		ex	hl,de
+		add	hl,bc
+	edup
+		org	$-3
+		or	a
+		ret	nz
+.reset:		inc	a
+		ld	(surprise.processor),a
+		ret
 
 ;; ----------------------------------------------------------------------------
 surprise_rut:	ld	a,#AA
