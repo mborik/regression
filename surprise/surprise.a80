@@ -16,6 +16,11 @@
 	  endif
 	endm
 
+	macro blik frames, place, color
+		dw	frames + 0,	 place << 8 | color
+		dw	frames + 8,	 place << 8 | 0
+	endm
+
 ;;-----------------------------------------------------------------------------
 
 		org	RUNZONE
@@ -45,7 +50,7 @@ surprise:	ei
 		halt
 .color:		ld	a,0
 .processor:	ld	bc,0
-.citajscenar:	ld	hl,.table
+.citajscenar:	ld	hl,drawcube.table
 		ld	a,(hl)
 		or	a
 		ret	z
@@ -81,39 +86,6 @@ surprise:	ei
 		dec	hl
 		ld	(hl),c
 		jr	.loop
-
-	macro blik frames, place, color
-		dw	frames + 0,	 place << 8 | color
-		dw	frames + 8,	 place << 8 | 0
-	endm
-
-.table:		blik	3300,  5, 011q
-		blik	3322,  4, 044q
-		blik	3344,  7, 122q
-		blik	3366,  1, 166q
-		blik	3388, 12, 033q
-		blik	3410,  2, 111q
-		blik	3432,  9, 022q
-		blik	3454,  3, 055q
-		blik	3476,  6, 133q
-		blik	3498, 11, 066q
-		blik	3520,  8, 155q
-		blik	3542, 10, 144q
-		blik	3564,  5, 177q
-		dw	3586,  4 << 8 | 077q
-		dw	3608,  7 << 8 | 077q
-		dw	3630,  1 << 8 | 077q
-		dw	3652, 12 << 8 | 077q
-		dw	3674,  2 << 8 | 077q
-		dw	3696,  9 << 8 | 077q
-		dw	3718,  3 << 8 | 077q
-		dw	3740,  6 << 8 | 077q
-		dw	3762, 11 << 8 | 077q
-		dw	3784,  8 << 8 | 077q
-		dw	3806, 10 << 8 | 077q
-		dw	3828,  5 << 8 | 077q
-		dw	4000,0
-		dw	0
 
 .jumpers:	jp	drawcube.reset
 		ds	5
@@ -305,6 +277,47 @@ flakejbarvy	border	2
 		ret
 
 attr_story_pak:	incbin "atributy.story.lzx"
+
+
+		align	256
+
+drawcube.table:	blik	3300,  5, 011q
+		blik	3322,  4, 044q
+		blik	3344,  7, 122q
+		blik	3366,  1, 166q
+		blik	3388, 12, 033q
+		blik	3410,  2, 111q
+		blik	3432,  9, 022q
+		blik	3454,  3, 055q
+		blik	3476,  6, 133q
+		blik	3498, 11, 066q
+		blik	3520,  8, 155q
+		blik	3542, 10, 144q
+		blik	3564,  5, 177q
+		dw	3586,  4 << 8 | 077q
+		dw	3608,  7 << 8 | 077q
+		dw	3630,  1 << 8 | 077q
+		dw	3652, 12 << 8 | 077q
+		dw	3674,  2 << 8 | 077q
+		dw	3696,  9 << 8 | 077q
+		dw	3718,  3 << 8 | 077q
+		dw	3740,  6 << 8 | 077q
+		dw	3762, 11 << 8 | 077q
+		dw	3784,  8 << 8 | 077q
+		dw	3785,  4 << 8
+		dw	3806, 10 << 8 | 077q
+		dw	3807,  1 << 8
+		dw	3828,  5 << 8 | 077q
+		dw	3829, 12 << 8
+		dw	3850,  2 << 8
+		dw	3872,  9 << 8
+		dw	3894,  3 << 8
+		dw	3916, 11 << 8
+		dw	3938,  8 << 8
+		dw	3960, 10 << 8
+		dw	3982,  5 << 8
+		dw	3999,0
+		dw	0
 
 
 		align	256
