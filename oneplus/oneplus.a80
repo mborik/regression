@@ -212,7 +212,7 @@ vyblikator:	ld	hl,.table
 		ld	(act128page),a
 		ret
 
-.table:		dw	2376, 2376 + 3
+.table:	;	dw	2376, 2376 + 3
 		dw	2398, 2398 + 3
 		dw	2420, 2420 + 3
 		dw	2442, 2442 + 3

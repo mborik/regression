@@ -1,8 +1,9 @@
 		device	zxspectrum128
 
-numberOfNeedles = 3
+numberOfNeedles = 4
 		include "pg1fx.inc"
 		include "pg3fx.inc"
+		include "pg4fx.inc"
 		include "pg6fx.inc"
 
 
@@ -414,8 +415,9 @@ kernel:		ld	b,25
 		call	RUNZONE
 		jr	.run
 
-.end		di
+.end		ei
 		halt
+		jr	.end
 
 fxtable:	db	fx_city.pg
 		dw	fx_city

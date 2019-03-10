@@ -6,6 +6,7 @@
 ; simplified aj adopted to sjasmplus by mborik/NAG (c) 2019
 
 	ifndef fx
+		device	zxspectrum128
 		org	#C000
 	endif
 
@@ -15,12 +16,6 @@
 music_init	jr	p3x_init
 music_stop	jp	p3x_mute
 music_play	jp	p3x_play
-
-	ifdef fx
-		; description
-		db	0
-		incbin	"music/final.pt3",31,64
-	endif
 
 p3x_init:	ld	hl,MDLADDR
 p3x_initv0:	ld	(modaddr+1),hl

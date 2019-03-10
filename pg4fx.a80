@@ -1,17 +1,18 @@
 		device	zxspectrum48
 		org	#C000
-		define fx 6
+		define fx 4
 
-@_fxpage = #16
+@_fxpage = #14
 @_fxpage_start
 
 ;;-----------------------------------------------------------------------------
-		include "music/pt3extra.a80"
-		incbin "music/final.pt3",99
+fx_surprise:	incbin "surprise/final.pak"
+.pg = _fxpage
+.sync = 2540
 
-MUSIC.page = _fxpage
-MUSIC.init = music_init
-MUSIC.play = music_play
+fx_teleso:	incbin "teleso/final.pak"
+.pg = _fxpage
+.sync = 4000
 
 ;;-----------------------------------------------------------------------------
 	if $ > #FFFF
@@ -25,7 +26,10 @@ MUSIC.play = music_play
 		savebin "output",(_fxpage_start),$-(_fxpage_start)
 
 ;;-----------------------------------------------------------------------------
+		export fx_surprise
+		export fx_surprise.pg
+		export fx_surprise.sync
 
-		export	MUSIC.page
-		export	MUSIC.init
-		export	MUSIC.play
+		export fx_teleso
+		export fx_teleso.pg
+		export fx_teleso.sync
