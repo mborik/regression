@@ -36,20 +36,9 @@ ren final-t36o7o14.lzx final.pak
 del /Q /F output needle*
 
 sjasmplus pg1fx.a80 --lst=kernel/pg1fx.lst --exp=kernel/pg1fx.inc
-lzxpack -t36o7o14 output
-ren output-t36o7o14.lzx needle1
-
 sjasmplus pg3fx.a80 --lst=kernel/pg3fx.lst --exp=kernel/pg3fx.inc
-lzxpack -t36o7o14 output
-ren output-t36o7o14.lzx needle3
-
 sjasmplus pg4fx.a80 --lst=kernel/pg4fx.lst --exp=kernel/pg4fx.inc
-lzxpack -t36o7o14 output
-ren output-t36o7o14.lzx needle4
-
 sjasmplus pg6fx.a80 --lst=kernel/pg6fx.lst --exp=kernel/pg6fx.inc
-lzxpack -t36o7o14 output
-ren output-t36o7o14.lzx needle6
 
 @cd kernel
 sjasmplus --lst=kernel.lst --exp=constants.inc kernel.a80

@@ -1,4 +1,4 @@
-		device	zxspectrum48
+		device	zxspectrum128
 		org	#C000
 		define fx 4
 
@@ -23,7 +23,7 @@ fx_teleso:	incbin "teleso/final.pak"
 	endif
 
 		align	16384
-		savebin "output",(_fxpage_start),$-(_fxpage_start)
+		savebin "needle4",(_fxpage_start),$-(_fxpage_start)
 
 ;;-----------------------------------------------------------------------------
 		export fx_surprise

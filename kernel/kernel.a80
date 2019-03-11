@@ -138,21 +138,13 @@ needle:		ld	a,#61
 		ld	a,(ix+1)
 		sub	' '
 		jr	nz,error
-		ld	h,a
-		ld	l,a
-		ld	e,(ix+4)
-		ld	d,(ix+5)
-		ex	hl,de
-		ld	a,#0F	; HOWSEC
-		rst	#20
-		jr	nz,error
-
-		ld	e,c
+.targetpg:	ld	a,0
+		call	xchg.bnk
+		ld	e,16
 		ld	bc,0
 		pop	hl
-		ld	ix,RUNZONE
-		push	ix
-		ld	a,#22	; LOA1X
+		ld	ix,#C000
+		ld	a,#23	; LOA2X
 		rst	#20
 
 .prgptr:	ld	hl,#56A1 ; #5AA1
@@ -162,11 +154,6 @@ needle:		ld	a,#61
 		djnz	.pgprog
 		ld	(.prgptr+1),hl
 
-.targetpg:	ld	a,0
-		call	xchg.bnk
-		pop	hl
-		ld	de,#C000
-		call	depack
 		pop	af
 		dec	a
 		jr	nz,.loop

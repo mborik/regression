@@ -1,4 +1,4 @@
-		device	zxspectrum48
+		device	zxspectrum128
 		org	#C000
 		define fx 6
 
@@ -22,7 +22,7 @@ MUSIC.play = music_play
 	endif
 
 		align	16384
-		savebin "output",(_fxpage_start),$-(_fxpage_start)
+		savebin "needle6",(_fxpage_start),$-(_fxpage_start)
 
 ;;-----------------------------------------------------------------------------
 
