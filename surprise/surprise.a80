@@ -53,7 +53,7 @@ surprise:	ei
 .citajscenar:	ld	hl,drawcube.table
 		ld	a,(hl)
 		or	a
-		ret	z
+		jr	z,finish
 		ld	c,a
 		inc	l
 		ld	b,(hl)
@@ -87,7 +87,56 @@ surprise:	ei
 		ld	(hl),c
 		jr	.loop
 
-.jumpers:	jp	drawcube.reset
+finish:		xor	a
+		ld	hl,IMCALL
+		ld	(hl),a
+		inc	l
+		ld	(hl),a
+		inc	l
+		ld	(hl),a
+		ld	a,#1D
+		call	xchg.bnk
+		halt
+		di
+		ld	(.retsp+1),sp
+		ld	sp,#DB00
+		ld	hl,#0707
+		ld	b,32
+.attrs:	dup 12
+		push	hl
+	edup
+		djnz	.attrs
+		ld	a,3
+		ld	bc,#40FF
+		ld	hl,0
+		ld	de,0
+.loop:	dup 4
+		push	hl
+	edup
+	dup 8
+		push	de
+	edup
+	dup 4
+		push	hl
+	edup
+		djnz	.loop
+		dec	a
+		jr	z,.retsp
+		ld	b,#40
+		bit	0,a
+		jr	nz,.loop-3
+		ld	d,c
+		ld	e,c
+		jr	.loop
+
+.retsp:		ld	sp,0
+		ei
+		ld	a,#10
+		jp	xchg.bnk
+; end
+
+surprise.jumpers:
+		jp	drawcube.reset
 		ds	5
 
 		ld	hl,attrs2+0
@@ -293,7 +342,7 @@ drawcube.table:	blik	3300,  5, 011q
 		blik	3498, 11, 066q
 		blik	3520,  8, 155q
 		blik	3542, 10, 144q
-		blik	3564,  5, 177q
+		blik	3564,  5, 122q
 		dw	3586,  4 << 8 | 077q
 		dw	3608,  7 << 8 | 077q
 		dw	3630,  1 << 8 | 077q

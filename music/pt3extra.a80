@@ -6,7 +6,9 @@
 ; simplified aj adopted to sjasmplus by mborik/NAG (c) 2019
 
 	ifndef fx
+	ifndef ukernel
 		device	zxspectrum128
+	endif
 		org	#C000
 	endif
 
