@@ -24,7 +24,12 @@ const pages = [
 	...[...Array(20).keys()].map(cityflyPath),
 	'reglogo\\gfx\\stlpce.bin',
 	'reglogo\\gfx\\squashy.pg0',
-	'reglogo\\gfx\\squashy.pg1'
+	'reglogo\\gfx\\squashy.pg1',
+	'transformy\\pg\\trafo.004',
+	'transformy\\pg\\trafo.000',
+	'transformy\\pg\\trafo.002',
+	'transformy\\pg\\trafo.001',
+	'transformy\\pg\\trafo.003'
 ];
 
 for (i = 0, j = 0, l = 0, c = 0; i < pages.length; i++, c++) {

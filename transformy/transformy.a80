@@ -1,0 +1,441 @@
+		device	zxspectrum128
+
+@DEBUG = 0
+
+		include "../kernel/constants.inc"
+
+;;-----------------------------------------------------------------------------
+	macro border n
+	  if DEBUG
+	    if n > 0
+		ld	a,n
+	    else
+		xor	a
+	    endif
+		out	(254),a
+	  endif
+	endm
+
+;;-----------------------------------------------------------------------------
+
+		org	RUNZONE
+
+begin:		ei
+		ld	a,#1D
+		call	xchg.vram+2
+		ld	a,102q
+		ld	(#580B),a
+		ld	(#582B),a
+		ld	(#584B),a
+		ld	(#586B),a
+		ld	(#588B),a
+		ld	hl,#4000
+		ld	de,#C000
+		ld	bc,#1B00
+		ldir
+.stvorcek:	ei
+		halt
+		call	xchg.vram
+		call	stvorcekani
+		jr	nz,.stvorcek
+
+		ld	bc,4092
+.introwait:	ei
+		halt
+		ld	hl,(FRAMES)
+		xor	a
+		sbc	hl,bc
+		jr	c,.introwait
+
+		ld	b,97
+.stage1:	push	bc
+		ei
+		halt
+		ld	hl,(animate+1)
+		push	hl
+		call	xchg.vram
+		call	animate
+		halt
+		call	xchg.vram
+		pop	hl
+		call	animate.hl
+		pop	bc
+		djnz	.stage1
+
+.stage2:	ei
+		halt
+		ld	hl,(animate+1)
+		push	hl
+		call	xchg.vram
+		call	animate
+.stage2.ptr:	ld	a,0
+		call	tears
+		halt
+		pop	hl
+		push	af
+		call	xchg.vram
+		call	animate.hl
+		pop	af
+		call	tears
+		inc	a
+		cp	82
+		ld	(.stage2.ptr+1),a
+		jr	nz,.stage2
+
+		xor	a
+		ld	h,a
+		ld	l,a
+		ld	(applymask),a
+		ld	(stvorcekani.pushers),a
+		ld	(stvorcekani.pushers+1),hl
+		ld	hl,kvadro.outro
+		ld	(stvorcekani+1),hl
+		ld	hl,135 << 8 | 21
+		ld	(stvorcekani.pointers+4),hl
+
+.stage3:	push	af
+		ei
+		halt
+		call	xchg.vram
+		ld	hl,(stvorcekani+1)
+		push	hl
+		call	stvorcekani
+		call	tears.fin
+		ei
+		halt
+		call	xchg.vram
+		pop	hl
+		call	stvorcekani+3
+		call	tears.fin
+		pop	af
+		inc	a
+		cp	32
+		jr	c,.stage3
+		cp	63
+		jr	z,.stageF
+		ld	l,a
+		and	30
+		rlca
+		ld	(applymask.ptr+1),a
+		ld	a,l
+		jr	.stage3
+
+.stageF:	ld	a,#0F
+		call	fillattrs
+		halt
+		call	xchg.vram
+		ld	a,#17
+		call	fillattrs
+		halt
+		call	xchg.vram
+		ld	a,#1F
+		call	fillattrs
+		halt
+		call	xchg.vram
+		ld	a,#27
+		call	fillattrs
+		halt
+		call	xchg.vram
+		ld	a,#2F
+		call	fillattrs
+		halt
+		call	xchg.vram
+		ld	a,#37
+		call	fillattrs
+		halt
+		call	xchg.vram
+		ld	a,#3F
+		call	fillattrs
+
+		ld	a,#38
+		push	af
+		ld	hl,#C000
+		ld	de,#C001
+		ld	bc,#1800
+		ld	(hl),l
+		push	hl
+		push	de
+		push	bc
+		ldir
+		ld	(hl),a
+		ld	bc,#2FF
+		ldir
+		call	xchg.vram
+		pop	bc
+		pop	de
+		pop	hl
+		ld	(hl),l
+		ldir
+		pop	af
+		ld	(hl),a
+		ld	bc,#2FF
+		ldir
+		ret
+
+animate:	ld	hl,animate.table
+.hl		ld	a,(hl)
+		or	a
+		jr	nz,.next
+		ld	hl,animate.table
+		ld	(animate+1),hl
+		ld	a,(hl)
+.next		out	(mb02ram),a
+		inc	hl
+		ld	e,(hl)
+		inc	hl
+		ld	d,(hl)
+		inc	hl
+		ld	(animate+1),hl
+		ex	hl,de
+		jp	(hl)
+
+tears.fin:	ld	a,81
+tears:		push	af
+		ld	hl,.exit
+		push	hl
+		ld	l,a
+		rlca
+		add	a,l
+		ld	l,a
+		ld	h,high tearsani.table
+		jp	(hl)
+.exit:		pop	af
+		ret
+
+stvorcekani:	ld	hl,kvadro.intro
+		ld	a,(hl)
+		or	a
+		ret	z
+		ld	c,a
+		inc	hl
+		ld	b,(hl)
+		inc	hl
+		ld	e,(hl)
+		inc	hl
+		ld	d,(hl)
+		inc	hl
+		ld	(stvorcekani+1),hl
+
+		ld	hl,0
+		exx
+		ld	(.retsp+1),sp
+		di
+.pointers:	ld	de,scradrtab+57
+		ld	bc,72 << 8 | 24
+.clear:		ld	a,(de)
+		add	a,c
+		ld	l,a
+		inc	d
+		ld	a,(de)
+		dec	d
+		inc	e
+		ld	h,a
+		ld	sp,hl
+		exx
+.pushers:
+	rept 8
+		push	hl
+	endm
+		exx
+		djnz	.clear
+.retsp:		ld	sp,0
+		exx
+		ei
+
+; c=x1 < e=x2, b=y1 < d=y2
+kvadro:		ld	a,d
+		sub	b
+		inc	a
+		ld	d,a
+		ld	a,c
+		and	#F8
+		ld	xh,a
+		ld	a,e
+		and	#F8
+		cp	xh
+		ld	xh,b
+		jr	nz,.r2
+		call	addbod
+		ld	b,a
+		ld	a,#FF
+		jr	z,.lbrdnone1
+.lbrdloop1:	srl	a
+		djnz	.lbrdloop1
+.lbrdnone1:	ld	c,a
+		ld	a,e
+		and	7
+		ld	b,a
+		ld	a,#80
+		jr	z,.rbrdnone1
+.rbrdloop1:	scf
+		rra
+		djnz	.rbrdloop1
+.rbrdnone1:	and	c
+		ld	e,a
+		ld	a,xh
+		cpl
+		and	7
+		inc	a
+		ld	b,a
+.zv1:		ld	a,e
+		call	applymask
+		ld	(hl),a
+		inc	h
+		dec	d
+		jr	z,.nzret
+		djnz	.zv1
+		ld	b,8
+		ld	a,#20
+		add	a,l
+		ld	l,a
+		jr	c,.zv1
+		ld	a,#F8
+		add	a,h
+		ld	h,a
+		jr	.zv1
+
+.nzret:		or	h
+		ret
+
+.r2:		dec	a
+		sub	c
+		rrca
+		rrca
+		rrca
+		and	#1F
+		inc	a
+		ld	(.kvainc+1),a
+		call	addbod
+		ld	b,a
+		ld	a,#FF
+		jr	z,.lbrdnone2
+.lbrdloop2:	srl	a
+		djnz	.lbrdloop2
+.lbrdnone2:	ld	(.kvazac+1),a
+		ld	a,e
+		and	7
+		ld	b,a
+		inc	b
+		xor	a
+.rbrdloop2:	scf
+		rra
+		djnz	.rbrdloop2
+		ld	(.kvaend+1),a
+		ld	a,xh
+		cpl
+		and	7
+		inc	a
+		ld	b,a
+
+.kva11:		push	hl
+.kvazac:	ld	a,#FF
+		call	applymask
+		ld	(hl),a
+.kvainc:	ld	e,0
+		inc	l
+		dec	e
+		jr	z,.kvaend
+		or	#FF
+		call	applymask
+.kvaline:	ld	(hl),a
+		inc	l
+		dec	e
+		jr	nz,.kvaline
+.kvaend:	ld	a,#FF
+		call	applymask
+		ld	(hl),a
+		pop	hl
+		inc	h
+		dec	d
+		jr	z,.nzret
+		djnz	.kva11
+		ld	b,8
+		ld	a,#20
+		add	a,l
+		ld	l,a
+		jr	c,.kva11
+		ld	a,#F8
+		add	a,h
+		ld	h,a
+		jr	.kva11
+
+addbod:		ld	h,high scradrtab
+		ld	l,b
+		ld	a,c
+		rrca
+		rrca
+		rrca
+		and	#1F
+		or	(hl)
+		inc	h
+		ld	h,(hl)
+		ld	l,a
+		ld	a,c
+		and	7
+		ret
+
+applymask:	ret
+		push	hl
+		push	af
+		ld	a,h
+		and	3
+.ptr:		add	a,0
+		ld	l,a
+		ld	h,high masky
+		pop	af
+		and	(hl)
+		pop	hl
+		ret
+
+fillattrs:	ld	d,a
+		ld	e,a
+		rrca
+		rrca
+		rrca
+		and	7
+		ld	(actborder),a
+.clean:		di
+		ld	(.rstsp+1),sp
+		ld	sp,#DB00
+		ld	l,12
+.loop:	rept 32
+		push	de
+	endm
+		dec	l
+		jr	nz,.loop
+.rstsp:		ld	sp,0
+		ei
+		ret
+
+
+kvadro.intro:	include	"tables/kvadro.intro.inc"
+		dw	0
+
+kvadro.outro:	include	"tables/kvadro.outro.inc"
+		dw	0
+
+animate.table:	incbin	"tables/frames.tab.bin"
+
+		align	256
+
+tearsani.table:	include	"tables/tears.ani.a80"
+
+		align	256
+scradrtab:
+.i = 0
+	dup 256
+		db	((((.i & #C0) | ((.i & #38) >> 3) | ((.i & 7) << 3)) << 5) & #FF)
+.i = .i + 1
+	edup
+.i = 0
+	dup 256
+		db	((((.i & #C0) | ((.i & #38) >> 3) | ((.i & 7) << 3)) << 5) >> 8) | #C0
+.i = .i + 1
+	edup
+
+masky:		incbin	"tables/masky.bin"
+
+
+;;-----------------------------------------------------------------------------
+
+		savebin "final.bin",begin,$-begin

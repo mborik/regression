@@ -10,10 +10,6 @@ fx_surprise:	incbin "surprise/final.pak"
 .pg = _fxpage
 .sync = 2540
 
-fx_teleso:	incbin "teleso/final.pak"
-.pg = _fxpage
-.sync = 4000
-
 ;;-----------------------------------------------------------------------------
 	if $ > #FFFF
 		display "Too long! ",/D,($-#10000)," bytes out!"
@@ -29,7 +25,3 @@ fx_teleso:	incbin "teleso/final.pak"
 		export fx_surprise
 		export fx_surprise.pg
 		export fx_surprise.sync
-
-		export fx_teleso
-		export fx_teleso.pg
-		export fx_teleso.sync

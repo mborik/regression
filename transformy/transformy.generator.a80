@@ -1,0 +1,240 @@
+@pg000 = #5A
+@pg001 = #5C
+@pg002 = #5B
+@pg003 = #5D
+@pg004 = #59
+
+@basescradr = #C000
+
+		output "tables/frames.tab.bin"
+
+		db	pg000 : dw	aa725_0000
+		db	pg000 : dw	aa725_0001
+		db	pg000 : dw	aa725_0002
+		db	pg000 : dw	aa725_0003
+		db	pg000 : dw	aa725_0004
+		db	pg000 : dw	aa725_0005
+		db	pg000 : dw	aa725_0006
+		db	pg000 : dw	aa725_0007
+		db	pg000 : dw	aa725_0008
+		db	pg000 : dw	aa725_0009
+		db	pg000 : dw	aa725_000a
+		db	pg000 : dw	aa725_000b
+		db	pg000 : dw	aa725_000c
+		db	pg000 : dw	aa725_000d
+		db	pg000 : dw	aa725_000e
+		db	pg000 : dw	aa725_000f
+		db	pg000 : dw	aa725_0010
+		db	pg000 : dw	aa725_0011
+		db	pg000 : dw	aa725_0012
+		db	pg000 : dw	aa725_0013
+		db	pg000 : dw	aa725_0014
+		db	pg000 : dw	aa725_0015
+		db	pg000 : dw	aa725_0016
+		db	pg001 : dw	aa725_0017
+		db	pg001 : dw	aa725_0018
+		db	pg001 : dw	aa725_0019
+		db	pg001 : dw	aa725_001a
+		db	pg001 : dw	aa725_001b
+		db	pg001 : dw	aa725_001c
+		db	pg001 : dw	aa725_001d
+		db	pg001 : dw	aa725_001e
+		db	pg001 : dw	aa725_001f
+		db	pg001 : dw	aa725_0020
+		db	pg001 : dw	aa725_0021
+		db	pg001 : dw	aa725_0022
+		db	pg001 : dw	aa725_0023
+		db	pg001 : dw	aa725_0024
+		db	pg001 : dw	aa725_0025
+		db	pg001 : dw	aa725_0026
+		db	pg001 : dw	aa725_0027
+		db	pg001 : dw	aa725_0028
+		db	pg001 : dw	aa725_0029
+		db	pg001 : dw	aa725_002a
+		db	pg001 : dw	aa725_002b
+		db	pg001 : dw	aa725_002c
+		db	pg001 : dw	aa725_002d
+		db	pg001 : dw	aa725_002e
+		db	pg001 : dw	aa725_002f
+		db	pg001 : dw	aa725_0030
+		db	pg002 : dw	aa725_0031
+		db	pg002 : dw	aa725_0032
+		db	pg002 : dw	aa725_0033
+		db	pg002 : dw	aa725_0034
+		db	pg002 : dw	aa725_0035
+		db	pg002 : dw	aa725_0036
+		db	pg002 : dw	aa725_0037
+		db	pg001 : dw	aa725_0038
+		db	pg002 : dw	aa725_0039
+		db	pg002 : dw	aa725_003a
+		db	pg002 : dw	aa725_003b
+		db	pg002 : dw	aa725_003c
+		db	pg002 : dw	aa725_003d
+		db	pg002 : dw	aa725_003e
+		db	pg002 : dw	aa725_003f
+		db	pg002 : dw	aa725_0040
+		db	pg003 : dw	aa725_0041
+		db	pg000 : dw	aa725_0042
+		db	pg003 : dw	aa725_0043
+		db	pg003 : dw	aa725_0044
+		db	pg003 : dw	aa725_0045
+		db	pg003 : dw	aa725_0046
+		db	pg003 : dw	aa725_0047
+		db	pg003 : dw	aa725_0048
+		db	pg003 : dw	aa725_0049
+		db	pg003 : dw	aa725_004a
+		db	pg003 : dw	aa725_004b
+		db	pg003 : dw	aa725_004c
+		db	pg003 : dw	aa725_004d
+		db	pg003 : dw	aa725_004e
+		db	pg004 : dw	aa725_004f
+		db	pg004 : dw	aa725_0050
+		db	pg004 : dw	aa725_0051
+		db	pg004 : dw	aa725_0052
+		db	pg004 : dw	aa725_0053
+		db	pg003 : dw	aa725_0054
+		db	pg004 : dw	aa725_0055
+		db	pg004 : dw	aa725_0056
+		db	pg004 : dw	aa725_0057
+		db	pg004 : dw	aa725_0058
+		db	0
+		outend
+
+;;-----------------------------------------------------------------------------
+		output "pg/trafo.000"
+
+		org 0
+aa725_0000	include "tables/gen/0000.asm"
+aa725_0001	include "tables/gen/0001.asm"
+aa725_0002	include "tables/gen/0002.asm"
+aa725_0003	include "tables/gen/0003.asm"
+aa725_0004	include "tables/gen/0004.asm"
+aa725_0005	include "tables/gen/0005.asm"
+aa725_0006	include "tables/gen/0006.asm"
+aa725_0007	include "tables/gen/0007.asm"
+aa725_0008	include "tables/gen/0008.asm"
+aa725_0009	include "tables/gen/0009.asm"
+aa725_000a	include "tables/gen/000a.asm"
+aa725_000b	include "tables/gen/000b.asm"
+aa725_000c	include "tables/gen/000c.asm"
+aa725_000d	include "tables/gen/000d.asm"
+aa725_000e	include "tables/gen/000e.asm"
+aa725_000f	include "tables/gen/000f.asm"
+aa725_0010	include "tables/gen/0010.asm"
+aa725_0011	include "tables/gen/0011.asm"
+aa725_0012	include "tables/gen/0012.asm"
+aa725_0013	include "tables/gen/0013.asm"
+aa725_0014	include "tables/gen/0014.asm"
+aa725_0015	include "tables/gen/0015.asm"
+aa725_0016	include "tables/gen/0016.asm"
+aa725_0042	include "tables/gen/0042.asm"
+
+		display /D,"pg/trafo.000: ", (16384-$), " bytes free..."
+
+		align	16384
+		outend
+
+;;-----------------------------------------------------------------------------
+		output "pg/trafo.001"
+
+		org 0
+aa725_0017	include "tables/gen/0017.asm"
+aa725_0018	include "tables/gen/0018.asm"
+aa725_0019	include "tables/gen/0019.asm"
+aa725_001a	include "tables/gen/001a.asm"
+aa725_001b	include "tables/gen/001b.asm"
+aa725_001c	include "tables/gen/001c.asm"
+aa725_001d	include "tables/gen/001d.asm"
+aa725_001e	include "tables/gen/001e.asm"
+aa725_001f	include "tables/gen/001f.asm"
+aa725_0020	include "tables/gen/0020.asm"
+aa725_0021	include "tables/gen/0021.asm"
+aa725_0022	include "tables/gen/0022.asm"
+aa725_0023	include "tables/gen/0023.asm"
+aa725_0024	include "tables/gen/0024.asm"
+aa725_0025	include "tables/gen/0025.asm"
+aa725_0026	include "tables/gen/0026.asm"
+aa725_0027	include "tables/gen/0027.asm"
+aa725_0028	include "tables/gen/0028.asm"
+aa725_0029	include "tables/gen/0029.asm"
+aa725_002a	include "tables/gen/002a.asm"
+aa725_002b	include "tables/gen/002b.asm"
+aa725_002c	include "tables/gen/002c.asm"
+aa725_002d	include "tables/gen/002d.asm"
+aa725_002e	include "tables/gen/002e.asm"
+aa725_002f	include "tables/gen/002f.asm"
+aa725_0030	include "tables/gen/0030.asm"
+aa725_0038	include "tables/gen/0038.asm"
+
+		display /D,"pg/trafo.001: ", (16384-$), " bytes free..."
+
+		align	16384
+		outend
+
+;;-----------------------------------------------------------------------------
+		output "pg/trafo.002"
+
+		org 0
+aa725_0031	include "tables/gen/0031.asm"
+aa725_0032	include "tables/gen/0032.asm"
+aa725_0033	include "tables/gen/0033.asm"
+aa725_0034	include "tables/gen/0034.asm"
+aa725_0035	include "tables/gen/0035.asm"
+aa725_0036	include "tables/gen/0036.asm"
+aa725_0037	include "tables/gen/0037.asm"
+aa725_0039	include "tables/gen/0039.asm"
+aa725_003a	include "tables/gen/003a.asm"
+aa725_003b	include "tables/gen/003b.asm"
+aa725_003c	include "tables/gen/003c.asm"
+aa725_003d	include "tables/gen/003d.asm"
+aa725_003e	include "tables/gen/003e.asm"
+aa725_003f	include "tables/gen/003f.asm"
+aa725_0040	include "tables/gen/0040.asm"
+
+		display /D,"pg/trafo.002: ", (16384-$), " bytes free..."
+
+		align	16384
+		outend
+
+;;-----------------------------------------------------------------------------
+		output "pg/trafo.003"
+
+		org 0
+aa725_0041	include "tables/gen/0041.asm"
+aa725_0043	include "tables/gen/0043.asm"
+aa725_0044	include "tables/gen/0044.asm"
+aa725_0045	include "tables/gen/0045.asm"
+aa725_0046	include "tables/gen/0046.asm"
+aa725_0047	include "tables/gen/0047.asm"
+aa725_0048	include "tables/gen/0048.asm"
+aa725_0049	include "tables/gen/0049.asm"
+aa725_004a	include "tables/gen/004a.asm"
+aa725_004b	include "tables/gen/004b.asm"
+aa725_004c	include "tables/gen/004c.asm"
+aa725_004d	include "tables/gen/004d.asm"
+aa725_004e	include "tables/gen/004e.asm"
+aa725_0054	include "tables/gen/0054.asm"
+
+		display /D,"pg/trafo.003: ", (16384-$), " bytes free..."
+
+		align	16384
+		outend
+
+;;-----------------------------------------------------------------------------
+		output "pg/trafo.004"
+
+		org 0
+aa725_004f	include "tables/gen/004f.asm"
+aa725_0050	include "tables/gen/0050.asm"
+aa725_0051	include "tables/gen/0051.asm"
+aa725_0052	include "tables/gen/0052.asm"
+aa725_0053	include "tables/gen/0053.asm"
+aa725_0055	include "tables/gen/0055.asm"
+aa725_0056	include "tables/gen/0056.asm"
+aa725_0057	include "tables/gen/0057.asm"
+aa725_0058	include "tables/gen/0058.asm"
+
+		display /D,"pg/trafo.004: ", (16384-$), " bytes free..."
+
+		align	16384
+		outend

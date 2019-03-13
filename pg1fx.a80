@@ -10,13 +10,13 @@ fx_city:	incbin "cityflyout/final.pak"
 .pg = _fxpage
 .sync = 0
 
-fx_reglogo:	incbin "reglogo/final.pak"
-.pg = _fxpage
-.sync = 836
-
 fx_oneplus:	incbin "oneplus/final.pak"
 .pg = _fxpage
 .sync = 1417
+
+fx_transformy:	incbin "transformy/final.pak"
+.pg = _fxpage
+.sync = 4000
 
 ;;-----------------------------------------------------------------------------
 	if $ > #FFFF
@@ -34,10 +34,10 @@ fx_oneplus:	incbin "oneplus/final.pak"
 		export fx_city.pg
 		export fx_city.sync
 
-		export fx_reglogo
-		export fx_reglogo.pg
-		export fx_reglogo.sync
-
 		export fx_oneplus
 		export fx_oneplus.pg
 		export fx_oneplus.sync
+
+		export fx_transformy
+		export fx_transformy.pg
+		export fx_transformy.sync

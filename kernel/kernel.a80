@@ -426,6 +426,10 @@ fxtable:	db	fx_city.pg
 		dw	fx_surprise
 		dw	fx_surprise.sync
 
+		db	fx_transformy.pg
+		dw	fx_transformy
+		dw	fx_transformy.sync
+
 		db	0
 
 @len = $ - start

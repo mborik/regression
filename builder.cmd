@@ -32,6 +32,12 @@ sjasmplus -Dfx --lst=teleso.lst teleso.a80
 lzxpack -t36o7o14 final.bin
 ren final-t36o7o14.lzx final.pak
 
+@cd ..\transformy
+del /Q /F final.pak
+sjasmplus -Dfx --lst=transformy.lst transformy.a80
+lzxpack -t36o7o14 final.bin
+ren final-t36o7o14.lzx final.pak
+
 @cd ..
 del /Q /F output needle*
 

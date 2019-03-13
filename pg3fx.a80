@@ -10,6 +10,10 @@ fx_oneplusani:	incbin "oneplus/oneplusani.pak"
 .pg = _fxpage
 .length = $-fx_oneplusani
 
+fx_reglogo:	incbin "reglogo/final.pak"
+.pg = _fxpage
+.sync = 836
+
 ;;-----------------------------------------------------------------------------
 	if $ > #FFFF
 		display "Too long! ",/D,($-#10000)," bytes out!"
@@ -25,3 +29,7 @@ fx_oneplusani:	incbin "oneplus/oneplusani.pak"
 		export fx_oneplusani
 		export fx_oneplusani.pg
 		export fx_oneplusani.length
+
+		export fx_reglogo
+		export fx_reglogo.pg
+		export fx_reglogo.sync
