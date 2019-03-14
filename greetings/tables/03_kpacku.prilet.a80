@@ -1,0 +1,32 @@
+; https://arachnoid.com/polysolve/
+; 0 -12
+; 10 -1
+; 15 3
+; 20 4
+; 21 5
+; 25 4
+; (4 degree)
+
+		priletL -12	; 0
+		priletL -11	; 1
+		priletL -10	; 2
+		priletL -9	; 3
+		priletL -8	; 4
+		priletL -6	; 5
+		priletL -5	; 6
+		priletL -4	; 7
+		priletL -3	; 8
+		priletL -2	; 9
+		priletL -1	; 10
+		priletL -0	; 11
+		priletL 1	; 12
+		priletL 2	; 13
+		priletL 2	; 14
+		priletL 3	; 15
+		priletL 3	; 16
+		priletL 4	; 17
+		priletL 4	; 18
+		priletL 4	; 19
+		priletL 5	; 20
+		priletL 5	; 21
+		priletL 4	; 22

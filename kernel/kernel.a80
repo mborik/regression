@@ -157,6 +157,14 @@ needle:		ld	a,#61
 		pop	af
 		dec	a
 		jr	nz,.loop
+		ld	b,25
+.fadeout:	ei
+		halt
+		halt
+		push	bc
+		call	attrhide
+		pop	bc
+		djnz	.fadeout
 		jp	kernel
 
 error:		ld	hl,txterr
@@ -305,16 +313,7 @@ blocktable:	include "../haystack.inc"
 		align	256
 
 		nop
-kernel:		ld	b,25
-.fadeout:	ei
-		halt
-		halt
-		push	bc
-		call	attrhide
-		pop	bc
-		djnz	.fadeout
-
-		di
+kernel:		di
 		ld	hl,im2vector
 		ld	a,h
 		ld	i,a
@@ -429,6 +428,10 @@ fxtable:	db	fx_city.pg
 		db	fx_transformy.pg
 		dw	fx_transformy
 		dw	fx_transformy.sync
+
+		db	fx_greetings.pg
+		dw	fx_greetings
+		dw	fx_greetings.sync
 
 		db	0
 

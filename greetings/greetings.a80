@@ -1,0 +1,605 @@
+		device	zxspectrum128
+
+@DEBUG = 0
+
+		include "../kernel/constants.inc"
+
+;;-----------------------------------------------------------------------------
+	macro border n
+	  if DEBUG
+	    if n > 0
+		ld	a,n
+	    else
+		xor	a
+	    endif
+		out	(254),a
+	  endif
+	endm
+
+;;-----------------------------------------------------------------------------
+		org	RUNZONE
+		define	MUSIC.waitfor 4610
+
+start	ifndef fx
+		di
+		ld	a,#1D
+		call	xchg.vram+2
+		ld	hl,#5800
+		ld	de,#5801
+		ld	bc,#2FF
+		ld	(hl),#38
+		ldir
+		ld	hl,#5800
+		ld	de,#D800
+		ld	bc,#300
+		ldir
+		ld	a,7
+		ld	(actborder),a
+	endif
+
+		ld	hl,gfx.nogrtz2gmb.src
+		ld	de,gfx.nogrtz2gmb1
+		call	depack
+		call	clearbuffer
+
+loop:		ei
+		halt
+		call	citajScenar
+		call	xchg.vram
+		border	6
+enable.prilet:	ld	bc,prilet
+enable.flash:	ld	bc,flashout
+enable.nogrtz:	ld	bc,nogrtz
+		border	7
+		jr	loop
+		ret
+
+citajScenar:	di
+		ld	(.retsp+1),sp
+.ptr:		ld	sp,scenar
+		pop	de
+		ld	a,e
+		or	d
+		jr	z,.retsp
+		ld	hl,(FRAMES)
+		sbc	hl,de
+		jr	c,.retsp
+		pop	bc
+		ld	a,c
+		dec	a
+		jr	nz,.flashout
+		pop	hl
+		ld	(prilet.L+1),hl
+		pop	hl
+		ld	(priletL+1),hl
+		pop	hl
+		ld	(prilet.R+1),hl
+		pop	hl
+		ld	(priletR+1),hl
+		pop	hl
+		ld	(prilet.scradr+1),hl
+		ld	(.ptr+1),sp
+		ld	sp,(.retsp+1)
+		ld	a,#CD
+		ld	(enable.prilet),a
+		jp	clearbuffer
+
+.flashout:	dec	a
+		jr	nz,.nogrtz
+		inc	a
+		ld	(enable.prilet),a
+		ld	a,10
+		ld	(flashout+1),a
+		ld	a,#CD
+		ld	(enable.flash),a
+		jr	.storesp
+
+.nogrtz:	dec	a
+		jr	nz,.fin
+		ld	a,8
+		ld	(nogrtz+1),a
+		ld	a,#CD
+		ld	(enable.nogrtz),a
+		ld	a,b
+		ld	(nogrtz.ptr_attr+2),a
+		pop	hl
+		ld	(nogrtz.ptr_src+1),hl
+		pop	hl
+		ld	(nogrtz.ptr_dst+1),hl
+.storesp:	ld	(.ptr+1),sp
+.retsp:		ld	sp,0
+		ei
+		ret
+
+.fin:		ld	(.ptr+1),sp
+		ld	sp,(.retsp+1)
+		ei
+		pop	af
+		ld	a,#3F
+		call	fillattrs
+		halt
+		call	xchg.vram
+		halt
+		halt
+		ld	a,#36
+		call	fillattrs
+		halt
+		call	xchg.vram
+		halt
+		halt
+		ld	a,#2D
+		call	fillattrs
+		halt
+		call	xchg.vram
+		halt
+		halt
+		ld	a,#24
+		call	fillattrs
+		halt
+		call	xchg.vram
+		halt
+		halt
+		ld	a,#1B
+		call	fillattrs
+		halt
+		call	xchg.vram
+		halt
+		halt
+		ld	a,#12
+		call	fillattrs
+		halt
+		call	xchg.vram
+		halt
+		halt
+		ld	a,#09
+		call	fillattrs
+		halt
+		call	xchg.vram
+		halt
+
+		xor	a
+		ld	(actborder),a
+		out	(254),a
+		ld	hl,#C000
+		ld	de,#C001
+		ld	bc,#1800
+		ld	(hl),l
+		push	hl
+		push	de
+		push	bc
+		ldir
+		ld	(hl),#47
+		ld	bc,#2FF
+		ldir
+		call	xchg.vram
+		pop	bc
+		pop	de
+		pop	hl
+		ld	(hl),l
+		ldir
+		ld	(hl),#47
+		ld	bc,#2FF
+		ldir
+		ret
+
+;;-----------------------------------------------------------------------------
+prilet:
+.L		ld	hl,gfx.n01_skrju
+		call	priletL
+.R		ld	hl,gfx.n02_thesuper
+		call	priletR
+		border	5
+.scradr		ld	de,scradrtab+16
+		jp	renderbuffer
+
+priletL:	ld	bc,tab.n01_skrju
+		ld	a,(bc)
+		or	a
+		ret	z
+		inc	bc
+		ld	(priletL+1),bc
+		ld	e,a
+		ld	d,high blitspace
+		jr	drawsprite
+
+priletR:	ld	bc,tab.n02_thesuper
+		ld	a,(bc)
+		or	a
+		ret	z
+		inc	bc
+		ld	(priletR+1),bc
+		ld	e,a
+		ld	d,high blitspace
+
+drawsprite:	ld	a,24
+		sub	(hl)
+		rlca
+		ld	(.width+1),a
+		ld	a,e
+		inc	hl
+		ld	bc,#10FF
+.width		jr	$+2
+	dup 24
+		ldi
+	edup
+		ld	e,a
+		inc	d
+		ld	c,a
+		djnz	.width
+		ret
+
+; v DE je ptr na scradrtab
+renderbuffer:	di
+		ld	(.retsp+1),sp
+.y = 0
+	dup 16
+		ex	hl,de
+		ld	e,(hl)
+		inc	h
+		ld	d,(hl)
+		ex	hl,de
+		ld	bc,18
+		add	hl,bc
+		ld	sp,hl
+.nx = 0
+	dup 9
+		ld	hl,(blitspace.priletL.draw + (.y * 256) - .nx)
+		push	hl
+.nx = .nx + 2
+	edup
+		ex	de,hl
+		ld	c,l
+		inc	c
+		ld	a,28 ; offset druheho riadka
+		add	a,l
+		ld	l,a
+		ld	d,(hl)
+		dec	h
+		ld	e,(hl)
+		ld	l,c
+		ex	hl,de
+		ld	bc,32
+		add	hl,bc
+		ld	sp,hl
+.nx = 0
+	dup 11
+		ld	hl,(blitspace.priletR.draw + (.y * 256) - .nx)
+		push	hl
+.nx = .nx + 2
+	edup
+.y = .y + 1
+	edup
+.retsp:		ld	sp,0
+		ret
+
+clearbuffer:	di
+		ld	(.retsp+1),sp
+		ld	sp,blitspace.clear
+		ld	de,0
+		ld	b,32
+.loop
+	dup 16
+		push	de
+	edup
+		ld	hl,160
+		add	hl,sp
+		ld	sp,hl
+		djnz	.loop
+.retsp:		ld	sp,0
+		ret
+
+;;-----------------------------------------------------------------------------
+nogrtz:		ld	a,8
+		dec	a
+		ld	(nogrtz+1),a
+		cp	6
+		jr	c,.clwhite
+		ld	a,#16
+		call	fillattrs
+.ptr_src:	ld	hl,0
+.ptr_dst:	ld	de,0
+		ld	bc,2048
+		ldir
+		ret
+
+.retf		inc	a
+		ld	(enable.nogrtz),a
+		ret
+
+.clwhite:	cp	2
+		ret	nc
+		or	a
+		call	z,.retf
+		ld	a,#38
+		call	fillattrs
+		ld	(fillattrs.rstsp+1),sp
+.ptr_attr:	ld	hl,#D900
+		ld	a,h
+		and	3
+		rlca
+		rlca
+		di
+		ld	sp,hl
+		ld	l,a
+		ld	de,#3A3A
+		jr	fillattrs.loop
+
+flashout:	ld	a,10
+		dec	a
+		ld	(flashout+1),a
+		cp	6
+		jr	c,.clred
+		ld	a,#47
+		jr	fillattrs
+.clred		cp	2
+		jr	c,.clwhite
+		ld	a,#15
+		jr	fillattrs
+.clwhite	cp	1
+		jr	nz,.retf
+		ld	a,#38
+		jr	fillattrs
+.retf		or	a
+		ret	nz
+		inc	a
+		ld	(enable.flash),a
+		ld	a,#38
+
+fillattrs:	ld	d,a
+		ld	e,a
+		rrca
+		rrca
+		rrca
+		and	7
+		ld	(actborder),a
+.clean:		di
+		ld	(.rstsp+1),sp
+		ld	sp,#DB00
+		ld	l,12
+.loop:	rept 32
+		push	de
+	endm
+		dec	l
+		jr	nz,.loop
+.rstsp:		ld	sp,0
+		ei
+		ret
+
+;;-----------------------------------------------------------------------------
+scenar		dw	4686
+		db	1,0 ; prilet
+		dw	gfx.n07_zeroteam
+		dw	tab.n07_zeroteam
+		dw	gfx.n08_3sc
+		dw	tab.n08_3sc
+		dw	scradrtab+16
+
+		dw	4708
+		db	2,0 ; flash
+
+		dw	4774
+		db	1,0 ; prilet
+		dw	gfx.n09_sindikat
+		dw	tab.n09_sindikat
+		dw	gfx.n10_krapgang
+		dw	tab.n10_krapgang
+		dw	scradrtab+72
+
+		dw	4796
+		db	2,0 ; flash
+
+		dw	4840
+		db	1,0 ; prilet
+		dw	gfx.n11_speccypl
+		dw	tab.n11_speccypl
+		dw	gfx.n12_hooy
+		dw	tab.n12_hooy
+		dw	scradrtab+128
+
+		dw	4862
+		db	2,0 ; flash
+
+		dw	4906
+		db	3,#D9 ; nogrtz
+		dw	gfx.nogrtz2gmb1
+		dw	#C000
+
+		dw	4928
+		db	3,#DA ; nogrtz
+		dw	gfx.nogrtz2gmb2
+		dw	#C800
+
+		dw	4950
+		db	3,#DB ; nogrtz
+		dw	gfx.nogrtz2gmb3
+		dw	#D000
+
+		dw	4972
+		db	3,#D9 ; nogrtz.void
+		dw	gfx.void
+		dw	#C000
+
+		dw	4983
+		db	3,#DA ; nogrtz.void
+		dw	gfx.void
+		dw	#C800
+
+		dw	4994
+		db	3,#DB ; nogrtz.void
+		dw	gfx.void
+		dw	#D000
+
+		dw	5016
+		db	1,0 ; prilet
+		dw	gfx.n01_skrju
+		dw	tab.n01_skrju
+		dw	gfx.n02_thesuper
+		dw	tab.n02_thesuper
+		dw	scradrtab+16
+
+		dw	5038
+		db	2,0 ; flash
+
+		dw	5082
+		db	1,0 ; prilet
+		dw	gfx.n03_kpacku
+		dw	tab.n03_kpacku
+		dw	gfx.n04_sibcrew
+		dw	tab.n04_sibcrew
+		dw	scradrtab+72
+
+		dw	5104
+		db	2,0 ; flash
+
+		dw	5148
+		db	1,0 ; prilet
+		dw	gfx.n05_demarche
+		dw	tab.n05_demarche
+		dw	gfx.n06_lomars
+		dw	tab.n06_lomars
+		dw	scradrtab+128
+
+		dw	5170
+		db	2,0 ; flash
+
+		dw	5225
+		db	3,#D9 ; nogrtz.void
+		dw	gfx.void
+		dw	#C000
+
+		dw	5236
+		db	3,#DA ; nogrtz.void
+		dw	gfx.void
+		dw	#C800
+
+		dw	5247
+		dw	0,0 ; fin
+
+;;-----------------------------------------------------------------------------
+	module gfx
+n01_skrju	db	.len
+		incbin "gfx/01_skrju.bin"
+.len = ($ - n01_skrju) >> 4
+
+n02_thesuper	db	.len
+		incbin "gfx/02_thesuper.bin"
+.len = ($ - n02_thesuper) >> 4
+
+n03_kpacku	db	.len
+		incbin "gfx/03_kpacku.bin"
+.len = ($ - n03_kpacku) >> 4
+
+n04_sibcrew	db	.len
+		incbin "gfx/04_sibcrew.bin"
+.len = ($ - n04_sibcrew) >> 4
+
+n05_demarche	db	.len
+		incbin "gfx/05_demarche.bin"
+.len = ($ - n05_demarche) >> 4
+
+n06_lomars	db	.len
+		incbin "gfx/06_lomars.bin"
+.len = ($ - n06_lomars) >> 4
+
+n07_zeroteam	db	.len
+		incbin "gfx/07_zeroteam.bin"
+.len = ($ - n07_zeroteam) >> 4
+
+n08_3sc		db	.len
+		incbin "gfx/08_3sc.bin"
+.len = ($ - n08_3sc) >> 4
+
+n09_sindikat	db	.len
+		incbin "gfx/09_sindikat.bin"
+.len = ($ - n09_sindikat) >> 4
+
+n10_krapgang	db	.len
+		incbin "gfx/10_krapgang.bin"
+.len = ($ - n10_krapgang) >> 4
+
+n11_speccypl	db	.len
+		incbin "gfx/11_speccypl.bin"
+.len = ($ - n11_speccypl) >> 4
+
+n12_hooy	db	.len
+		incbin "gfx/12_hooy.bin"
+.len = ($ - n12_hooy) >> 4
+
+nogrtz2gmb1 = #6000
+nogrtz2gmb2 = #6800
+nogrtz2gmb3 = #7000
+void = #7800
+nogrtz2gmb.src	incbin "gfx/nogrtz2gemba.lzx"
+	endmodule
+
+;;-----------------------------------------------------------------------------
+	module tab
+
+	macro priletL val
+		db	(val + 48)
+	endm
+	macro priletR val
+		db	(val + 176) + 1
+	endm
+
+n01_skrju	include "tables/01_skrju.prilet.a80"
+		db	0
+n02_thesuper	include "tables/02_thesuper.prilet.a80"
+		db	0
+n03_kpacku	include "tables/03_kpacku.prilet.a80"
+		db	0
+n04_sibcrew	include "tables/04_sibcrew.prilet.a80"
+		db	0
+n05_demarche	include "tables/05_demarche.prilet.a80"
+		db	0
+n06_lomars	include "tables/06_lomars.prilet.a80"
+		db	0
+n07_zeroteam	include "tables/07_zeroteam.prilet.a80"
+		db	0
+n08_3sc		include "tables/08_3sc.prilet.a80"
+		db	0
+n09_sindikat	include "tables/09_sindikat.prilet.a80"
+		db	0
+n10_krapgang	include "tables/10_krapgang.prilet.a80"
+		db	0
+n11_speccypl	include "tables/11_speccypl.prilet.a80"
+		db	0
+n12_hooy	include "tables/12_hooy.prilet.a80"
+		db	0
+	endmodule
+
+		align	256
+scradrtab:
+.i = 0
+	dup 256
+		db	((((.i & #C0) | ((.i & #38) >> 3) | ((.i & 7) << 3)) << 5) & #FF)
+.i = .i + 1
+	edup
+.i = 0
+	dup 256
+		db	((((.i & #C0) | ((.i & #38) >> 3) | ((.i & 7) << 3)) << 5) >> 8) | #C0
+.i = .i + 1
+	edup
+
+		savebin "final.bin",start,$-start
+
+;;-----------------------------------------------------------------------------
+
+		org	#B000
+
+blitspace:	ds	4096
+.priletL.ptr	=	blitspace + 48
+.priletL.draw	=	blitspace + 66
+.priletR.ptr	=	blitspace + 176
+.priletR.draw	=	blitspace + 208
+.clear		=	blitspace + 80
+
+;;-----------------------------------------------------------------------------
+	ifndef fx
+		slot 3
+		page 6
+
+		include "../kernel/kernel.micro.inc"
+
+		savesna "greetings.sna",microkernel
+	endif
