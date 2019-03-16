@@ -1,0 +1,244 @@
+		device	zxspectrum128
+
+@DEBUG = 0
+
+		include "../kernel/constants.inc"
+
+;;-----------------------------------------------------------------------------
+	macro border n
+	  if DEBUG
+	    if n > 0
+		ld	a,n
+	    else
+		xor	a
+	    endif
+		out	(254),a
+	  endif
+	endm
+
+;;-----------------------------------------------------------------------------
+		org	RUNZONE
+
+@start	ifndef fx
+		di
+		ld	hl,#4000
+		ld	de,#4001
+		ld	bc,#1800
+		ld	(hl),l
+		ld	a,l
+		ld	(actborder),a
+		ldir
+		ld	bc,#2FF
+		ld	(hl),#47
+		ldir
+	endif
+		ld	a,#10
+		call	xchg.bnk
+
+		call	mkbod
+
+loop:		ei
+		halt
+		border	1
+		call	draw
+		ret	z
+		call	scenar
+		border	0
+.reset:		call	dvakratadost
+		jr	loop
+
+dvakratadost:	ld	a,2
+		dec	a
+		ld	(dvakratadost+1),a
+		ret	nz
+.counter:	ld	a,0
+		inc	a
+		ld	(.counter+1),a
+		ld	hl,data
+		cp	24
+		jr	nz,.n1
+		ld	(draw.ptr2+1),hl
+		ret
+
+.n1		cp	72
+		jr	nz,.n2
+		ld	(draw.ptr3+1),hl
+		ret
+
+.n2		cp	172
+		jr	nz,.n3
+		ld	(draw.ptr4+1),hl
+		ld	a,1
+		ld	(loop.reset),a
+		ret
+
+.n3		cp	129
+		jr	nz,.n4
+		ld	(draw.ptr1+1),hl
+		ret
+
+.n4		ld	a,2
+		ld	(dvakratadost+1),a
+		ret
+
+scenar:		ld	hl,(FRAMES)
+		ld	bc,6120
+		xor	a
+		sbc	hl,bc
+		ret	c
+		ld	a,1
+		ld	(IMCALL+16),a ; vypnutie muziky
+		ret
+
+draw:		ld	lx,0
+.ptr1:		ld	hl,data
+		ld	c,(hl)
+		inc	hl
+		ld	b,(hl)
+		inc	hl
+		ld	a,b
+		or	c
+		jr	z,.ptr2
+		ld	lx,a
+		ld	(.ptr1+1),hl
+		call	setbod
+
+.ptr2:		ld	hl,dataend
+		ld	c,(hl)
+		inc	hl
+		ld	b,(hl)
+		inc	hl
+		ld	a,b
+		or	c
+		jr	z,.ptr3
+		ld	lx,a
+		ld	(.ptr2+1),hl
+		inc	c
+		push	bc
+		call	setbod
+		pop	bc
+		inc	b
+		push	bc
+		call	setbod
+		pop	bc
+		dec	c
+		call	setbod
+
+.ptr3:		ld	hl,dataend
+		ld	c,(hl)
+		inc	hl
+		ld	b,(hl)
+		inc	hl
+		ld	a,b
+		or	c
+		jr	z,.ptr4
+		ld	lx,a
+		ld	(.ptr3+1),hl
+		inc	c
+		push	bc
+		call	setbod
+		pop	bc
+		dec	c
+		inc	b
+		call	setbod
+
+.ptr4:		ld	hl,dataend
+		ld	c,(hl)
+		inc	hl
+		ld	b,(hl)
+		inc	hl
+		ld	a,b
+		or	c
+		jr	z,.finished
+		ld	lx,a
+		ld	(.ptr4+1),hl
+;		push	bc
+;		call	setbod
+;		pop	bc
+		inc	b
+		inc	c
+		call	setbod
+.finished:	xor	a
+		or	lx
+		ret
+
+setbod:		ld	h,high tabbod	; x = c, y = b
+		ld	l,b
+		ld	d,(hl)
+		inc	h
+		ld	a,(hl)
+		inc	h
+		ld	l,c
+		or	(hl)
+		ld	e,a
+		inc	h
+		ld	a,(de)
+		xor	(hl)
+		ld	(de),a
+		ret
+
+mkbod:		ld	ix,tabbod
+		ld	hl,#4000
+mkbb1:		ld	(ix+0),h
+		inc	hx
+		ld	(ix+0),l
+		dec	hx
+		call	downhl
+		inc	lx
+		jr	nz,mkbb1
+		inc	hx
+		inc	hx
+mkbb2:		ld	a,lx
+		rrca
+		rrca
+		rrca
+		and	#1F
+		ld	(ix+0),a
+		ld	a,lx
+		cpl
+		add	a,a
+		add	a,a
+		add	a,a
+		or	#C7
+		ld	(mkbb3+1),a
+		xor	a
+mkbb3:		set	1,a
+		inc	hx
+		ld	(ix+0),a
+		dec	hx
+		inc	lx
+		jr	nz,mkbb2
+		ret
+
+downhl:		inc	h
+		ld	a,h
+		and	7
+		ret	nz
+		ld	a,32
+		add	a,l
+		ld	l,a
+		ret	c
+		ld	a,#F8
+		add	a,h
+		ld	h,a
+		ret
+
+data:		include	"tables/bodpath.a80"
+dataend:	db	0,0
+
+		savebin "final.bin",start,$-start
+
+;;-----------------------------------------------------------------------------
+		align	256
+
+tabbod:		ds	1024
+
+;;-----------------------------------------------------------------------------
+	ifndef fx
+		slot 3
+		page 6
+
+		include "../kernel/kernel.micro.inc"
+
+		savesna "turndisk.sna",microkernel
+	endif

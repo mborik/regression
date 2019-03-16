@@ -299,8 +299,7 @@ attrhide6:	ld	(hl),a
 		align	256
 
 im2vector:
-direntrybuf:
-screen.lzx:	incbin "loading.lzx"
+direntrybuf:	ds	32
 
 txterr		db	"DEMO-KERNEL LOADING FAILED!"
 		dw	#C900
@@ -433,17 +432,22 @@ fxtable:	db	fx_city.pg
 		dw	fx_greetings
 		dw	fx_greetings.sync
 
+		db	fx_turndisk.pg
+		dw	fx_turndisk
+		dw	fx_turndisk.sync
+
 		db	0
 
-@len = $ - start
 
 		align	256
 @RUNZONE	equ	$
 basesp
 
+screen.lzx:	incbin "loading.lzx"
+
 
 		emptytap "REGRESSION.tap"
-		savetap  "REGRESSION.tap",CODE,"autosys",start,len
+		savetap  "REGRESSION.tap",CODE,"autosys",start,$-start
 
 
 		export page128

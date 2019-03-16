@@ -14,6 +14,12 @@ MUSIC.init = music_init
 MUSIC.play = music_play
 
 ;;-----------------------------------------------------------------------------
+
+fx_turndisk:	incbin "turndisk/final.pak"
+.pg = _fxpage
+.sync = 0
+
+;;-----------------------------------------------------------------------------
 	if $ > #FFFF
 		display "Too long! ",/D,($-#10000)," bytes out!"
 		end
@@ -29,3 +35,7 @@ MUSIC.play = music_play
 		export	MUSIC.page
 		export	MUSIC.init
 		export	MUSIC.play
+
+		export fx_turndisk
+		export fx_turndisk.pg
+		export fx_turndisk.sync
