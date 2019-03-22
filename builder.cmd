@@ -70,4 +70,4 @@ bin2mbd needle4 -a 49152 -o "regression.mbd"
 bin2mbd needle6 -a 49152 -o "regression.mbd"
 
 @rem CLEANUP!
-del /Q /F output kernel\REGRESSION.tap
+del /Q /F kernel\REGRESSION.tap

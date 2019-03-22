@@ -41,11 +41,24 @@ loop:		ei
 		halt
 		border	1
 		call	draw
-		ret	z
-		call	scenar
+		jr	z,ukoncito
+.reset1:	call	dvakratadost
+		call	draw
+		jr	z,ukoncito
 		border	0
-.reset:		call	dvakratadost
+.reset2:	call	dvakratadost
 		jr	loop
+
+ukoncito:	ei
+		halt
+		ld	hl,(FRAMES)
+		ld	bc,6120
+		xor	a
+		sbc	hl,bc
+		jr	c,ukoncito
+		ld	a,1
+		ld	(IMCALL+16),a ; vypnutie muziky
+		ret
 
 dvakratadost:	ld	a,2
 		dec	a
@@ -69,7 +82,8 @@ dvakratadost:	ld	a,2
 		jr	nz,.n3
 		ld	(draw.ptr4+1),hl
 		ld	a,1
-		ld	(loop.reset),a
+		ld	(loop.reset1),a
+		ld	(loop.reset2),a
 		ret
 
 .n3		cp	129
@@ -79,15 +93,6 @@ dvakratadost:	ld	a,2
 
 .n4		ld	a,2
 		ld	(dvakratadost+1),a
-		ret
-
-scenar:		ld	hl,(FRAMES)
-		ld	bc,6120
-		xor	a
-		sbc	hl,bc
-		ret	c
-		ld	a,1
-		ld	(IMCALL+16),a ; vypnutie muziky
 		ret
 
 draw:		ld	lx,0

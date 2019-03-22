@@ -234,7 +234,7 @@ flakejbarvy	border	2
 		ld	de,attrs2
 		ld	bc,#D800
 .loop0:		inc	l
-	rept 30
+	dup 30
 		ld	a,(hl)
 		dec	l
 		ex	af,af'
@@ -249,7 +249,7 @@ flakejbarvy	border	2
 		inc	l
 		inc	e
 		inc	c
-	endm
+	edup
 		ld	a,(hl)
 		dec	l
 		ex	af,af'
@@ -294,12 +294,12 @@ flakejbarvy	border	2
 		ld	bc,-32
 		add	hl,bc
 		inc	de
-	rept 22
+	dup 22
 		ld	a,(de)
 		inc	de
 		ld	(hl),a
 		add	hl,bc
-	endm
+	edup
 		ld	a,(de)
 		inc	de
 		ld	(hl),a

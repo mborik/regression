@@ -126,6 +126,6 @@
 		dw	#D5EE
 		dw	#D6EE
 		dw	#D7EE
-	rept 32
+	dup 32
 		dw	#DB00
-	endm
+	edup

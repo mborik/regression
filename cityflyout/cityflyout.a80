@@ -320,28 +320,28 @@ renderCleanNG:	ld	bc,#7FF7
 		ld	a,5
 .loop0:		ex	af,af'
 		pop	de
-	rept 31
+	dup 31
 		ld	a,(hl)
 		ld	(de),a
 		and	b
 		ld	(hl),a
 		inc	l
 		inc	e
-	endm
+	edup
 		ld	a,(hl)
 		ld	(de),a
 		and	b
 		ld	(hl),a
 		inc	h
 		pop	de
-	rept 31
+	dup 31
 		ld	a,(hl)
 		ld	(de),a
 		and	c
 		ld	(hl),a
 		dec	l
 		dec	e
-	endm
+	edup
 		ld	a,(hl)
 		ld	(de),a
 		and	c
@@ -373,25 +373,25 @@ priletUpdate:	ld	hl,tab.prilet.n
 		ld	l,a
 		ex	de,hl
 		ld	b,5
-.loop	rept 5
+.loop	dup 5
 		ld	a,(de)
 		or	(hl)
 		ld	(hl),a
 		inc	l
 		inc	e
-	endm
+	edup
 		ld	a,(de)
 		or	(hl)
 		ld	(hl),a
 		inc	h
 		inc	e
-	rept 5
+	dup 5
 		ld	a,(de)
 		or	(hl)
 		ld	(hl),a
 		dec	l
 		inc	e
-	endm
+	edup
 		ld	a,(de)
 		or	(hl)
 		ld	(hl),a
@@ -422,9 +422,9 @@ fillattrs:	ld	l,7
 		ld	(.rstsp+1),sp
 		ld	sp,#DB00
 		ld	l,12
-.loop:	rept 32
+.loop:	dup 32
 		push	de
-	endm
+	edup
 		dec	l
 		jr	nz,.loop
 .rstsp:		ld	sp,0

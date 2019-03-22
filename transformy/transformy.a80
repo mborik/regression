@@ -233,9 +233,9 @@ stvorcekani:	ld	hl,kvadro.intro
 		ld	sp,hl
 		exx
 .pushers:
-	rept 8
+	dup 8
 		push	hl
-	endm
+	edup
 		exx
 		djnz	.clear
 .retsp:		ld	sp,0
@@ -398,9 +398,9 @@ fillattrs:	ld	d,a
 		ld	(.rstsp+1),sp
 		ld	sp,#DB00
 		ld	l,12
-.loop:	rept 32
+.loop:	dup 32
 		push	de
-	endm
+	edup
 		dec	l
 		jr	nz,.loop
 .rstsp:		ld	sp,0

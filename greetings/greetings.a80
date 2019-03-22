@@ -356,9 +356,9 @@ fillattrs:	ld	d,a
 		ld	(.rstsp+1),sp
 		ld	sp,#DB00
 		ld	l,12
-.loop:	rept 32
+.loop:	dup 32
 		push	de
-	endm
+	edup
 		dec	l
 		jr	nz,.loop
 .rstsp:		ld	sp,0

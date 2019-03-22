@@ -106,9 +106,9 @@ makeblik:	ld	a,1
 		ld	hl,0
 		add	hl,sp
 		ld	sp,#D9A0
-	rept 32
+	dup 32
 		push	de
-	endm
+	edup
 		ld	sp,hl
 		ei
 		ret
@@ -344,9 +344,9 @@ maznak:		ld	hl,maznak.addrs
 		ex	hl,de
 		inc	hl
 		ld	sp,hl
-	rept 16
+	dup 16
 		push	bc
-	endm
+	edup
 		ex	hl,de
 		inc	hl
 		ld	e,(hl)
@@ -355,9 +355,9 @@ maznak:		ld	hl,maznak.addrs
 		ex	hl,de
 		inc	hl
 		ld	sp,hl
-	rept 16
+	dup 16
 		push	bc
-	endm
+	edup
 		ex	hl,de
 		inc	hl
 		ld	a,(hl)

@@ -258,13 +258,13 @@ drawchunk:	rrca
 		add	a,c
 		ld	($+4),a
 		jr	$
-	rept	8
+	dup 8
 		ld	a,(de)
 		xor	(hl)
 		ld	(de),a
 		inc	hl
 		inc	d
-	endm
+	edup
 		org	$-1
 		ret
 
@@ -310,9 +310,9 @@ stvorcekani:	ld	hl,stvorcekani.table
 		ld	sp,#5000
 		ld	de,0
 		ld	b,32
-.clear:	rept 32
+.clear:	dup 32
 		push	de
-	endm
+	edup
 		djnz	.clear
 .retsp:		ld	sp,0
 		exx
