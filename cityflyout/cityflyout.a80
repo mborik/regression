@@ -130,7 +130,7 @@ start		di
 		call	prilet.loop
 		ld	a,#38
 		call	fillattrs ; 2 halts
-		ld	a,-2
+		ld	a,-4
 		call	shakinRender
 		ld	b,4
 		call	prilet.loop
@@ -467,7 +467,7 @@ flakacfarieb:	push	de
 
 render:		ld	hl,0
 .mb02pg:	ld	a,0
-		add	a,#42
+		add	a,#44
 		out	(mb02ram),a
 		di
 		ld	(.restoresp+1),sp

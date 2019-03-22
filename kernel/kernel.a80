@@ -56,7 +56,7 @@ loader:		ld	e,0	; (0 = root)
 		rst	#20
 
 .blktabptr:	ld	hl,blocktable
-.targetpg:	ld	bc,(blocktable.firstct << 8) | #62 ; SRAM page 2 (WR)
+.targetpg:	ld	bc,(blocktable.firstct << 8) | #64 ; SRAM page 4 (WR)
 .depk6:		ld	e,(hl)
 		inc	hl
 		ld	d,(hl)
@@ -447,7 +447,7 @@ screen.lzx:	incbin "loading.lzx"
 
 
 		emptytap "REGRESSION.tap"
-		savetap  "REGRESSION.tap",CODE,"autosys",start,$-start
+		savetap  "REGRESSION.tap",CODE,"REGRESSION",start,$-start
 
 
 		export page128
