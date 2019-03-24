@@ -1,0 +1,181 @@
+		device	zxspectrum128
+
+@DEBUG = 0
+
+		include "../kernel/constants.inc"
+
+;;-----------------------------------------------------------------------------
+	macro border n
+	  if DEBUG
+	    if n > 0
+		ld	a,n
+	    else
+		xor	a
+	    endif
+		out	(254),a
+	  endif
+	endm
+
+;;-----------------------------------------------------------------------------
+	ifndef fx
+		org	#6000
+		incbin "gfx/ripple.001",0,#2000
+	endif
+
+		org	RUNZONE
+
+start:		ld	a,#1F
+		call	xchg.bnk
+		ld	hl,#4000
+		ld	de,#4001
+		ld	bc,#1800
+		ld	(hl),l
+		push	hl
+		ldir
+		ld	(hl),#47
+		ld	bc,#2FF
+		ldir
+		pop	hl
+		ld	de,#C000
+		ld	bc,#1B00
+		ldir
+
+.loop:		ei
+		halt
+	ifdef fx
+		call	xchg.vram
+	endif
+		call	renderA
+		ei
+		halt
+		call	renderB
+		jr	.loop
+
+renderB:	call	process.remain
+		inc	hx
+		ld	(renderA.ptr+2),ix
+		ret
+
+renderA:	ld	a,0
+		add	a,#44
+.ptr	ifdef fx
+		ld	ix,#0060
+	else
+		ld	ix,#6060
+		out	(mb02ram),a
+	endif
+
+process:
+.i = 0
+	dup 96
+.y = (.i & #F0) >> 1
+		ld	l,(ix+(.i - #60))
+		ld	h,high patterns.tab
+		ld	a,(hl)
+		inc	h
+		ld	h,(hl)
+		ld	l,a
+		ld	de,#C000 | (((.y & #C0) | ((.y & #38) >> 3) | ((.y & 7) << 3)) << 5) | (.i & 15)
+		call	drawsq
+.i = .i + 1
+	edup
+		org	$-3
+		jp	drawsq
+
+.remain:
+	dup 96
+.y = (.i & #F0) >> 1
+		ld	l,(ix+(.i - #60))
+		ld	h,high patterns.tab
+		ld	a,(hl)
+		inc	h
+		ld	h,(hl)
+		ld	l,a
+		ld	de,#C000 | (((.y & #C0) | ((.y & #38) >> 3) | ((.y & 7) << 3)) << 5) | (.i & 15)
+		call	drawsq
+.i = .i + 1
+	edup
+		org	$-3
+
+drawsq:		di
+		ld	(.retsp+1),sp
+		ld	sp,hl
+		ld	h,d
+		ld	l,e
+	dup 4
+		pop	bc
+		ld	(hl),c
+		inc	h
+		ld	(hl),b
+		inc	h
+	edup
+		org	$-1
+		ld	h,d
+		ld	a,31
+		xor	e
+		ld	l,a
+		ld	e,a
+	dup 4
+		pop	bc
+		ld	(hl),c
+		inc	h
+		ld	(hl),b
+		inc	h
+	edup
+		org	$-1
+.third		ld	hl,#90FF
+		sbc	hl,de
+		ld	d,h
+	dup 4
+		pop	bc
+		ld	(hl),c
+		inc	h
+		ld	(hl),b
+		inc	h
+	edup
+		org	$-1
+		ld	h,d
+		ld	a,l
+		xor	31
+		ld	l,a
+	dup 4
+		pop	bc
+		ld	(hl),c
+		inc	h
+		ld	(hl),b
+		inc	h
+	edup
+		org	$-1
+.retsp:		ld	sp,0
+		ei
+		ret
+
+;;-----------------------------------------------------------------------------
+		align	256
+
+patterns.tab:
+.i = 0
+	dup 256
+		db	low (patterns.gfx + (.i * 32))
+.i = .i + 1
+	edup
+.i = 0
+	dup 256
+		db	high (patterns.gfx + (.i * 32))
+.i = .i + 1
+	edup
+
+patterns.gfx:	incbin "gfx/patterns.bin"
+
+
+		savebin "final.bin",start,$-start
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	ifndef fx
+		slot 3
+		page 6
+
+		include "../kernel/kernel.micro.inc"
+
+		savesna "ripple.sna",microkernel
+	endif
