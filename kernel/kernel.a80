@@ -1,10 +1,11 @@
 		device	zxspectrum128
 
-numberOfNeedles = 4
+numberOfNeedles = 5
 		include "pg1fx.inc"
 		include "pg3fx.inc"
 		include "pg4fx.inc"
 		include "pg6fx.inc"
+		include "pg7fx.inc"
 
 
 page128		equ	#7FFD
@@ -93,12 +94,11 @@ loader:		ld	e,0	; (0 = root)
 		jr	.fcursor
 
 		ld	hl,(.prgptr+1)
-.fullfilprg:	ld	a,c
-		and	#1F
+.fullfilprg:	ld	a,l
+		cp	#BF
 		jr	z,needle
 		ld	(hl),#FF
 		inc	l
-		inc	c
 		jr	.fullfilprg
 
 needle:		ld	a,#61
@@ -412,7 +412,7 @@ fxtable:	db	fx_city.pg
 		dw	fx_reglogo
 		dw	fx_reglogo.sync
 
-		db	fx_oneplusani.pg | #80 ; data transfer flag
+		db	fx_oneplusani.pg
 		dw	fx_oneplusani
 		dw	fx_oneplusani.length
 
@@ -434,7 +434,11 @@ fxtable:	db	fx_city.pg
 
 		db	fx_turndisk.pg
 		dw	fx_turndisk
-		dw	fx_turndisk.sync
+		dw	fx_turndisk.length
+
+		db	fx_ripple.pg
+		dw	fx_ripple
+		dw	fx_ripple.sync
 
 		db	0
 

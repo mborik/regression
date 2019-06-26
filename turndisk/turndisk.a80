@@ -12,12 +12,16 @@
 	    else
 		xor	a
 	    endif
+		ld	(actborder),a
 		out	(254),a
 	  endif
 	endm
 
 ;;-----------------------------------------------------------------------------
+
 		org	RUNZONE
+
+		define	MUSIC.waitfor 5258
 
 @start	ifndef fx
 		di
@@ -32,67 +36,123 @@
 		ld	(hl),#47
 		ldir
 	endif
+		border	1
 		ld	a,#10
 		call	xchg.bnk
 
 		call	mkbod
 
-loop:		ei
+		ei
 		halt
-		border	1
-		call	draw
-		jr	z,ukoncito
-.reset1:	call	dvakratadost
-		call	draw
-		jr	z,ukoncito
-		border	0
-.reset2:	call	dvakratadost
-		jr	loop
+		ld	a,#CD
+		ld	hl,callback
+		ld	(IMCALL),a
+		ld	(IMCALL+1),hl
 
-ukoncito:	ei
+		ld	a,#64
+		out	(mb02ram),a
+		ld	hl,packed.page1
+		ld	de,0
+		push	de
+		call	depack36
+		ld	a,#65
+		out	(mb02ram),a
+		ld	hl,packed.page2
+		pop	de
+		push	de
+		call	depack36
+		ld	a,#66
+		out	(mb02ram),a
+		ld	hl,packed.page3
+		pop	de
+		push	de
+		call	depack36
+		ld	a,#67
+		out	(mb02ram),a
+		ld	hl,packed.page4
+		pop	de
+		call	depack36
+
+deadloop:	ei
 		halt
 		ld	hl,(FRAMES)
-		ld	bc,6120
+		ld	bc,6232
 		xor	a
 		sbc	hl,bc
-		jr	c,ukoncito
-		ld	a,1
-		ld	(IMCALL+16),a ; vypnutie muziky
+		jr	c,deadloop
 		ret
 
-dvakratadost:	ld	a,2
+callback:	call	draw
+		jr	z,ukoncito
+.reset1:	call	vyckavator
+		call	draw
+		jr	z,ukoncito
+.reset2:	call	vyckavator
+		call	draw
+		jr	z,ukoncito
+.reset3:	call	vyckavator
+		call	draw
+		jr	z,ukoncito
+.reset4:	call	vyckavator
+.reset5:	ld	bc,drawlogo
+.reset6:	ld	bc,drawlogo
+		call	drawlogo
+		call	drawlogo
+		jp	drawlogo
+
+ukoncito:	ld	l,a
+		ld	h,a
+		inc	a
+		ld	(IMCALL),a
+		ld	(IMCALL+1),hl
+		ld	a,l
+		ld	(IMCALL),a
+		ret
+
+vyckavator:	ld	a,6
 		dec	a
-		ld	(dvakratadost+1),a
+		ld	(vyckavator+1),a
 		ret	nz
 .counter:	ld	a,0
 		inc	a
 		ld	(.counter+1),a
 		ld	hl,data
-		cp	24
+		cp	120
 		jr	nz,.n1
 		ld	(draw.ptr2+1),hl
 		ret
 
-.n1		cp	72
+.n1		cp	128
 		jr	nz,.n2
 		ld	(draw.ptr3+1),hl
 		ret
 
-.n2		cp	172
+.n2		cp	250
 		jr	nz,.n3
 		ld	(draw.ptr4+1),hl
 		ld	a,1
-		ld	(loop.reset1),a
-		ld	(loop.reset2),a
+		ld	(callback.reset1),a
+		ld	(callback.reset2),a
+		ld	(callback.reset3),a
+		ld	(callback.reset4),a
+		ld	a,#CD
+		ld	(callback.reset5),a
+		ld	(callback.reset6),a
+		ld	hl,reglogo
+		ld	(drawlogo+1),hl
+		ld	a,#23
+		ld	(drawlogo.dir),a
+		ld	hl,0
+		ld	(drawlogo.dir+1),hl
 		ret
 
-.n3		cp	129
+.n3		cp	150
 		jr	nz,.n4
 		ld	(draw.ptr1+1),hl
 		ret
 
-.n4		ld	a,2
-		ld	(dvakratadost+1),a
+.n4		ld	a,6
+		ld	(vyckavator+1),a
 		ret
 
 draw:		ld	lx,0
@@ -167,6 +227,22 @@ draw:		ld	lx,0
 		or	lx
 		ret
 
+drawlogo:	ld	hl,reglogend-2
+		ld	c,(hl)
+		inc	hl
+		ld	b,(hl)
+.dir		dec	hl
+		dec	hl
+		dec	hl
+		ld	a,b
+		or	c
+		ret	z
+		ld	(drawlogo+1),hl
+/*	; proforma
+		ld	a,b
+		sub	20
+		ld	b,a
+*/
 setbod:		ld	h,high tabbod	; x = c, y = b
 		ld	l,b
 		ld	d,(hl)
@@ -228,22 +304,56 @@ downhl:		inc	h
 		ld	h,a
 		ret
 
+;;-----------------------------------------------------------------------------
+;; Setting for depacker according to compression identification -tXYoAoB
+
+com	=	3	;; Compression type - one from TYPZX7 TYPBLK TYPBS1
+pos	=	6	;; Offset coding - one from POSOF4 POSOF1 POSOF2 POSOFD
+ofs1	=	8	;; Number of bits for 1st offset - required for POSOF1 POSOF2 POSOF4
+ofs2	=	11	;; Number of bits for 2nd offset - required for POSOF2 only
+
+;; This is needed to set according to compression ID string from name of compressed file:
+;;  -tXYoAoB ... means setting  com=X, pos=Y, ofs1=A, ofs2=B   (ofs1 ofs2 only when required)
+
+;; Set optimization of depacker
+
+spd	=	2
+
+;; Possible values:
+;;  0 ... optimized for code length - short but slow
+;;  1 ... compromise between length and speed
+;;  2+ .. optimized for speed - but longer code
+
+depack36	include "../kernel/lzx.a80"
+
+;;-----------------------------------------------------------------------------
 data:		include	"tables/bodpath.a80"
 dataend:	db	0,0
 
+reglogo:	include	"tables/reglogo.a80"
+reglogend:	db	0,0
+
+;; zapakovane data ------------------------------------------------------------
+
+packed.page1	incbin "../ripple/gfx/ripple.001.lzx"
+packed.page2	incbin "../ripple/gfx/ripple.002.lzx"
+packed.page3	incbin "../ripple/gfx/ripple.003.lzx"
+packed.page4	incbin "../ripple/gfx/ripple.004.lzx"
+
+
 		savebin "final.bin",start,$-start
-
 ;;-----------------------------------------------------------------------------
-		align	256
 
-tabbod:		ds	1024
+tabbod = #BC00
 
 ;;-----------------------------------------------------------------------------
 	ifndef fx
 		slot 3
 		page 6
 
+	module ukernel
 		include "../kernel/kernel.micro.inc"
+	endmodule
 
 		savesna "turndisk.sna",microkernel
 	endif

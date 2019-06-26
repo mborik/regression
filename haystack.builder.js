@@ -1,6 +1,8 @@
 const fs = require('fs');
 const { spawnSync } = require('child_process');
 
+const MB02_1ST_SAFE_PG = 4;
+
 const mode = '-t36o7o14';
 const cityflyPath =
 	(n => `cityflyout\\pg\\cityfly.${('00' + n.toString(10)).substr(-3)}`);
@@ -57,7 +59,7 @@ for (i = 0, j = 0, l = 0, c = 0; i < pages.length; i++, c++) {
 	fs.writeSync(fd, bin, 0, bin.length, j);
 
 	b = 0xC000 + (j - l);
-	a80 += `.pg${toHex(i + 2, 2)}:\t	dw	#${toHex(b)}	; (${bin.length})\n`;
+	a80 += `.pg${toHex(i + MB02_1ST_SAFE_PG, 2)}:\t	dw	#${toHex(b)}	; (${bin.length})\n`;
 	console.log(`~ compressed to ${bin.length} bytes (stored on #${toHex(b)})...`);
 
 	j += bin.length;

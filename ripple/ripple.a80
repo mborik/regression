@@ -17,87 +17,69 @@
 	endm
 
 ;;-----------------------------------------------------------------------------
-	ifndef fx
-		org	#6000
-		incbin "gfx/ripple.001",0,#2000
-	endif
 
 		org	RUNZONE
 
-start:		ld	a,#1F
+start:		ei
+		ld	a,#15
 		call	xchg.bnk
-		ld	hl,#4000
-		ld	de,#4001
-		ld	bc,#1800
-		ld	(hl),l
-		push	hl
-		ldir
-		ld	(hl),#47
-		ld	bc,#2FF
-		ldir
-		pop	hl
-		ld	de,#C000
-		ld	bc,#1B00
-		ldir
 
 .loop:		ei
 		halt
-	ifdef fx
-		call	xchg.vram
-	endif
-		call	renderA
-		ei
-		halt
-		call	renderB
+		;call	xchg.vram
+		call	render
 		jr	.loop
 
-renderB:	call	process.remain
-		inc	hx
-		ld	(renderA.ptr+2),ix
+
+;; ~ RENDER ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+render:		ld	a,#44
+		ld	hl,xorbuffer
+.ptr		ld	de,#0000
+		out	(mb02ram),a
+		di
+
+.i = 0
+	dup 192
+		ld	a,(de)
+		or	a
+		jr	z,$+12
+		xor	(hl)
+		ld	(hl),a
+		exx
+.y = (.i & #F0) >> 1
+		ld	de,#C000 | (((.y & #C0) | ((.y & #38) >> 3) | ((.y & 7) << 3)) << 5) | (.i & 15)
+		call	drawsq
+		exx
+.i = .i + 1
+		inc	de
+		inc	l
+	edup
+		org	$-1
+		ld	(.ptr+1),de
+		ei
+		ld	a,d
+		sub	#3F
+		ret	nz
+		ld	e,a
+		ld	d,a
+		ld	(.ptr+1),de
+		ld	de,render+1
+		ld	a,(de)
+		inc	a
+		ld	(de),a
+		cp	#48
+		ret	nz
+		ld	a,#44
+		ld	(de),a
 		ret
 
-renderA:	ld	a,0
-		add	a,#44
-.ptr	ifdef fx
-		ld	ix,#0060
-	else
-		ld	ix,#6060
-		out	(mb02ram),a
-	endif
-
-process:
-.i = 0
-	dup 96
-.y = (.i & #F0) >> 1
-		ld	l,(ix+(.i - #60))
-		ld	h,high patterns.tab
+drawsq:		ld	h,high patterns.tab
+		ld	l,a
 		ld	a,(hl)
 		inc	h
 		ld	h,(hl)
 		ld	l,a
-		ld	de,#C000 | (((.y & #C0) | ((.y & #38) >> 3) | ((.y & 7) << 3)) << 5) | (.i & 15)
-		call	drawsq
-.i = .i + 1
-	edup
-		org	$-3
-		jp	drawsq
-
-.remain:
-	dup 96
-.y = (.i & #F0) >> 1
-		ld	l,(ix+(.i - #60))
-		ld	h,high patterns.tab
-		ld	a,(hl)
-		inc	h
-		ld	h,(hl)
-		ld	l,a
-		ld	de,#C000 | (((.y & #C0) | ((.y & #38) >> 3) | ((.y & 7) << 3)) << 5) | (.i & 15)
-		call	drawsq
-.i = .i + 1
-	edup
-		org	$-3
-
-drawsq:		di
 		ld	(.retsp+1),sp
 		ld	sp,hl
 		ld	h,d
@@ -147,11 +129,12 @@ drawsq:		di
 	edup
 		org	$-1
 .retsp:		ld	sp,0
-		ei
 		ret
 
 ;;-----------------------------------------------------------------------------
 		align	256
+
+patterns.gfx	incbin "gfx/patterns.bin"
 
 patterns.tab:
 .i = 0
@@ -165,17 +148,7 @@ patterns.tab:
 .i = .i + 1
 	edup
 
-patterns.gfx:	incbin "gfx/patterns.bin"
 
+xorbuffer:	ds	256
 
 		savebin "final.bin",start,$-start
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	ifndef fx
-		slot 3
-		page 6
-
-		include "../kernel/kernel.micro.inc"
-
-		savesna "ripple.sna",microkernel
-	endif

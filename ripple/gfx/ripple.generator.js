@@ -1,20 +1,25 @@
 const fs = require('fs');
+const { spawnSync } = require('child_process');
+
+const LZXmode = '-t36o8o11';
 
 const WAVE1 = 4096;
-const WAVE2 = 212;
+const WAVE2 = 221;
 const WAVE3 = 4;
 
-const buf = new Buffer(64 * 48);
+const buf   = new Buffer(64 * 48);
 const frame = new Buffer(244);
-const page = new Buffer(16384);
+const page  = new Buffer(16384);
+const xorer = new Buffer(192);
 
 let pg = 16384; // page limit
 let ptr = 0, cptr = 0;
-
 let initialized = 0;
-page.fill(0);
 
-for (let it = 0; it < 768; it += 2) {
+page.fill(0);
+xorer.fill(0);
+
+for (let it = 0; it < 840; it += 2) {
 	let x, y, d, s, i, j, jeNieco;
 
 	for (y = 0; y < 48; y++) {
@@ -44,13 +49,30 @@ for (let it = 0; it < 768; it += 2) {
 
 	if (jeNieco) {
 		initialized = 0xFF;
-		frame.copy(page, ptr - cptr, 0, 191);
 
-		ptr += 256;
-		if (ptr > pg) {
-			fs.writeFileSync(`ripple.${('00' + (pg >> 14)).substr(-3)}`, page);
+		for (i = 0; i < 192; i++) {
+			s = frame.readUInt8(i);
+			j = xorer.readUInt8(i);
+			xorer.writeUInt8(s ^ j, i);
+		}
+
+		xorer.copy(page, ptr - cptr, 0, 192);
+		frame.copy(xorer, 0, 0, 192);
+
+		ptr += 192;
+		if (ptr >= (pg - 256)) {
+			const fn = `ripple.${('00' + (pg >> 14)).substr(-3)}`;
+			fs.writeFileSync(fn, page);
+
+			console.log(`~ compressing '${fn}'...`);
+			spawnSync('cmd.exe', ['/c', 'lzxpack', LZXmode, fn], { cwd: '.' });
+
+			const lzxn = `ripple${LZXmode}.lzx`;
+			const bin = fs.readFileSync(lzxn);
+			fs.unlinkSync(lzxn);
+			fs.writeFileSync(fn + '.lzx', bin);
+
 			page.fill(0);
-
 			ptr = cptr = pg;
 			pg += 16384;
 		}

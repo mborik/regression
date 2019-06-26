@@ -10,9 +10,9 @@ fx_surprise:	incbin "surprise/final.pak"
 .pg = _fxpage
 .sync = 2540
 
-fx_greetings:	incbin "greetings/final.pak"
-.pg = _fxpage
-.sync = 4610
+fx_turndisk:	incbin "turndisk/final.bin"
+.pg = _fxpage | #80 ; data transfer part
+.length = $-fx_turndisk
 
 ;;-----------------------------------------------------------------------------
 	if $ > #FFFF
@@ -30,6 +30,6 @@ fx_greetings:	incbin "greetings/final.pak"
 		export fx_surprise.pg
 		export fx_surprise.sync
 
-		export fx_greetings
-		export fx_greetings.pg
-		export fx_greetings.sync
+		export fx_turndisk
+		export fx_turndisk.pg
+		export fx_turndisk.length
