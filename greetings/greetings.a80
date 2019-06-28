@@ -20,7 +20,7 @@
 		org	RUNZONE
 		define	MUSIC.waitfor 4610
 
-start	ifndef fx
+start	ifndef isFX
 		di
 		ld	a,#1D
 		call	xchg.vram+2
@@ -595,7 +595,7 @@ blitspace:	ds	4096
 .clear		=	blitspace + 80
 
 ;;-----------------------------------------------------------------------------
-	ifndef fx
+	ifndef isFX
 		slot 3
 		page 6
 

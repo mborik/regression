@@ -5,7 +5,7 @@
 ; improved and reformated for AS by mborik/GembaBoys (c) 2016
 ; simplified aj adopted to sjasmplus by mborik/NAG (c) 2019
 
-	ifndef fx
+	ifndef isFX
 	ifndef ukernel
 		device	zxspectrum128
 	endif
@@ -1034,7 +1034,7 @@ p3x_setup:	db	1
 songdata
 MDLADDR		equ	songdata-99
 
-	ifndef fx
+	ifndef isFX
 	ifndef ukernel
 		incbin	"final.pt3",99
 

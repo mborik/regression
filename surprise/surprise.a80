@@ -381,7 +381,7 @@ attrs1		ds	768	; sinusovka
 attrs2		ds	768	; farebny zaklad
 
 ;;-----------------------------------------------------------------------------
-	ifndef fx
+	ifndef isFX
 		slot 3
 		page 6
 

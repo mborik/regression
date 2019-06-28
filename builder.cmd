@@ -3,47 +3,47 @@ mbdnew regression.mbd 82 11 "REGRESSION demo by NAG/svk"
 @cd kernel
 @cd ..\cityflyout
 del /Q /F final.pak
-sjasmplus -Dfx --lst=cityflyout.lst cityflyout.a80
+sjasmplus -DisFX --lst=cityflyout.lst cityflyout.a80
 lzxpack -t36o7o14 final.bin
 ren final-t36o7o14.lzx final.pak
 
 @cd ..\reglogo
 del /Q /F final.pak
-sjasmplus -Dfx --lst=reglogo.lst reglogo.a80
+sjasmplus -DisFX --lst=reglogo.lst reglogo.a80
 lzxpack -t36o7o14 final.bin
 ren final-t36o7o14.lzx final.pak
 
 @cd ..\oneplus
 del /Q /F final.pak
 sjasmplus oneplusani.a80
-sjasmplus -Dfx --lst=oneplus.lst oneplus.a80
+sjasmplus -DisFX --lst=oneplus.lst oneplus.a80
 lzxpack -t36o7o14 final.bin
 ren final-t36o7o14.lzx final.pak
 
 @cd ..\surprise
 del /Q /F final.pak
-sjasmplus -Dfx --lst=surprise.lst surprise.a80
+sjasmplus -DisFX --lst=surprise.lst surprise.a80
 lzxpack -t36o7o14 final.bin
 ren final-t36o7o14.lzx final.pak
 
 @cd ..\transformy
 del /Q /F final.pak
-sjasmplus -Dfx --lst=transformy.lst transformy.a80
+sjasmplus -DisFX --lst=transformy.lst transformy.a80
 lzxpack -t36o7o14 final.bin
 ren final-t36o7o14.lzx final.pak
 
 @cd ..\greetings
 del /Q /F final.pak
-sjasmplus -Dfx --lst=greetings.lst greetings.a80
+sjasmplus -DisFX --lst=greetings.lst greetings.a80
 lzxpack -t36o7o14 final.bin
 ren final-t36o7o14.lzx final.pak
 
 @cd ..\turndisk
-sjasmplus -Dfx --lst=turndisk.lst turndisk.a80
+sjasmplus -DisFX --lst=turndisk.lst turndisk.a80
 
 @cd ..\ripple
 del /Q /F final.pak
-sjasmplus -Dfx --lst=ripple.lst ripple.a80
+sjasmplus -DisFX --lst=ripple.lst ripple.a80
 lzxpack -t36o7o14 final.bin
 ren final-t36o7o14.lzx final.pak
 

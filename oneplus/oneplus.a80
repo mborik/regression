@@ -25,7 +25,7 @@
 @odkalisko = bufdat - 6912
 
 begin:
-	ifndef fx
+	ifndef isFX
 		ld	hl,initscreen
 		ld	de,#4000
 		call	depack
@@ -475,14 +475,14 @@ scradrtab:
 
 ;;-----------------------------------------------------------------------------
 
-	ifndef fx
+	ifndef isFX
 initscreen:	incbin "gfx/oneplusani000.scr.lzx"
 	else
 		savebin "final.bin",begin,$-begin
 	endif
 
 ;;-----------------------------------------------------------------------------
-	ifndef fx
+	ifndef isFX
 		slot 3
 		page 6
 

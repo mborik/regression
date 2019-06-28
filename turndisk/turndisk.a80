@@ -23,7 +23,7 @@
 
 		define	MUSIC.waitfor 5258
 
-@start	ifndef fx
+@start	ifndef isFX
 		di
 		ld	hl,#4000
 		ld	de,#4001
@@ -305,7 +305,7 @@ downhl:		inc	h
 		ret
 
 ;;-----------------------------------------------------------------------------
-;; Setting for depacker according to compression identification -tXYoAoB
+;; Setting for depacker according to compression identification -t36o8o11
 
 com	=	3	;; Compression type - one from TYPZX7 TYPBLK TYPBS1
 pos	=	6	;; Offset coding - one from POSOF4 POSOF1 POSOF2 POSOFD
@@ -347,7 +347,7 @@ packed.page4	incbin "../ripple/gfx/ripple.004.lzx"
 tabbod = #BC00
 
 ;;-----------------------------------------------------------------------------
-	ifndef fx
+	ifndef isFX
 		slot 3
 		page 6
 

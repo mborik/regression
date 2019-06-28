@@ -1,6 +1,6 @@
 		device	zxspectrum128
 		org	#C000
-		define fx 1
+		define isFX 1
 
 @_fxpage = #11
 @_fxpage_start
