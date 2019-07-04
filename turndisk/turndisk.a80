@@ -3,6 +3,8 @@
 @DEBUG = 0
 
 		include "../kernel/constants.inc"
+		include "../ripple/rippleani.inc"
+		include "../ripple/mandaly/build.inc"
 
 ;;-----------------------------------------------------------------------------
 	macro border n
@@ -36,8 +38,7 @@
 		ld	(hl),#47
 		ldir
 	endif
-		border	1
-		ld	a,#10
+		ld	a,ripple.pg128k
 		call	xchg.bnk
 
 		call	mkbod
@@ -51,26 +52,29 @@
 
 		ld	a,#64
 		out	(mb02ram),a
-		ld	hl,packed.page1
+		ld	hl,ripple.page1
 		ld	de,0
 		push	de
 		call	depack36
 		ld	a,#65
 		out	(mb02ram),a
-		ld	hl,packed.page2
+		ld	hl,ripple.page2
 		pop	de
 		push	de
 		call	depack36
 		ld	a,#66
 		out	(mb02ram),a
-		ld	hl,packed.page3
+		ld	hl,ripple.page3
 		pop	de
 		push	de
 		call	depack36
 		ld	a,#67
 		out	(mb02ram),a
-		ld	hl,packed.page4
+		ld	hl,ripple.page4
 		pop	de
+		call	depack36
+		ld	hl,ripple.mandalas
+		ld	de,mandala.start
 		call	depack36
 
 deadloop:	ei
@@ -333,18 +337,12 @@ dataend:	db	0,0
 reglogo:	include	"tables/reglogo.a80"
 reglogend:	db	0,0
 
-;; zapakovane data ------------------------------------------------------------
-
-packed.page1	incbin "../ripple/gfx/ripple.001.lzx"
-packed.page2	incbin "../ripple/gfx/ripple.002.lzx"
-packed.page3	incbin "../ripple/gfx/ripple.003.lzx"
-packed.page4	incbin "../ripple/gfx/ripple.004.lzx"
-
-
 		savebin "final.bin",start,$-start
-;;-----------------------------------------------------------------------------
 
-tabbod = #BC00
+;;-----------------------------------------------------------------------------
+		align	256
+
+tabbod		ds	1024
 
 ;;-----------------------------------------------------------------------------
 	ifndef isFX

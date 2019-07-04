@@ -1,0 +1,24 @@
+		device	zxspectrum128
+		include "../kernel/constants.inc"
+
+		org	#C000
+
+@ripple
+.pg128k = #14
+
+.page1		incbin "../ripple/gfx/ripple.001.lzx"
+.page3		incbin "../ripple/gfx/ripple.002.lzx"
+.page2		incbin "../ripple/gfx/ripple.003.lzx"
+.page4		incbin "../ripple/gfx/ripple.004.lzx"
+.mandalas	incbin "../ripple/mandaly/build.pak"
+.length = $-ripple
+
+		savebin "rippleani.pak",ripple,$-ripple
+
+
+		export ripple.page1
+		export ripple.page2
+		export ripple.page3
+		export ripple.page4
+		export ripple.mandalas
+		export ripple.pg128k

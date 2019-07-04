@@ -1,25 +1,17 @@
 const fs = require('fs');
 const { spawnSync } = require('child_process');
 
-const LZXmode = '-t36o8o11';
-
-const WAVE1 = 4096;
-const WAVE2 = 221;
-const WAVE3 = 4;
+const WAVE1 = 2048;
+const WAVE2 = 246;
+const WAVE3 = Math.PI;
 
 const buf   = new Buffer(64 * 48);
-const frame = new Buffer(244);
-const page  = new Buffer(16384);
-const xorer = new Buffer(192);
+const frame = new Buffer(176);
 
-let pg = 16384; // page limit
-let ptr = 0, cptr = 0;
+let srcframes = [];
 let initialized = 0;
 
-page.fill(0);
-xorer.fill(0);
-
-for (let it = 0; it < 840; it += 2) {
+for (let it = 0; it < 768; it += 2) {
 	let x, y, d, s, i, j, jeNieco;
 
 	for (y = 0; y < 48; y++) {
@@ -34,7 +26,7 @@ for (let it = 0; it < 840; it += 2) {
 
 	d = 0;
 	jeNieco = initialized;
-	for (y = 0; y < 24; y += 2) {
+	for (y = 2; y < 24; y += 2) {
 		for (x = 0; x < 32; x += 2) {
 			i = (y * 64) + x;
 			j = ((y + 1) * 64) + x;
@@ -49,18 +41,40 @@ for (let it = 0; it < 840; it += 2) {
 
 	if (jeNieco) {
 		initialized = 0xFF;
+		srcframes.push(Buffer.from(frame));
+	}
+}
 
-		for (i = 0; i < 192; i++) {
-			s = frame.readUInt8(i);
+console.log(srcframes.length);
+
+const LZXmode = '-t36o8o11';
+const xorer = new Buffer(176);
+const page  = new Buffer(16384);
+
+let pg = 16384; // page limit
+let i, j, k, s, ptr, cptr;
+
+for (s = 0; s < 2; s++) {
+	xorer.fill(0);
+	page.fill(0);
+
+	ptr = cptr = (pg - 16384);
+
+	srcframes.forEach((frame, idx) => {
+		if ((idx & 1) !== s)
+			return;
+
+		for (i = 0; i < 176; i++) {
+			k = frame.readUInt8(i);
 			j = xorer.readUInt8(i);
-			xorer.writeUInt8(s ^ j, i);
+			xorer.writeUInt8(k ^ j, i);
 		}
 
-		xorer.copy(page, ptr - cptr, 0, 192);
-		frame.copy(xorer, 0, 0, 192);
+		xorer.copy(page, ptr - cptr, 0, 176);
+		frame.copy(xorer, 0, 0, 176);
 
-		ptr += 192;
-		if (ptr >= (pg - 256)) {
+		ptr += 176;
+		if (ptr >= (pg - 176)) {
 			const fn = `ripple.${('00' + (pg >> 14)).substr(-3)}`;
 			fs.writeFileSync(fn, page);
 
@@ -76,5 +90,5 @@ for (let it = 0; it < 840; it += 2) {
 			ptr = cptr = pg;
 			pg += 16384;
 		}
-	}
+	});
 }

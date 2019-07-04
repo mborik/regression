@@ -13,9 +13,9 @@ fx_greetings:	incbin "greetings/final.pak"
 .pg = _fxpage
 .sync = 4610
 
-fx_ripple:	incbin "ripple/final.pak"
-.pg = _fxpage
-.sync = 0
+fx_turndisk:	incbin "turndisk/final.bin"
+.pg = _fxpage | #80 ; data transfer part
+.length = $-fx_turndisk
 
 ;;-----------------------------------------------------------------------------
 	if $ > #FFFF
@@ -33,6 +33,6 @@ fx_ripple:	incbin "ripple/final.pak"
 		export fx_greetings.pg
 		export fx_greetings.sync
 
-		export fx_ripple
-		export fx_ripple.pg
-		export fx_ripple.sync
+		export fx_turndisk
+		export fx_turndisk.pg
+		export fx_turndisk.length

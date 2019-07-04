@@ -1,8 +1,9 @@
 		device	zxspectrum128
 
-@DEBUG = 0
+@DEBUG = 1
 
 		include "../kernel/constants.inc"
+		include "mandaly/build.inc"
 
 ;;-----------------------------------------------------------------------------
 	macro border n
@@ -21,57 +22,77 @@
 		org	RUNZONE
 
 start:		ei
-		ld	a,#15
-		call	xchg.bnk
+		ld	a,#1D
+		call	xchg.bnk-3
+		ld	hl,mandala.attr0
+		call	blitattrs
+		ld	iy,drawsq
 
 .loop:		ei
 		halt
-		;call	xchg.vram
+		call	citajScenar
+		call	xchg.vram
 		call	render
+		ei
+		halt
+		call	citajScenar
+		call	xchg.vram
+		call	render2
 		jr	.loop
 
 
 ;; ~ RENDER ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 render:		ld	a,#44
-		ld	hl,xorbuffer
 .ptr		ld	de,#0000
+.xor		ld	hl,xorbuffer
 		out	(mb02ram),a
-		di
 
-.i = 0
-	dup 192
+.core		di
+		ld	(.retsp+1),sp
+.i = 16
+	dup 176
 		ld	a,(de)
 		or	a
-		jr	z,$+12
+		jr	z,$+15
 		xor	(hl)
 		ld	(hl),a
 		exx
 .y = (.i & #F0) >> 1
 		ld	de,#C000 | (((.y & #C0) | ((.y & #38) >> 3) | ((.y & 7) << 3)) << 5) | (.i & 15)
-		call	drawsq
+		ld	ix,$+6
+		jp	(iy)
 		exx
 .i = .i + 1
 		inc	de
 		inc	l
 	edup
 		org	$-1
-		ld	(.ptr+1),de
+.retsp:		ld	sp,0
 		ei
-		ld	a,d
-		sub	#3F
-		ret	nz
-		ld	e,a
-		ld	d,a
-		ld	(.ptr+1),de
-		ld	de,render+1
-		ld	a,(de)
+		ret
+
+render2:	ld	a,(render+1)
 		inc	a
-		ld	(de),a
+		ld	de,(render.ptr+1)
+		ld	hl,(render.xor+1)
+		inc	h
+		call	render.core
+		ld	(render.ptr+1),de
+		ld	hl,#3FF0
+		xor	a
+		sbc	hl,de
+		ret	nz
+		ld	(render.ptr+1),hl
+		ld	hl,render+1
+		ld	a,(hl)
+		inc	a
+		inc	a
+		ld	(hl),a
 		cp	#48
 		ret	nz
 		ld	a,#44
-		ld	(de),a
+		ld	(hl),a
 		ret
 
 drawsq:		ld	h,high patterns.tab
@@ -80,7 +101,6 @@ drawsq:		ld	h,high patterns.tab
 		inc	h
 		ld	h,(hl)
 		ld	l,a
-		ld	(.retsp+1),sp
 		ld	sp,hl
 		ld	h,d
 		ld	l,e
@@ -128,8 +148,219 @@ drawsq:		ld	h,high patterns.tab
 		inc	h
 	edup
 		org	$-1
-.retsp:		ld	sp,0
+		jp	(ix)
+
+fillattrs:	ld	a,b
+		ld	d,a
+		ld	e,a
+		rrca
+		rrca
+		rrca
+		and	7
+		ld	(actborder),a
+		out	(254),a
+		ld	a,(act128page)
+		ld	bc,page128
+		push	bc
+		push	af
+		and	#F8
+		or	7
+		out	(c),a
+		di
+		ld	(.rstsp+1),sp
+		ld	hl,#DB00
+.secvram:	ld	sp,hl
+		ld	a,8
+.loop:	dup 48
+		push	de
+	edup
+		dec	a
+		jr	nz,.loop
+		ld	hl,#8300
+		add	hl,sp
+		jr	c,.secvram
+.rstsp:		ld	sp,0
+		pop	af
+		pop	bc
+		out	(c),a
+		ei
 		ret
+
+citajScenar:	di
+		ld	(.retsp+1),sp
+.ptr:		ld	sp,scenar
+		pop	de
+		ld	a,e
+		or	d
+		jr	z,.retsp
+		ld	hl,(FRAMES)
+		sbc	hl,de
+		jr	c,.retsp
+		pop	bc
+		ld	a,c
+		dec	a
+		jr	nz,.otherfns
+; fn 1
+		pop	hl
+.xorxor		ld	de,xorbuffer
+		ld	bc,xorbuffer + 256
+		ld	a,44
+.xorloop:	ex	af,af'
+	dup 4
+		ld	a,(de)
+		xor	(hl)
+		ld	(de),a
+		ld	a,(bc)
+		xor	(hl)
+		ld	(bc),a
+		inc	hl
+		inc	e
+		inc	c
+	edup
+		ex	af,af'
+		dec	a
+		jr	nz,.xorloop
+		pop	hl
+		ld	a,h
+		or	l
+		jr	nz,.xorxor
+		ld	(.ptr+1),sp
+		ld	sp,(.retsp+1)
+		ei
+		halt
+		ret
+
+.retsp:		ld	sp,0
+		ei
+		ret
+
+.otherfns:	dec	a
+		jr	z,.fillattrs
+		dec	a
+		jr	z,.blitattrs
+
+; fn 0
+.fin:		ld	(.ptr+1),sp
+		ld	sp,(.retsp+1)
+		ei
+		pop	af
+		xor	a
+		jp	fillattrs+1
+
+; fn 2
+.fillattrs:	ld	(.ptr+1),sp
+		ld	sp,(.retsp+1)
+		jp	fillattrs
+
+; fn 3
+.blitattrs:	pop	hl
+		ld	(.ptr+1),sp
+		ld	sp,(.retsp+1)
+
+blitattrs:	ld	a,(hl)
+		rrca
+		rrca
+		rrca
+		and	7
+		ld	(actborder),a
+		out	(254),a
+		ld	a,(act128page)
+		ld	bc,page128
+		push	bc
+		push	af
+		and	#F8
+		or	7
+		out	(c),a
+		di
+		push	hl
+		ld	de,#5800
+		ld	bc,768
+		ldir
+		pop	hl
+		ld	de,#D800
+		ld	bc,768
+		ldir
+		pop	af
+		pop	bc
+		out	(c),a
+		ei
+		halt
+		ret
+
+;;-----------------------------------------------------------------------------
+scenar		dw	6451
+		db	2,0q27 ; flash
+		dw	6453
+		db	2,0q37 ; flash
+		dw	6455
+		db	2,0q57 ; flash
+		dw	6457
+		db	2,0q67 ; flash
+		dw	6459
+		db	2,0q77 ; flash
+
+		dw	6460
+		db	1,0 ; change mandala
+		dw	mandala.no1
+		dw	0
+
+		dw	6462
+		db	3,0 ; blit attrs
+		dw	mandala.attr1
+
+		dw	6627
+		db	2,0q27 ; flash
+		dw	6629
+		db	2,0q37 ; flash
+		dw	6631
+		db	2,0q57 ; flash
+		dw	6633
+		db	2,0q67 ; flash
+		dw	6635
+		db	2,0q77 ; flash
+
+		dw	6636
+		db	1,0 ; change mandala
+		dw	mandala.no1
+		dw	mandala.no3
+		dw	0
+
+		dw	6638
+		db	3,0 ; blit attrs
+		dw	mandala.attr3
+
+		dw	6812
+		db	1,0 ; change mandala
+		dw	mandala.no3
+		dw	mandala.no2
+		dw	0
+
+		dw	6814
+		db	3,0 ; blit attrs
+		dw	mandala.attr2
+
+		dw	6979
+		db	2,0q27 ; flash
+		dw	6981
+		db	2,0q37 ; flash
+		dw	6983
+		db	2,0q57 ; flash
+		dw	6985
+		db	2,0q67 ; flash
+		dw	6987
+		db	2,0q77 ; flash
+
+		dw	6988
+		db	1,0 ; change mandala
+		dw	mandala.no2
+		dw	mandala.no4
+		dw	0
+
+		dw	6990
+		db	1,7 ; flash
+
+		dw	7694
+		dw	0,0 ; fin
 
 ;;-----------------------------------------------------------------------------
 		align	256
@@ -148,7 +379,6 @@ patterns.tab:
 .i = .i + 1
 	edup
 
-
-xorbuffer:	ds	256
+xorbuffer:	block	512,0
 
 		savebin "final.bin",start,$-start

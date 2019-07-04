@@ -1,0 +1,27 @@
+		device	zxspectrum48
+
+		org	#8000-len
+
+mandala.start
+mandala.attr0:	incbin "pattern0.scr",6144,768
+mandala.attr1:	incbin "pattern1.scr",6144,768
+mandala.attr2:	incbin "pattern2.scr",6144,768
+mandala.attr3:	incbin "pattern3.scr",6144,768
+mandala.no1:	incbin "pattern1.bin"
+mandala.no2:	incbin "pattern2.bin"
+mandala.no3:	incbin "pattern3.bin"
+mandala.no4:	incbin "pattern4.bin"
+
+@len = $-mandala.start
+		savebin "build.bin",mandala.start,len
+
+
+		export	mandala.start
+		export	mandala.attr0
+		export	mandala.attr1
+		export	mandala.attr2
+		export	mandala.attr3
+		export	mandala.no1
+		export	mandala.no2
+		export	mandala.no3
+		export	mandala.no4
