@@ -40,10 +40,10 @@ start:		ld	a,#58	; SRAM page (RO)
 		call	render
 .pass2end	jr	.loop
 
-		ld	a,#59
+		ld	a,#5E
 		out	(mb02ram),a
 		call	animator
-		ld	a,#5A
+		ld	a,#5F
 		out	(mb02ram),a
 		call	animator
 		ld	a,#40 ; back to ROM

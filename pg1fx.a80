@@ -14,6 +14,10 @@ fx_oneplus:	incbin "oneplus/final.pak"
 .pg = _fxpage
 .sync = 1417
 
+fx_trafoutro:	incbin "transformy/trafoutro.pak"
+.pg = _fxpage | #80 ; data transfer part
+.length = $-fx_trafoutro
+
 fx_transformy:	incbin "transformy/final.pak"
 .pg = _fxpage
 .sync = 4000
@@ -37,6 +41,10 @@ fx_transformy:	incbin "transformy/final.pak"
 		export fx_oneplus
 		export fx_oneplus.pg
 		export fx_oneplus.sync
+
+		export fx_trafoutro
+		export fx_trafoutro.pg
+		export fx_trafoutro.length
 
 		export fx_transformy
 		export fx_transformy.pg

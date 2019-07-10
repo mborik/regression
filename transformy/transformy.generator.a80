@@ -1,8 +1,8 @@
-@pg000 = #5C
-@pg001 = #5E
-@pg002 = #5D
-@pg003 = #5F
-@pg004 = #5B
+@pg000 = #5B
+@pg001 = #59
+@pg002 = #5A
+@pg003 = #5C
+@pg004 = #5D
 
 @basescradr = #C000
 
@@ -97,6 +97,28 @@
 		db	pg004 : dw	aa725_0056
 		db	pg004 : dw	aa725_0057
 		db	pg004 : dw	aa725_0058
+		db	0
+		outend
+
+		output "tables/outro.tab.bin"
+
+		db	pg004 : dw	aa97b_0000
+		db	pg004 : dw	aa97b_0001
+		db	pg004 : dw	aa97b_0002
+		db	pg004 : dw	aa97b_0003
+		db	pg004 : dw	aa97b_0004
+		db	pg004 : dw	aa97b_0005
+		db	pg004 : dw	aa97b_0006
+		db	pg004 : dw	aa97b_0007
+		db	pg004 : dw	aa97b_0008
+		db	pg004 : dw	aa97b_0009
+		db	pg004 : dw	aa97b_000a
+		db	pg004 : dw	aa97b_000b
+		db	pg004 : dw	aa97b_000c
+		db	pg004 : dw	aa97b_000d
+		db	pg004 : dw	aa97b_000e
+		db	pg004 : dw	aa97b_000f
+		db	pg004 : dw	aa97b_0010
 		db	0
 		outend
 
@@ -234,7 +256,35 @@ aa725_0056	include "tables/gen/0056.asm"
 aa725_0057	include "tables/gen/0057.asm"
 aa725_0058	include "tables/gen/0058.asm"
 
+aa97b_0001	include "tables/outro/0001.asm"
+aa97b_0005	include "tables/outro/0005.asm"
+aa97b_0007	include "tables/outro/0007.asm"
+aa97b_0009	include "tables/outro/0009.asm"
+aa97b_000a	include "tables/outro/000a.asm"
+aa97b_000b	include "tables/outro/000b.asm"
+aa97b_000c	include "tables/outro/000c.asm"
+aa97b_000d	include "tables/outro/000d.asm"
+aa97b_000e	include "tables/outro/000e.asm"
+aa97b_000f	include "tables/outro/000f.asm"
+
 		display /D,"pg/trafo.004: ", (16384-$), " bytes free..."
 
 		align	16384
+		outend
+
+;;-----------------------------------------------------------------------------
+		output "pg/trafo.outro.bin"
+
+		org	$6600
+
+aa97b_0000	include "tables/outro/0000.asm"
+aa97b_0002	include "tables/outro/0002.asm"
+aa97b_0003	include "tables/outro/0003.asm"
+aa97b_0004	include "tables/outro/0004.asm"
+aa97b_0006	include "tables/outro/0006.asm"
+aa97b_0008	include "tables/outro/0008.asm"
+aa97b_0010	include "tables/outro/0010.asm"
+
+		display /D,"pg/trafo.outro.bin: ", ($8000-$), " bytes free..."
+
 		outend

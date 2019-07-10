@@ -1,0 +1,14 @@
+		device	zxspectrum128
+		include "../kernel/constants.inc"
+
+@bufdat = #6600
+
+		org	RUNZONE
+
+start:		ld	hl,bufdat.packed
+		ld	de,bufdat
+		jp	depack
+
+bufdat.packed:	incbin "pg/trafo.outro.lzx"
+
+		savebin "trafoutro.pak",start,$-start

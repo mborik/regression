@@ -21,13 +21,13 @@
 .pg16:		dw	#EA9D	; (5147)
 .pg17:		dw	#C000	; (4477)
 .pg18:		dw	#D17D	; (460)
-.pg19:		dw	#D349	; (3009)
-.pg1A:		dw	#DF0A	; (2970)
-.pg1B:		dw	#EAA4	; (4668)
-.pg1C:		dw	#C000	; (8295)
-.pg1D:		dw	#E067	; (7454)
-.pg1E:		dw	#C000	; (8725)
-.pg1F:		dw	#E215	; (7192)
+.pg19:		dw	#D349	; (8725)
+.pg1A:		dw	#C000	; (7454)
+.pg1B:		dw	#DD1E	; (8295)
+.pg1C:		dw	#C000	; (7192)
+.pg1D:		dw	#DC18	; (7353)
+.pg1E:		dw	#C000	; (3009)
+.pg1F:		dw	#CBC1	; (2970)
 
 .firstct:		equ	4
-.counts:		db	4,4,4,3,5,2,2,0
+.counts:		db	4,4,4,3,3,2,2,2,0

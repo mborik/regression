@@ -23,12 +23,6 @@
 begin:		ei
 		ld	a,#1D
 		call	xchg.vram+2
-		ld	a,102q
-		ld	(#580B),a
-		ld	(#582B),a
-		ld	(#584B),a
-		ld	(#586B),a
-		ld	(#588B),a
 		ld	hl,#4000
 		ld	de,#C000
 		ld	bc,#1B00
@@ -47,7 +41,7 @@ begin:		ei
 		sbc	hl,bc
 		jr	c,.introwait
 
-		ld	b,97
+		ld	b,245
 .stage1:	push	bc
 		ei
 		halt
@@ -62,63 +56,21 @@ begin:		ei
 		pop	bc
 		djnz	.stage1
 
-.stage2:	ei
+		ld	hl,outro.table
+		ld	b,16
+.stage2:	push	bc
+		ei
 		halt
-		ld	hl,(animate+1)
 		push	hl
-		call	xchg.vram
-		call	animate
-.stage2.ptr:	ld	a,0
-		call	tears
-		halt
-		pop	hl
-		push	af
 		call	xchg.vram
 		call	animate.hl
-		pop	af
-		call	tears
-		inc	a
-		cp	82
-		ld	(.stage2.ptr+1),a
-		jr	nz,.stage2
-
-		xor	a
-		ld	h,a
-		ld	l,a
-		ld	(applymask),a
-		ld	(stvorcekani.pushers),a
-		ld	(stvorcekani.pushers+1),hl
-		ld	hl,kvadro.outro
-		ld	(stvorcekani+1),hl
-		ld	hl,135 << 8 | 21
-		ld	(stvorcekani.pointers+4),hl
-
-.stage3:	push	af
-		ei
-		halt
-		call	xchg.vram
-		ld	hl,(stvorcekani+1)
-		push	hl
-		call	stvorcekani
-		call	tears.fin
-		ei
 		halt
 		call	xchg.vram
 		pop	hl
-		call	stvorcekani+3
-		call	tears.fin
-		pop	af
-		inc	a
-		cp	32
-		jr	c,.stage3
-		cp	63
-		jr	z,.stageF
-		ld	l,a
-		and	30
-		rlca
-		ld	(applymask.ptr+1),a
-		ld	a,l
-		jr	.stage3
+		call	animate.hl
+		pop	bc
+		ld	hl,(animate+1)
+		djnz	.stage2
 
 .stageF:	ld	a,#0F
 		call	fillattrs
@@ -188,19 +140,6 @@ animate:	ld	hl,animate.table
 		ld	(animate+1),hl
 		ex	hl,de
 		jp	(hl)
-
-tears.fin:	ld	a,81
-tears:		push	af
-		ld	hl,.exit
-		push	hl
-		ld	l,a
-		rlca
-		add	a,l
-		ld	l,a
-		ld	h,high tearsani.table
-		jp	(hl)
-.exit:		pop	af
-		ret
 
 stvorcekani:	ld	hl,kvadro.intro
 		ld	a,(hl)
@@ -277,9 +216,7 @@ kvadro:		ld	a,d
 		and	7
 		inc	a
 		ld	b,a
-.zv1:		ld	a,e
-		call	applymask
-		ld	(hl),a
+.zv1:		ld	(hl),e
 		inc	h
 		dec	d
 		jr	z,.nzret
@@ -329,20 +266,17 @@ kvadro:		ld	a,d
 
 .kva11:		push	hl
 .kvazac:	ld	a,#FF
-		call	applymask
 		ld	(hl),a
 .kvainc:	ld	e,0
 		inc	l
 		dec	e
 		jr	z,.kvaend
 		or	#FF
-		call	applymask
 .kvaline:	ld	(hl),a
 		inc	l
 		dec	e
 		jr	nz,.kvaline
 .kvaend:	ld	a,#FF
-		call	applymask
 		ld	(hl),a
 		pop	hl
 		inc	h
@@ -374,19 +308,6 @@ addbod:		ld	h,high scradrtab
 		and	7
 		ret
 
-applymask:	ret
-		push	hl
-		push	af
-		ld	a,h
-		and	3
-.ptr:		add	a,0
-		ld	l,a
-		ld	h,high masky
-		pop	af
-		and	(hl)
-		pop	hl
-		ret
-
 fillattrs:	ld	d,a
 		ld	e,a
 		rrca
@@ -411,14 +332,8 @@ fillattrs:	ld	d,a
 kvadro.intro:	include	"tables/kvadro.intro.inc"
 		dw	0
 
-kvadro.outro:	include	"tables/kvadro.outro.inc"
-		dw	0
-
 animate.table:	incbin	"tables/frames.tab.bin"
-
-		align	256
-
-tearsani.table:	include	"tables/tears.ani.a80"
+outro.table:	incbin	"tables/outro.tab.bin"
 
 		align	256
 scradrtab:
@@ -432,9 +347,6 @@ scradrtab:
 		db	((((.i & #C0) | ((.i & #38) >> 3) | ((.i & 7) << 3)) << 5) >> 8) | #C0
 .i = .i + 1
 	edup
-
-masky:		incbin	"tables/masky.bin"
-
 
 ;;-----------------------------------------------------------------------------
 

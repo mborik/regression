@@ -424,6 +424,10 @@ fxtable:	db	fx_city.pg
 		dw	fx_surprise
 		dw	fx_surprise.sync
 
+		db	fx_trafoutro.pg
+		dw	fx_trafoutro
+		dw	fx_trafoutro.length
+
 		db	fx_transformy.pg
 		dw	fx_transformy
 		dw	fx_transformy.sync

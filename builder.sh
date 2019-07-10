@@ -37,6 +37,7 @@ ${ASM} -DisFX --lst=surprise.lst surprise.a80
 LZX final.bin final.pak
 
 cd ../transformy
+${ASM} trafoutro.a80
 ${ASM} -DisFX --lst=transformy.lst transformy.a80
 LZX final.bin final.pak
 

@@ -38,12 +38,12 @@
 		{
 			"label": "build REGRESSION.mbd",
 			"type": "shell",
-			"command": "sjasmplus",
+			"command": "bash builder.sh",
 			"options": {
 				"cwd": "${workspaceFolder}"
 			},
 			"windows": {
-				"command": "builder.cmd",
+				"command": "bash builder.sh",
 				"options": {
 					"shell": {
 						"executable": "C:\\WINDOWS\\System32\\cmd.exe",
