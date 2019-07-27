@@ -1,11 +1,12 @@
 const fs = require('fs');
+const path = require('path');
 const { spawnSync } = require('child_process');
 
 const MB02_1ST_SAFE_PG = 4;
 
 const mode = '-t36o7o14';
 const cityflyPath =
-	(n => `cityflyout\\pg\\cityfly.${('00' + n.toString(10)).substr(-3)}`);
+	(n => `cityflyout/pg/cityfly.${('00' + n.toString(10)).substr(-3)}`);
 
 const lzxName = (a => a.substr(0, a.lastIndexOf('.')) + mode + '.lzx');
 
@@ -24,21 +25,22 @@ let a, b, c, i, j, l;
 
 const pages = [
 	...[...Array(20).keys()].map(cityflyPath),
-	'reglogo\\gfx\\stlpce.bin',
-	'transformy\\pg\\trafo.001',
-	'transformy\\pg\\trafo.002',
-	'transformy\\pg\\trafo.000',
-	'transformy\\pg\\trafo.003',
-	'transformy\\pg\\trafo.004',
-	'reglogo\\gfx\\squashy.pg0',
-	'reglogo\\gfx\\squashy.pg1'
+	'reglogo/gfx/stlpce.bin',
+	'transformy/pg/trafo.001',
+	'transformy/pg/trafo.002',
+	'transformy/pg/trafo.000',
+	'transformy/pg/trafo.003',
+	'transformy/pg/trafo.004',
+	'reglogo/gfx/squashy.pg0',
+	'reglogo/gfx/squashy.pg1'
 ];
 
 for (i = 0, j = 0, l = 0, c = 0; i < pages.length; i++, c++) {
-	a = pages[i];
+	a = path.normalize(pages[i]);
 	console.log(`~ compressing '${a}'...`);
 
-	spawnSync('cmd.exe', ['/c', 'lzxpack', mode, a], { cwd: '.' });
+	spawnSync('lzxpack', [mode, a],
+		{ cwd: '.', shell: true, windowsHide: true });
 
 	a = lzxName(a);
 	bin = fs.readFileSync(a);
@@ -67,7 +69,7 @@ for (i = 0, j = 0, l = 0, c = 0; i < pages.length; i++, c++) {
 
 console.log(`~ finishig after ${c} pages (${pg - j} bytes excess)...`);
 
-fs.writeSync(fd, new Buffer([0]), 0, 1, pg - 1);
+fs.writeSync(fd, Buffer.from([0]), 0, 1, pg - 1);
 fs.closeSync(fd);
 
 counts.push(c, 0);

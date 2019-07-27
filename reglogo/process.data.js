@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 
 let fd;
 let l = 64, lp = Math.ceil(l >> 5);
@@ -11,8 +12,9 @@ const bin = new Buffer(16384 * lp);
 
 for (; b < l; b++) {
 	a = ('000' + b.toString(10)).substr(-4);
+	a = path.normalize(`./frames/sqsh${a}.png.bmp`);
 
-	fd = fs.openSync(`./frames/sqsh${a}.png.bmp`, 'r');
+	fd = fs.openSync(a, 'r');
 	fs.readSync(fd, scr, 0, 512, 62);
 	fs.closeSync(fd);
 
@@ -30,7 +32,7 @@ for (; b < l; b++) {
 
 //---------------------------------------------------------------------------------------
 for (b = 0; b < lp; b++) {
-	a = `gfx\\squashy.pg${b}`;
+	a = path.normalize(`gfx/squashy.pg${b}`);
 	i = b * 16384;
 
 	fs.writeFileSync(a, bin.slice(i, i + 16384), { flag: 'w' });

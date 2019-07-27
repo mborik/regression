@@ -79,7 +79,8 @@ for (s = 0; s < 2; s++) {
 			fs.writeFileSync(fn, page);
 
 			console.log(`~ compressing '${fn}'...`);
-			spawnSync('cmd.exe', ['/c', 'lzxpack', LZXmode, fn], { cwd: '.' });
+			spawnSync('lzxpack', [LZXmode, fn],
+				{ cwd: '.', shell: true, windowsHide: true });
 
 			const lzxn = `ripple${LZXmode}.lzx`;
 			const bin = fs.readFileSync(lzxn);
