@@ -10,12 +10,12 @@ const scr = new Buffer(384);
 const bin = new Buffer(16384);
 
 // eslint-disable-next-line no-octal
-const palette = [ 0007, 0122, 0133, 0144, 0111, 0166, 0155, 0177 ];
+const palette = [ 0007, 0111, 0122, 0144, 0133, 0166, 0155, 0177 ];
 const storeAttrs = (byte) => {
-	let c = palette[(byte >> 4) & 7] || palette[0];
+	let c = palette[byte & 7] || palette[0];
 	bin.writeUInt8(c, i++);
 
-	c = palette[byte & 7] || palette[0];
+	c = palette[(byte >> 4) & 7] || palette[0];
 	bin.writeUInt8(c, i++);
 };
 
@@ -27,7 +27,7 @@ for (i = 0, b = 1, d = -1; b < l; b++) {
 	fs.readSync(fd, scr, 0, 384, 0xCA);
 	fs.closeSync(fd);
 
-	for (ct = 0, j = 319; j >= 64; j--) {
+	for (ct = 0, j = 64; j < 320; j++) {
 		c = scr.readUInt8(j);
 
 		if (c === d) {

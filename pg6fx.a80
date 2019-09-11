@@ -14,7 +14,7 @@ MUSIC.init = music_init
 MUSIC.play = music_play
 
 ;;-----------------------------------------------------------------------------
-	if $ > #FFFF
+	if $ > #10000
 		display "Too long! ",/D,($-#10000)," bytes out!"
 		end
 	else

@@ -13,7 +13,7 @@ fx_city:	incbin "cityflyout/final.pak"
 .sync = 0
 
 ;;-----------------------------------------------------------------------------
-	if $ > #FFFF
+	if $ > #10000
 		display "Too long! ",/D,($-#10000)," bytes out!"
 		end
 	else

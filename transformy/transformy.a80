@@ -348,8 +348,8 @@ blitlines:	ld	hl,stripes.pak
 		inc	hl
 		or	a
 		jr	z,.pushpairs
-		ld	d,a
-		ld	e,(hl)
+		ld	e,a
+		ld	d,(hl)
 		inc	hl
 .pushpairs:	push	de
 		dec	c
@@ -357,8 +357,8 @@ blitlines:	ld	hl,stripes.pak
 		djnz	.pushpairs
 		jr	.rstsp
 
-.justword:	ld	d,c
-		ld	e,(hl)
+.justword:	ld	e,c
+		ld	d,(hl)
 		inc	hl
 		push	de
 .ret2loop:	djnz	.mainloop

@@ -15,7 +15,7 @@ fx_reglogo:	incbin "reglogo/final.pak"
 .sync = 836
 
 ;;-----------------------------------------------------------------------------
-	if $ > #FFFF
+	if $ > #10000
 		display "Too long! ",/D,($-#10000)," bytes out!"
 		end
 	else
