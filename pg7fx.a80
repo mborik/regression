@@ -9,9 +9,9 @@ VRAM2		ds	8192
 
 ;;-----------------------------------------------------------------------------
 
-fx_greetings:	incbin "greetings/final.pak"
-.pg = _fxpage
-.sync = 4610
+fx_trafoutro:	incbin "transformy/trafoutro.pak"
+.pg = _fxpage | #80 ; data transfer part
+.length = $-fx_trafoutro
 
 fx_turndisk:	incbin "turndisk/final.bin"
 .pg = _fxpage | #80 ; data transfer part
@@ -25,13 +25,13 @@ fx_turndisk:	incbin "turndisk/final.bin"
 		display /D,(#10000-$)," bytes free..."
 	endif
 
-		align	16384
+		align	16384,0
 		savebin "needle7",(_fxpage_start),$-(_fxpage_start)
 
 ;;-----------------------------------------------------------------------------
-		export fx_greetings
-		export fx_greetings.pg
-		export fx_greetings.sync
+		export fx_trafoutro
+		export fx_trafoutro.pg
+		export fx_trafoutro.length
 
 		export fx_turndisk
 		export fx_turndisk.pg

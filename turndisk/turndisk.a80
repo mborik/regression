@@ -50,6 +50,12 @@
 		ld	(IMCALL),a
 		ld	(IMCALL+1),hl
 
+		ld	hl,#5845
+		ld	bc,#3642
+.reglogo_red:	ld	(hl),c
+		inc	l
+		djnz	.reglogo_red
+
 		ld	a,#64
 		out	(mb02ram),a
 		ld	hl,ripple.page1
@@ -242,11 +248,7 @@ drawlogo:	ld	hl,reglogend-2
 		or	c
 		ret	z
 		ld	(drawlogo+1),hl
-/*	; proforma
-		ld	a,b
-		sub	20
-		ld	b,a
-*/
+		dec	b
 setbod:		ld	h,high tabbod	; x = c, y = b
 		ld	l,b
 		ld	d,(hl)

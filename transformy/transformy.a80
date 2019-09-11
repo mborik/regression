@@ -49,10 +49,13 @@ begin:		ei
 		push	hl
 		call	xchg.vram
 		call	animate
+		call	blitlines
 		halt
 		call	xchg.vram
 		pop	hl
 		call	animate.hl
+		call	blitlines
+		ld	(blitlines+1),hl
 		pop	bc
 		djnz	.stage1
 
@@ -64,12 +67,10 @@ begin:		ei
 		push	hl
 		call	xchg.vram
 		call	animate.hl
-		call	blitlines
 		halt
 		call	xchg.vram
 		pop	hl
 		call	animate.hl
-		call	blitlines
 		pop	bc
 		ld	hl,(animate+1)
 		djnz	.stage2
@@ -330,66 +331,49 @@ fillattrs:	ld	d,a
 		ei
 		ret
 
-blitlines:	ld	hl,wormspace.frontal
-		ld	de,wormspace.backbuf
-		ld	bc,224
-		exx
-		ld	bc,#1008
-		ld	hl,scradrtab+32
-.loop1		push	bc
-		push	hl
+blitlines:	ld	hl,stripes.pak
+		di
+		ld	(.rstsp+1),sp
+		ld	sp,#DA80
+		ld	b,0
+.mainloop:	ld	a,(hl)
+		ld	c,a
+		inc	hl
+		inc	a
+		ld	de,#0707
+		jr	z,.fill2end
+		jp	p,.justword
+		res	7,c
 		ld	a,(hl)
-		inc	h
-		ld	h,(hl)
-		ld	l,a
-		ld	a,h
-		and	#C0
-		or	#10
-		ld	d,a
-		ld	a,h
-		and	#78
-		rrca
-		rrca
-		rrca
-		or	d
-		ld	d,a
-		ld	e,l
-		exx
-		ld	a,(hl)
+		inc	hl
 		or	a
-		jr	z,.checkBack
-		ld	(de),a
-		exx
-		ld	b,h
-		ld	c,0
-		ld	(hl),c
+		jr	z,.pushpairs
+		ld	d,a
+		ld	e,(hl)
+		inc	hl
+.pushpairs:	push	de
 		dec	c
-		inc	h
-	dup 6
-		ld	(hl),c
-		inc	h
-	edup
-		ld	(hl),0
-		ld	h,b
-		ld	(de),a
-		jr	.finish
+		jr	z,.ret2loop
+		djnz	.pushpairs
+		jr	.rstsp
 
-.checkBack:	ld	c,a
-		ld	a,(de)
-		or	a
-		jr	z,.nomaskback
+.justword:	ld	d,c
+		ld	e,(hl)
+		inc	hl
+		push	de
+.ret2loop:	djnz	.mainloop
+		jr	.rstsp
 
-.nomaskback:	ld	a,c
-		ld	(de),a
-.finish		exx
-		pop	hl
-		pop	bc
-		ld	a,l
-		add	a,c
-		ld	l,a
-		djnz	.loop1
+.fill2end:	push	de
+		djnz	$-1
+.rstsp:		ld	sp,0
+		ei
 		ret
 
+
+stripes.pak:	block	60,#FF
+		incbin	"transformy.stripes.bin"
+		block	30,#FF
 
 kvadro.intro:	include	"tables/kvadro.intro.inc"
 		dw	0
@@ -409,12 +393,6 @@ scradrtab:
 		db	((((.i & #C0) | ((.i & #38) >> 3) | ((.i & 7) << 3)) << 5) >> 8) | #C0
 .i = .i + 1
 	edup
-
-;;-----------------------------------------------------------------------------
-
-wormspace:	ds	4096 ; 16 rows
-.backbuf	=	wormspace + 48
-.frontal	=	wormspace + 176
 
 ;;-----------------------------------------------------------------------------
 

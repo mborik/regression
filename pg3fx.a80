@@ -22,7 +22,7 @@ fx_reglogo:	incbin "reglogo/final.pak"
 		display /D,(#10000-$)," bytes free..."
 	endif
 
-		align	16384
+		align	16384,0
 		savebin "needle3",(_fxpage_start),$-(_fxpage_start)
 
 ;;-----------------------------------------------------------------------------

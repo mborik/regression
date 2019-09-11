@@ -8,13 +8,9 @@
 ;;-----------------------------------------------------------------------------
 data_ripple:	incbin "ripple/rippleani.pak"
 
-fx_ripple:	incbin "ripple/final.pak"
+fx_city:	incbin "cityflyout/final.pak"
 .pg = _fxpage
 .sync = 0
-
-fx_surprise:	incbin "surprise/final.pak"
-.pg = _fxpage
-.sync = 2540
 
 ;;-----------------------------------------------------------------------------
 	if $ > #FFFF
@@ -24,14 +20,10 @@ fx_surprise:	incbin "surprise/final.pak"
 		display /D,(#10000-$)," bytes free..."
 	endif
 
-		align	16384
+		align	16384,0
 		savebin "needle4",(_fxpage_start),$-(_fxpage_start)
 
 ;;-----------------------------------------------------------------------------
-		export fx_surprise
-		export fx_surprise.pg
-		export fx_surprise.sync
-
-		export fx_ripple
-		export fx_ripple.pg
-		export fx_ripple.sync
+		export fx_city
+		export fx_city.pg
+		export fx_city.sync

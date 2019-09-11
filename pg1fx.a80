@@ -6,21 +6,25 @@
 @_fxpage_start
 
 ;;-----------------------------------------------------------------------------
-fx_city:	incbin "cityflyout/final.pak"
-.pg = _fxpage
-.sync = 0
-
 fx_oneplus:	incbin "oneplus/final.pak"
 .pg = _fxpage
 .sync = 1417
 
-fx_trafoutro:	incbin "transformy/trafoutro.pak"
-.pg = _fxpage | #80 ; data transfer part
-.length = $-fx_trafoutro
+fx_surprise:	incbin "surprise/final.pak"
+.pg = _fxpage
+.sync = 2540
 
 fx_transformy:	incbin "transformy/final.pak"
 .pg = _fxpage
 .sync = 4000
+
+fx_greetings:	incbin "greetings/final.pak"
+.pg = _fxpage
+.sync = 4610
+
+fx_ripple:	incbin "ripple/final.pak"
+.pg = _fxpage
+.sync = 0
 
 ;;-----------------------------------------------------------------------------
 	if $ > #FFFF
@@ -30,22 +34,26 @@ fx_transformy:	incbin "transformy/final.pak"
 		display /D,(#10000-$)," bytes free..."
 	endif
 
-		align	16384
+		align	16384,0
 		savebin "needle1",(_fxpage_start),$-(_fxpage_start)
 
 ;;-----------------------------------------------------------------------------
-		export fx_city
-		export fx_city.pg
-		export fx_city.sync
-
 		export fx_oneplus
 		export fx_oneplus.pg
 		export fx_oneplus.sync
 
-		export fx_trafoutro
-		export fx_trafoutro.pg
-		export fx_trafoutro.length
+		export fx_surprise
+		export fx_surprise.pg
+		export fx_surprise.sync
 
 		export fx_transformy
 		export fx_transformy.pg
 		export fx_transformy.sync
+
+		export fx_greetings
+		export fx_greetings.pg
+		export fx_greetings.sync
+
+		export fx_ripple
+		export fx_ripple.pg
+		export fx_ripple.sync
