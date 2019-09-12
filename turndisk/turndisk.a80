@@ -86,7 +86,7 @@
 deadloop:	ei
 		halt
 		ld	hl,(FRAMES)
-		ld	bc,6232
+		ld	bc,6238
 		xor	a
 		sbc	hl,bc
 		jr	c,deadloop

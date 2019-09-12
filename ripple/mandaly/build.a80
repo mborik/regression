@@ -11,6 +11,7 @@ mandala.no1:	incbin "pattern1.bin"
 mandala.no2:	incbin "pattern2.bin"
 mandala.no3:	incbin "pattern3.bin"
 mandala.no4:	incbin "pattern4.bin"
+mandala.no5:	incbin "pattern5.bin"
 
 @len = $-mandala.start
 		savebin "build.bin",mandala.start,len
@@ -25,3 +26,4 @@ mandala.no4:	incbin "pattern4.bin"
 		export	mandala.no2
 		export	mandala.no3
 		export	mandala.no4
+		export	mandala.no5

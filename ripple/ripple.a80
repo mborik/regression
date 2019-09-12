@@ -1,6 +1,6 @@
 		device	zxspectrum128
 
-@DEBUG = 1
+@DEBUG = 0
 
 		include "../kernel/constants.inc"
 		include "mandaly/build.inc"
@@ -28,7 +28,7 @@ start:		ei
 		call	blitattrs
 		ld	iy,drawsq
 
-.loop:		ei
+loop:		ei
 		halt
 		call	citajScenar
 		call	xchg.vram
@@ -38,7 +38,11 @@ start:		ei
 		call	citajScenar
 		call	xchg.vram
 		call	render2
-		jr	.loop
+		jr	loop
+
+finalpart:	ei
+		halt
+		jr	finalpart
 
 
 ;; ~ RENDER ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -168,15 +172,16 @@ fillattrs:	ld	a,b
 		out	(c),a
 		di
 		ld	(.rstsp+1),sp
-		ld	hl,#DB00
-.secvram:	ld	sp,hl
-		ld	a,8
-.loop:	dup 48
+		ld	hl,#D880
+.secvram:	ld	b,6
+.loop:		ld	sp,hl
+	dup 64
 		push	de
 	edup
-		dec	a
-		jr	nz,.loop
-		ld	hl,#8300
+		ld	hl,#0100
+		add	hl,sp
+		djnz	.loop
+		ld	hl,#7E00
 		add	hl,sp
 		jr	c,.secvram
 .rstsp:		ld	sp,0
@@ -189,11 +194,8 @@ fillattrs:	ld	a,b
 citajScenar:	di
 		ld	(.retsp+1),sp
 .ptr:		ld	sp,scenar
-		pop	de
-		ld	a,e
-		or	d
-		jr	z,.retsp
 		ld	hl,(FRAMES)
+		pop	de
 		sbc	hl,de
 		jr	c,.retsp
 		pop	bc
@@ -240,12 +242,9 @@ citajScenar:	di
 		jr	z,.blitattrs
 
 ; fn 0
-.fin:		ld	(.ptr+1),sp
-		ld	sp,(.retsp+1)
-		ei
+.fin:		ld	sp,(.retsp+1)
 		pop	af
-		xor	a
-		jp	fillattrs+1
+		jp	finalpart
 
 ; fn 2
 .fillattrs:	ld	(.ptr+1),sp
@@ -273,11 +272,11 @@ blitattrs:	ld	a,(hl)
 		out	(c),a
 		di
 		push	hl
-		ld	de,#5800
+		ld	de,#D800
 		ld	bc,768
 		ldir
 		pop	hl
-		ld	de,#D800
+		ld	de,#5800
 		ld	bc,768
 		ldir
 		pop	af
@@ -287,79 +286,106 @@ blitattrs:	ld	a,(hl)
 		halt
 		ret
 
+	macro flash frames, color
+		dw	frames
+		db	2, color
+	endm
+
+	macro bltattr frames, ptr
+		dw	frames
+		db	3, 0
+		dw	ptr
+	endm
+
+	macro xormnd frames, mandala
+		dw	frames
+		db	1, 0
+		dw	mandala
+		dw	0
+	endm
+
+	macro xorrep frames, mandala1, mandala2
+		dw	frames
+		db	1, 0
+		dw	mandala1
+		dw	mandala2
+		dw	0
+	endm
+
 ;;-----------------------------------------------------------------------------
-scenar		dw	6451
-		db	2,0q27 ; flash
-		dw	6453
-		db	2,0q37 ; flash
-		dw	6455
-		db	2,0q57 ; flash
-		dw	6457
-		db	2,0q67 ; flash
-		dw	6459
-		db	2,0q77 ; flash
+scenar		flash	6451, 0q27
+		flash	6453, 0q37
+		flash	6455, 0q57
+		flash	6457, 0q67
+		flash	6459, 0q77
 
-		dw	6460
-		db	1,0 ; change mandala
-		dw	mandala.no1
-		dw	0
+		bltattr	6460, mandala.attr2
 
-		dw	6462
-		db	3,0 ; blit attrs
-		dw	mandala.attr1
+		flash	6627, 0q27
+		flash	6629, 0q37
+		flash	6631, 0q57
+		flash	6633, 0q67
+		flash	6635, 0q77
 
-		dw	6627
-		db	2,0q27 ; flash
-		dw	6629
-		db	2,0q37 ; flash
-		dw	6631
-		db	2,0q57 ; flash
-		dw	6633
-		db	2,0q67 ; flash
-		dw	6635
-		db	2,0q77 ; flash
+		xormnd	6636, mandala.no1
+		bltattr	6638, mandala.attr1
 
-		dw	6636
-		db	1,0 ; change mandala
-		dw	mandala.no1
-		dw	mandala.no3
-		dw	0
+		flash	6979, 0q27
+		flash	6981, 0q37
+		flash	6983, 0q57
+		flash	6985, 0q67
+		flash	6987, 0q77
 
-		dw	6638
-		db	3,0 ; blit attrs
-		dw	mandala.attr3
+		xorrep	6988, mandala.no1, mandala.no3
+		bltattr	6990, mandala.attr3
+;;--
+		flash	7012, 0q70
+		bltattr	7018, mandala.attr3
 
-		dw	6812
-		db	1,0 ; change mandala
-		dw	mandala.no3
-		dw	mandala.no2
-		dw	0
+		flash	7054, 0q77
+		xormnd	7056, mandala.no3
+		flash	7058, 0q06
+;;--
+		flash	7100, 0q70
+		flash	7106, 0q06
 
-		dw	6814
-		db	3,0 ; blit attrs
-		dw	mandala.attr2
+		flash	7142, 0q77
+		xormnd	7144, mandala.no4
+		bltattr	7146, mandala.attr0
+;;--
+		flash	7188, 0q70
+		bltattr	7194, mandala.attr0
 
-		dw	6979
-		db	2,0q27 ; flash
-		dw	6981
-		db	2,0q37 ; flash
-		dw	6983
-		db	2,0q57 ; flash
-		dw	6985
-		db	2,0q67 ; flash
-		dw	6987
-		db	2,0q77 ; flash
+		flash	7231, 0q77
+		xorrep	7233, mandala.no4, mandala.no5
+		bltattr	7235, mandala.attr2
+;;--
+		flash	7276, 0q70
+		bltattr	7282, mandala.attr2
 
-		dw	6988
-		db	1,0 ; change mandala
-		dw	mandala.no2
-		dw	mandala.no4
-		dw	0
+		flash	7318, 0q77
+		xorrep	7320, mandala.no5, mandala.no2
+		flash	7322, 0q15
 
-		dw	6990
-		db	1,7 ; flash
+		flash	7364, 0q70
+		flash	7370, 0q26
 
-		dw	7694
+		flash	7406, 0q77
+		xormnd	7408, mandala.no2
+		flash	7410, 0q37
+
+		flash	7452, 0q72
+		flash	7458, 0q47
+
+		flash	7496, 0q73
+		flash	7502, 0q57
+
+		flash	7540, 0q75
+		flash	7546, 0q61
+
+		flash	7584, 0q77
+
+		dw	7586
 		dw	0,0 ; fin
 
 ;;-----------------------------------------------------------------------------
