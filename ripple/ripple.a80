@@ -40,9 +40,15 @@ loop:		ei
 		call	render2
 		jr	loop
 
-finalpart:	ei
+finalpart:	;ld	a,MUSIC.page
+		;call	xchg.bnk
+		;ld	hl,fx_ripple_fin
+		;ld	de,#4000
+		;call	depack
+
+.deadloop:	ei
 		halt
-		jr	finalpart
+		jr	.deadloop
 
 
 ;; ~ RENDER ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -286,6 +292,7 @@ blitattrs:	ld	a,(hl)
 		halt
 		ret
 
+;;-----------------------------------------------------------------------------
 	macro flash frames, color
 		dw	frames
 		db	2, color
@@ -312,7 +319,6 @@ blitattrs:	ld	a,(hl)
 		dw	0
 	endm
 
-;;-----------------------------------------------------------------------------
 scenar		flash	6451, 0q27
 		flash	6453, 0q37
 		flash	6455, 0q57
