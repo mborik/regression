@@ -47,6 +47,7 @@ LZX final.bin final.pak
 
 cd ../ripple
 ${ASM} rippleani.a80 --exp=rippleani.inc
+${ASM} ripple.final.a80 --lst=ripple.final.lst --exp=ripple.final.inc
 ${ASM} -DisFX --lst=ripple.lst ripple.a80
 LZX final.bin final.pak
 

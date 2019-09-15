@@ -1,4 +1,5 @@
-hiliteword:	dec	a
+hiliteword:	ld	h,l
+		dec	a
 		jp	z,hiliteword1
 		dec	a
 		jp	z,hiliteword2

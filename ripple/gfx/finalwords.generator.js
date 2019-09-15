@@ -5,7 +5,7 @@ let fn = 'finalwords.scr';
 
 const LZXmode = '-t36o8o11';
 const buf = fs.readFileSync(fn);
-const pixels = buf.slice(0, 6143);
+const pixels = buf.slice(0, 6144);
 const attrs = buf.slice(6144);
 
 const generators = [];
@@ -29,7 +29,7 @@ for (let f = 1; f < 256; f++) {
 }
 
 generators.unshift(
-	`hiliteword:\t${
+	`hiliteword:	ld	h,l\n\t\t${
 		labels.map(l => `dec	a\n\t	jp	z,${l}`).join('\n\t	')
 	}\n\t	ret`
 );

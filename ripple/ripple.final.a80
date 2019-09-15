@@ -1,0 +1,21 @@
+		device	zxspectrum48
+
+		org	#10000 - hiliteword.len
+
+hiliteword:
+		include "gfx/hilitewords.a80"
+hiliteword.len = $-hiliteword
+
+
+		org	hiliteword - finalwords.len
+
+finalwords:	incbin "gfx/finalwords.scr.lzx"
+finalwords.len = $-finalwords
+
+
+@total = hiliteword.len + finalwords.len
+		savebin "ripple.final.bin",finalwords,total
+
+
+		export	finalwords
+		export	hiliteword
