@@ -1,0 +1,21 @@
+		device	zxspectrum48
+
+		org	#10000 - hilitewords.len
+
+hilitewords:
+		include "hilitewords.a80"
+hilitewords.len = $-hilitewords
+
+
+		org	hilitewords - finalwords.len
+
+finalwords:	incbin "finalwords.scr.lzx"
+finalwords.len = $-finalwords
+
+
+@total = hilitewords.len + finalwords.len
+		savebin "finalpart.data.pak",finalwords,total
+
+
+		export	finalwords
+		export	hilitewords

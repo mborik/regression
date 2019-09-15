@@ -1,0 +1,43 @@
+; https://arachnoid.com/polysolve/
+; 7 7
+; 11 5
+; 18 0
+; 26 5
+; 30 7
+; (4 degree)
+
+	macro genattr val
+		db	0q70 + val
+	endm
+
+		genattr	7 ; 1
+		genattr	7 ; 2
+		genattr	7 ; 3
+		genattr	7 ; 4
+		genattr	7 ; 5
+		genattr	7 ; 6
+		genattr	7 ; 7
+		genattr	7 ; 8
+		genattr	6 ; 9
+		genattr	6 ; 10
+		genattr	5 ; 11
+		genattr	4 ; 12
+		genattr	3 ; 13
+		genattr	2 ; 14
+		genattr	1 ; 15
+		genattr	1 ; 16
+		genattr	0 ; 17
+		genattr	0 ; 18
+		genattr	0 ; 19
+		genattr	0 ; 20
+		genattr	1 ; 21
+		genattr	1 ; 22
+		genattr	2 ; 23
+		genattr	3 ; 24
+		genattr	4 ; 25
+		genattr	5 ; 26
+		genattr	6 ; 27
+		genattr	6 ; 28
+		genattr	7 ; 29
+
+		db	0

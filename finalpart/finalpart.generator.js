@@ -3,7 +3,7 @@ const { spawnSync } = require('child_process');
 
 let fn = 'finalwords.scr';
 
-const LZXmode = '-t36o8o11';
+const LZXmode = '-t34o3';
 const buf = fs.readFileSync(fn);
 const pixels = buf.slice(0, 6144);
 const attrs = buf.slice(6144);

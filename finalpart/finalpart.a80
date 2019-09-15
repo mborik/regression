@@ -1,0 +1,150 @@
+		include "finalpart.data.inc"
+
+finalpart:	ei
+		ld	a,MUSIC.page
+		call	xchg.bnk
+		ld	hl,finalwords
+		ld	de,#4000
+		call	depack34
+
+		ld	b,128
+wordsloop:	ei
+		halt
+		ld	a,1
+.col1:		ld	l,0q77
+		call	hilitewords
+		ld	a,2
+.col2:		ld	l,0q77
+		call	hilitewords
+		ld	a,3
+.col3:		ld	l,0q77
+		call	hilitewords
+		ld	a,4
+.col4:		ld	l,0q77
+		call	hilitewords
+		ld	a,5
+.col5:		ld	l,0q77
+		call	hilitewords
+		ld	a,6
+.col6:		ld	l,0q77
+		call	hilitewords
+		ld	a,7
+.col7:		ld	l,0q77
+		call	hilitewords
+		ld	a,8
+.col8:		ld	l,0q77
+		call	hilitewords
+		ld	a,3
+		and	b
+		call	z,colorixer
+		djnz	wordsloop
+
+		ld	a,#17
+		call	xchg.bnk
+		ld	hl,#4000
+		ld	de,#4001
+		ld	bc,6143
+		ld	(hl),l
+		ldir
+		ld	hl,#4000
+		ld	d,#C0
+		ld	b,high 6144
+		ldir
+
+deadloop:	ei
+		halt
+		jr	deadloop
+
+colorixer:
+.col1:		ld	hl,colorixy+8
+		ld	a,(hl)
+		or	a
+		jr	z,.col2
+		ld	(wordsloop.col1+1),a
+		ld	a,l
+		inc	a
+		ld	(.col1+1),a
+.col2:		ld	l,low colorixy+7
+		ld	a,(hl)
+		or	a
+		jr	z,.col3
+		ld	(wordsloop.col2+1),a
+		ld	a,l
+		inc	a
+		ld	(.col2+1),a
+.col3:		ld	l,low colorixy+6
+		ld	a,(hl)
+		or	a
+		jr	z,.col4
+		ld	(wordsloop.col3+1),a
+		ld	a,l
+		inc	a
+		ld	(.col3+1),a
+.col4:		ld	l,low colorixy+5
+		ld	a,(hl)
+		or	a
+		jr	z,.col5
+		ld	(wordsloop.col4+1),a
+		ld	a,l
+		inc	a
+		ld	(.col4+1),a
+.col5:		ld	l,low colorixy+4
+		ld	a,(hl)
+		or	a
+		jr	z,.col6
+		ld	(wordsloop.col5+1),a
+		ld	a,l
+		inc	a
+		ld	(.col5+1),a
+.col6:		ld	l,low colorixy+3
+		ld	a,(hl)
+		or	a
+		jr	z,.col7
+		ld	(wordsloop.col6+1),a
+		ld	a,l
+		inc	a
+		ld	(.col6+1),a
+.col7:		ld	l,low colorixy+2
+		ld	a,(hl)
+		or	a
+		jr	z,.col8
+		ld	(wordsloop.col7+1),a
+		ld	a,l
+		inc	a
+		ld	(.col7+1),a
+.col8:		ld	l,low colorixy+1
+		ld	a,(hl)
+		or	a
+		ret	z
+		ld	(wordsloop.col8+1),a
+		ld	a,l
+		inc	a
+		ld	(.col8+1),a
+		ret
+
+;;-----------------------------------------------------------------------------
+		align	32
+
+colorixy:	include "hilite.path.a80"
+
+;;-----------------------------------------------------------------------------
+;; Setting for depacker according to compression identification -t34o3
+
+com	=	3	;; Compression type - one from TYPZX7 TYPBLK TYPBS1
+pos	=	4	;; Offset coding - one from POSOF4 POSOF1 POSOF2 POSOFD
+ofs1	=	3	;; Number of bits for 1st offset - required for POSOF1 POSOF2 POSOF4
+ofs2	=	0	;; Number of bits for 2nd offset - required for POSOF2 only
+
+;; This is needed to set according to compression ID string from name of compressed file:
+;;  -tXYoAoB ... means setting  com=X, pos=Y, ofs1=A, ofs2=B   (ofs1 ofs2 only when required)
+
+;; Set optimization of depacker
+
+spd	=	2
+
+;; Possible values:
+;;  0 ... optimized for code length - short but slow
+;;  1 ... compromise between length and speed
+;;  2+ .. optimized for speed - but longer code
+
+depack34	include "../kernel/lzx.a80"

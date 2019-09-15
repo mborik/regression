@@ -4,7 +4,6 @@
 
 		include "../kernel/constants.inc"
 		include "mandaly/build.inc"
-		include "ripple.final.inc"
 
 ;;-----------------------------------------------------------------------------
 	macro border n
@@ -40,53 +39,6 @@ loop:		ei
 		call	xchg.vram
 		call	render2
 		jr	loop
-
-finalpart:	ei
-		halt
-		ld	a,MUSIC.page
-		call	xchg.bnk
-		ld	hl,finalwords
-		ld	de,#4000
-		call	depack
-
-		ld	b,14
-.waitforit:	ei
-		halt
-		djnz	.waitforit
-
-		ld	b,128
-.wordsloop:	ei
-		halt
-		ld	a,1
-.col1:		ld	h,0q71
-		call	hiliteword
-		ld	a,2
-.col2:		ld	h,0q72
-		call	hiliteword
-		ld	a,3
-.col3:		ld	h,0q73
-		call	hiliteword
-		ld	a,4
-.col4:		ld	h,0q74
-		call	hiliteword
-		ld	a,5
-.col5:		ld	h,0q75
-		call	hiliteword
-		ld	a,6
-.col6:		ld	h,0q76
-		call	hiliteword
-		ld	a,7
-.col7:		ld	h,0q75
-		call	hiliteword
-		ld	a,8
-.col8:		ld	h,0q74
-		call	hiliteword
-		djnz	.wordsloop
-
-.deadloop:	ei
-		halt
-		jr	.deadloop
-
 
 ;; ~ RENDER ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -418,18 +370,23 @@ scenar		flash	6451, 0q27
 		flash	7410, 0q37
 
 		flash	7452, 0q72
-		flash	7458, 0q47
+		flash	7458, 0q46
 
 		flash	7496, 0q73
 		flash	7502, 0q57
 
 		flash	7540, 0q75
-		flash	7546, 0q61
+		flash	7546, 0q65
 
 		flash	7584, 0q77
 
 		dw	7586
 		dw	0,0 ; fin
+
+
+;;-----------------------------------------------------------------------------
+;; FINAL PART
+		include "../finalpart/finalpart.a80"
 
 ;;-----------------------------------------------------------------------------
 		align	256

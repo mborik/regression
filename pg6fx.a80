@@ -14,10 +14,10 @@ MUSIC.init = music_init
 MUSIC.play = music_play
 
 ;;-----------------------------------------------------------------------------
-		include "ripple/ripple.final.inc"
+		include "finalpart/finalpart.data.inc"
 
 		org	finalwords
-		incbin	"ripple/ripple.final.bin"
+		incbin	"finalpart/finalpart.data.pak"
 
 ;;-----------------------------------------------------------------------------
 	if $ > #10000

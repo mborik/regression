@@ -45,9 +45,11 @@ cd ../greetings
 ${ASM} -DisFX --lst=greetings.lst greetings.a80
 LZX final.bin final.pak
 
+cd ../finalpart
+${ASM} finalpart.data.a80 --lst=finalpart.data.lst --exp=finalpart.data.inc
+
 cd ../ripple
 ${ASM} rippleani.a80 --exp=rippleani.inc
-${ASM} ripple.final.a80 --lst=ripple.final.lst --exp=ripple.final.inc
 ${ASM} -DisFX --lst=ripple.lst ripple.a80
 LZX final.bin final.pak
 
