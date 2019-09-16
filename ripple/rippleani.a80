@@ -6,11 +6,11 @@
 @ripple
 .pg128k = #14
 
-.page1		incbin "../ripple/gfx/ripple.001.lzx"
-.page3		incbin "../ripple/gfx/ripple.002.lzx"
-.page2		incbin "../ripple/gfx/ripple.003.lzx"
-.page4		incbin "../ripple/gfx/ripple.004.lzx"
-.mandalas	incbin "../ripple/mandaly/build.pak"
+.page1		incbin "gfx/ripple.001.lzx"
+.page3		incbin "gfx/ripple.002.lzx"
+.page2		incbin "gfx/ripple.003.lzx"
+.page4		incbin "gfx/ripple.004.lzx"
+.mandalas	incbin "mandaly/build.pak"
 .length = $-ripple
 
 		savebin "rippleani.pak",ripple,$-ripple
