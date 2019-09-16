@@ -5,9 +5,13 @@
 @_fxpage = #17
 @_fxpage_start
 
-VRAM2		ds	8192
+VRAM2		ds	6912
 
 ;;-----------------------------------------------------------------------------
+		org	#10000 - blk.len
+
+@blk
+		incbin "finalpart/finalwords.nfo"
 
 fx_oneplus:	incbin "oneplus/final.pak"
 .pg = _fxpage
@@ -17,6 +21,7 @@ fx_ripple:	incbin "ripple/final.pak"
 .pg = _fxpage
 .sync = 0
 
+@blk.len = $-blk
 ;;-----------------------------------------------------------------------------
 	if $ > #10000
 		display "Too long! ",/D,($-#10000)," bytes out!"
