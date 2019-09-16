@@ -239,7 +239,7 @@ citajScenar:	di
 ; fn 0
 .fin:		ld	sp,(.retsp+1)
 		pop	af
-		jp	finalpart
+		ret
 
 ; fn 2
 .fillattrs:	ld	(.ptr+1),sp
@@ -383,10 +383,6 @@ scenar		flash	6451, 0q27
 		dw	7586
 		dw	0,0 ; fin
 
-
-;;-----------------------------------------------------------------------------
-;; FINAL PART
-		include "../finalpart/finalpart.a80"
 
 ;;-----------------------------------------------------------------------------
 		align	256

@@ -18,7 +18,7 @@ mb02ram		equ	#17
 		org	#8000
 
 @start:		di
-		ld	sp,basesp
+		ld	sp,tempsp
 		xor	a
 		out	(254),a
 		ld	(actborder),a
@@ -173,6 +173,15 @@ error:		ld	hl,txterr
 		jp	c,restart
 		rst	0
 
+xchg.vram:	ld	a,#1D
+		xor	#0A
+		ld	(xchg.vram+1),a
+xchg.bnk:	ld	(act128page),a
+		ld	bc,page128
+		out	(c),a
+		ret
+
+
 	if $ > #8128
 		display "Too long! ",/D,($-#8128)," bytes out!"
 	else
@@ -254,53 +263,60 @@ interrupt:	push	af		; zakladne osetrenie prerusenia
 		ei
 		ret
 
-xchg.vram:	ld	a,#1D
-		xor	#0A
-		ld	(xchg.vram+1),a
-xchg.bnk:	ld	(act128page),a
-		ld	bc,page128
-		out	(c),a
-		ret
 
-attrhide:	ld	hl,22528
-		ld	c,24
-attrhide2:	ld	b,32
-		push	bc
-attrhide3:	ld	a,(hl)
-		and	7
-		jr	z,attrhide4
-		dec	a
-attrhide4:	push	af
-		ld	a,(hl)
-		and	56
-		jr	z,attrhide5
-		ld	c,8
-		sub	c
-		ld	c,a
-		pop	af
-		or	c
-		jr	attrhide6
-attrhide5:	ld	a,(hl)
-		and	248
-		ld	c,a
-		pop	af
-		or	c
-attrhide6:	ld	(hl),a
-		inc	hl
-		djnz	attrhide3
-		pop	bc
-		dec	c
-		jr	nz,attrhide2
-		ex	af,af'
-		ret
+fxtable:	db	fx_city.pg
+		dw	fx_city
+		dw	fx_city.sync
 
+		db	fx_reglogo.pg
+		dw	fx_reglogo
+		dw	fx_reglogo.sync
+
+		db	fx_oneplusani.pg
+		dw	fx_oneplusani
+		dw	fx_oneplusani.length
+
+		db	fx_oneplus.pg
+		dw	fx_oneplus
+		dw	fx_oneplus.sync
+
+		db	fx_surprise.pg
+		dw	fx_surprise
+		dw	fx_surprise.sync
+
+		db	fx_trafoutro.pg
+		dw	fx_trafoutro
+		dw	fx_trafoutro.length
+
+		db	fx_transformy.pg
+		dw	fx_transformy
+		dw	fx_transformy.sync
+
+		db	fx_greetings.pg
+		dw	fx_greetings
+		dw	fx_greetings.sync
+
+		db	fx_turndisk.pg
+		dw	fx_turndisk
+		dw	fx_turndisk.length
+
+		db	fx_ripple.pg
+		dw	fx_ripple
+		dw	fx_ripple.sync
+
+		db	fx_finalpart.pg
+		dw	fx_finalpart
+		dw	fx_finalpart.sync
+
+		db	0
 
 ;;-----------------------------------------------------------------------------
 		align	256
 
 im2vector:
-direntrybuf:	ds	32
+direntrybuf:	ds	256 - (attrhide.end - txterr)
 
+@tempsp
 txterr		db	"DEMO-KERNEL LOADING FAILED!"
 		dw	#C900
 
@@ -309,10 +325,45 @@ fn.haystack:	db	"haystack  "
 blocktable:	include "../haystack.inc"
 
 
+attrhide:	ld	hl,22528
+		ld	c,24
+.atthd2:	ld	b,32
+		push	bc
+.atthd3:	ld	a,(hl)
+		and	7
+		jr	z,.atthd4
+		dec	a
+.atthd4:	push	af
+		ld	a,(hl)
+		and	56
+		jr	z,.atthd5
+		ld	c,8
+		sub	c
+		ld	c,a
+		pop	af
+		or	c
+		jr	.atthd6
+.atthd5:	ld	a,(hl)
+		and	248
+		ld	c,a
+		pop	af
+		or	c
+.atthd6:	ld	(hl),a
+		inc	hl
+		djnz	.atthd3
+		pop	bc
+		dec	c
+		jr	nz,.atthd2
+		ex	af,af'
+		ret
+.end = $
+
+;;-----------------------------------------------------------------------------
 		align	256
 
 		nop
 kernel:		di
+		ld	sp,basesp
 		ld	hl,im2vector
 		ld	a,h
 		ld	i,a
@@ -403,53 +454,13 @@ kernel:		di
 .end		ei
 		halt
 		jr	.end
-
-fxtable:	db	fx_city.pg
-		dw	fx_city
-		dw	fx_city.sync
-
-		db	fx_reglogo.pg
-		dw	fx_reglogo
-		dw	fx_reglogo.sync
-
-		db	fx_oneplusani.pg
-		dw	fx_oneplusani
-		dw	fx_oneplusani.length
-
-		db	fx_oneplus.pg
-		dw	fx_oneplus
-		dw	fx_oneplus.sync
-
-		db	fx_surprise.pg
-		dw	fx_surprise
-		dw	fx_surprise.sync
-
-		db	fx_trafoutro.pg
-		dw	fx_trafoutro
-		dw	fx_trafoutro.length
-
-		db	fx_transformy.pg
-		dw	fx_transformy
-		dw	fx_transformy.sync
-
-		db	fx_greetings.pg
-		dw	fx_greetings
-		dw	fx_greetings.sync
-
-		db	fx_turndisk.pg
-		dw	fx_turndisk
-		dw	fx_turndisk.length
-
-		db	fx_ripple.pg
-		dw	fx_ripple
-		dw	fx_ripple.sync
-
-		db	0
-
+@kernend
 
 		align	256
 @RUNZONE	equ	$
 basesp
+
+		org	kernend
 
 screen.lzx:	incbin "loading.lzx"
 
@@ -471,4 +482,3 @@ screen.lzx:	incbin "loading.lzx"
 		export depack
 		export xchg.vram
 		export xchg.bnk
-		export attrhide

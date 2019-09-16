@@ -13,6 +13,10 @@ VRAM2		ds	6912
 @blk
 		incbin "finalpart/finalwords.nfo"
 
+fx_finalpart:	incbin "finalpart/final.pak"
+.pg = _fxpage
+.sync = 7586
+
 fx_oneplus:	incbin "oneplus/final.pak"
 .pg = _fxpage
 .sync = 1417
@@ -34,6 +38,10 @@ fx_ripple:	incbin "ripple/final.pak"
 		savebin "needle7",(_fxpage_start),$-(_fxpage_start)
 
 ;;-----------------------------------------------------------------------------
+		export fx_finalpart
+		export fx_finalpart.pg
+		export fx_finalpart.sync
+
 		export fx_oneplus
 		export fx_oneplus.pg
 		export fx_oneplus.sync

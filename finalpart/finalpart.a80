@@ -1,4 +1,25 @@
+		device	zxspectrum128
+
+@DEBUG = 0
+
+		include "../kernel/constants.inc"
 		include "finalpart.data.inc"
+
+;;-----------------------------------------------------------------------------
+	macro border n
+	  if DEBUG
+	    if n > 0
+		ld	a,n
+	    else
+		xor	a
+	    endif
+		out	(254),a
+	  endif
+	endm
+
+;;-----------------------------------------------------------------------------
+
+		org	RUNZONE
 
 finalpart:	ei
 		ld	a,MUSIC.page
@@ -50,10 +71,7 @@ wordsloop:	ei
 		ld	d,#C0
 		ld	b,high 6144
 		ldir
-
-deadloop:	ei
-		halt
-		jr	deadloop
+		ret
 
 colorixer:
 .col1:		ld	hl,colorixy+8
@@ -148,3 +166,6 @@ spd	=	2
 ;;  2+ .. optimized for speed - but longer code
 
 depack34	include "../kernel/lzx.a80"
+
+;;-----------------------------------------------------------------------------
+		savebin "final.bin",finalpart,$-finalpart

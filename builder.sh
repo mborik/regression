@@ -45,9 +45,6 @@ cd ../greetings
 ${ASM} -DisFX --lst=greetings.lst greetings.a80
 LZX final.bin final.pak
 
-cd ../finalpart
-${ASM} finalpart.data.a80 --lst=finalpart.data.lst --exp=finalpart.data.inc
-
 cd ../ripple
 ${ASM} rippleani.a80 --exp=rippleani.inc
 ${ASM} -DisFX --lst=ripple.lst ripple.a80
@@ -55,6 +52,11 @@ LZX final.bin final.pak
 
 cd ../turndisk
 ${ASM} -DisFX --lst=turndisk.lst turndisk.a80
+
+cd ../finalpart
+${ASM} finalpart.data.a80 --lst=finalpart.data.lst --exp=finalpart.data.inc
+${ASM} -DisFX --lst=finalpart.lst finalpart.a80
+LZX final.bin final.pak
 
 cd ..
 rm -f output needle* ${outputfn}
