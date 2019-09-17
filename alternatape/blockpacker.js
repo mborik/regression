@@ -5,18 +5,12 @@ const { spawnSync } = require('child_process');
 const mode = '-t56o10o12';
 const lzxName = (a => a.substr(0, a.lastIndexOf('.')) + mode + '.lzx');
 
-const toHex = (num, width) => {
-	let a = num.toString(16);
-	return ('0000' + a).substr(-Math.max(width || 4, a.length)).toUpperCase();
-}
-
 let bin = fs.readFileSync(path.normalize('../haystack'));
 
 for (let i = 0, ptr = 0; ptr < bin.length; ptr += 16384, i++) {
-	let a = toHex(i, 2);
-	console.log(`~ compressing haystack pg${a}...`);
+	console.log(`~ compressing haystack pg${i}...`);
 
-	a = `haystack.pg${a}.tmp`;
+	const a = `haystack.pg${i}.tmp`;
 	fs.writeFileSync(a, bin.slice(ptr, ptr + 16384));
 
 	spawnSync('lzxpack', [mode, a],
@@ -51,6 +45,19 @@ for (let i = 0, ptr = 0; ptr < bin.length; ptr += 16384, i++) {
 		{ windowsHide: true, shell: true, cwd: '.' });
 
 	const pak = a.replace('.scr', '.pak');
+	fs.renameSync(lzxName(a), pak);
+
+	console.log(`= ${fs.statSync(pak).size} bytes...`);
+}
+
+{
+	let a = 'final.bin';
+	console.log(`~ compressing kernel...`);
+
+	spawnSync('lzxpack', [mode, a],
+		{ windowsHide: true, shell: true, cwd: '.' });
+
+	const pak = a.replace('.bin', '.pak');
 	fs.renameSync(lzxName(a), pak);
 
 	console.log(`= ${fs.statSync(pak).size} bytes...`);

@@ -1,5 +1,12 @@
 		device	zxspectrum128
 
+		define TAP_KERNEL_BLOCK "../alternatape/final.bin"
+
+	output TAP_KERNEL_BLOCK
+		block	(xchg.vram - start), 0
+	outend
+
+
 numberOfNeedles = 5
 		include "pg1fx.inc"
 		include "pg3fx.inc"
@@ -173,6 +180,8 @@ error:		ld	hl,txterr
 		jp	c,restart
 		rst	0
 
+	output TAP_KERNEL_BLOCK,a
+
 xchg.vram:	ld	a,#1D
 		xor	#0A
 		ld	(xchg.vram+1),a
@@ -188,7 +197,7 @@ xchg.bnk:	ld	(act128page),a
 		display /D,(#8128-$)," bytes free..."
 	endif
 
-		org	#8128
+		ds	(#8128-$)
 
 ;; Setting for depacker according to compression identification -tXYoAoB
 
@@ -313,8 +322,12 @@ fxtable:	db	fx_city.pg
 ;;-----------------------------------------------------------------------------
 		align	256
 
-im2vector:
-direntrybuf:	ds	256 - (attrhide.end - txterr)
+im2vector:	block	257, 0
+
+	outend
+
+		org	im2vector
+direntrybuf:	block	256 - (attrhide.end - txterr), 0
 
 @tempsp
 txterr		db	"DEMO-KERNEL LOADING FAILED!"
@@ -354,7 +367,6 @@ attrhide:	ld	hl,22528
 		pop	bc
 		dec	c
 		jr	nz,.atthd2
-		ex	af,af'
 		ret
 .end = $
 
@@ -362,6 +374,9 @@ attrhide:	ld	hl,22528
 		align	256
 
 		nop
+
+	output TAP_KERNEL_BLOCK,a
+
 kernel:		di
 		ld	sp,basesp
 		ld	hl,im2vector
@@ -459,6 +474,7 @@ kernel:		di
 		align	256
 @RUNZONE	equ	$
 basesp
+	outend
 
 		org	kernend
 
@@ -477,6 +493,7 @@ screen.lzx:	incbin "loading.lzx"
 		export MUSIC.page
 		export MUSIC.init
 		export MUSIC.play
+		export kernel
 		export IMCALL
 		export RUNZONE
 		export depack

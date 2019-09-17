@@ -1,149 +1,131 @@
 		device	zxspectrum128
+		include "../kernel/constants.inc"
 
-page128		equ	#7FFD
-act128page	equ	#5B5C
-mb02ram		equ	#17
+needle1 	= 1 + #10
+needle3 	= 3 + #10
+needle4 	= 4 + #10
+needle6 	= 6 + #10
+needle7 	= 7 + #10
+numberOfNeedles	= 5
 
 
 		emptytap "REGRESSION.tap"
+		define OUTPUT_TAP "REGRESSION.tap"
 
-; BASIC header
-		tapout "REGRESSION.tap",0
-
-		db	0
-		db	'REGRESSION'
-		dw	bas.total + envtotal
-		dw	1 ; start line
-		dw	bas.total
-
-		tapend
-
-; BASIC block
-		tapout "REGRESSION.tap"
-
-	module bas
-line1:		db	0, 1
-		dw	.len
-.cmds		; CLEAR USR (VAL "256"*
-		db	#FD, #C0, '(', #B0, '"256"*'
-		; PEEK VAL "23636"+
-		db	#BE, #B0, '"23636"+'
-		; PEEK VAL "23635"+
-		db	#BE, #B0, '"23635"+'
-		; VAL "44"
-		db	#B0, '"44"):'
-		; RANDOMIZE USR VAL "x"
-		db	#F9, #C0, #B0
-	lua ALLPASS
-		local val = sj.get_label("loader.begin")
-		_pc("	db	'\"" .. val .. "\"'")
-	endlua
-		; EOL
-		db	#0D
-.len = $ - .cmds
-
-line2:		db	0, 2
-		dw	.len
-.cmds		; READ s
-		db	#E3, 's:'
-		; POKE VAL "23388",s:
-		db	#F4, #B0, '"23388",s:'
-		; OUT VAL "32765",s:
-		db	#DF, #B0, '"32765",s:'
-		; LOAD "page"+(STR$ s) CODE:
-		db	#EF, '"page"+(', #C1, 's)', #AF, ':'
-		; RANDOMIZE USR VAL "x":
-		db	#F9, #C0, #B0, '"40000"', ':'
-		; IF s <> VAL "23"
-		db	#FA, 's', #C9, #B0, '"23"'
-		; THEN GO TO VAL "2"
-		db	#CB, #EC, #B0, '"2"'
-		; EOL
-		db	#0D
-.len = $ - .cmds
-
-line3:		db	0, 3
-		dw	.len
-.cmds		; POKE VAL "23388",VAL "16":
-		db	#F4, #B0, '"23388",', #B0, '"16":'
-		; OUT VAL "32765",VAL "16"
-		db	#DF, #B0, '"32765",', #B0, '"16"'
-		; EOL
-		db	#0D
-.len = $ - .cmds
-
-line4:		db	0, 4
-		dw	.len
-.cmds		; FOR i=NOT PI TO VAL "8":
-		db	#EB, 'i=', #C3, #A7, #CC, #B0, '"8":'
-		; LOAD "data0"+(STR$ i) CODE:
-		db	#EF, '"data0"+(', #C1, 'i)', #AF, ':'
-		; RANDOMIZE USR VAL "x":
-		db	#F9, #C0, #B0, '"40000"', ':'
-		; NEXT i
-		db	#F3, 'i'
-		; EOL
-		db	#0D
-.len = $ - .cmds
-
-line5:		db	0, 5
-		dw	.len
-.cmds		; RANDOMIZE USR VAL "x"
-		db	#F9, #C0, #B0, '"40000"'
-		; EOL
-		db	#0D
-.len = $ - .cmds
-
-line9:		db	0, 9
-		dw	.len
-.cmds		; DATA...
-		db	#E4, #B0, '"17",', #B0, '"19",', #B0, '"20",', #B0, '"22",', #B0, '"23"'
-		; EOL
-		db	#0D
-.len = $ - .cmds
-
-total = $ - line1
-	endmodule
-
-sign:		db	'R'
-		dw	envlen
-envstart:
-
-		xor	a
-		out	(254),a
-		ld	a,7
-		ld	(23624),a
-		ld	(23693),a
-		ld	(23695),a
-		ld	a,'o'
-		ld	(23739),a
-
-		ld	hl,loader.entry-envstart
-		add	hl,bc
-		ld	de,loader.begin
-		push	de
-		ld	bc,loader.length
-		ldir
-
-		pop	bc
-		dec	bc
-		ret
 
 	module loader
-entry:
-	phase	#6000
+		org	#8000-shift
 
-begin:		ld	a,#10
-		call	xchg.bnk
-		ld	hl,screen.lzx
+begin:		ld	hl,screen.lzx
 		ld	de,#4000
+		jr	depack56
 
+processblock:	di
+		ld	hl,#8000
+		ld	de,#C000
+		call	depack56
+.blktabptr:	ld	hl,blocktable
+.targetpg:	ld	bc,(blocktable.firstct << 8) | #64 ; SRAM page 4 (WR)
+.depk6:		ld	e,(hl)
+		inc	hl
+		ld	d,(hl)
+		inc	hl
+		push	hl
+		ex	hl,de
+		ld	de,0
+		ld	a,c
+		inc	c
+		push	bc
+		out	(mb02ram),a	; switch bank
+		call	depack36
+
+.prgptr:	ld	hl,#50A1
+		ld	(hl),#FF	; draw progress
+		inc	l
+		ld	(.prgptr+1),hl
+
+		pop	bc
+		pop	hl
+		djnz	.depk6
+		ld	(.blktabptr+1),hl
+
+.countptr:	ld	hl,blocktable.counts
+		ld	b,(hl)
+		inc	hl
+		ld	(.countptr+1),hl
+		xor	a
+		out	(mb02ram),a
+		or	b
+		jr	z,fullfilprg
+		ld	(.targetpg+1),bc
+		ret
+
+fullfilprg:	ld	hl,(processblock.prgptr+1)
+.loop:		ld	a,l
+		cp	#BF
+		ret	z
+		ld	(hl),#FF
+		inc	l
+		jr	.loop
+
+unpackpage:	ld	hl,#51A1
+		ld	bc,((30 / numberOfNeedles) << 8) | #FF
+.pgprog:	ld	(hl),c	; draw progress
+		inc	l
+		djnz	.pgprog
+		ld	(unpackpage+1),hl
+		di
+		ld	hl,#8000
+		ld	de,#C000
+		jr	depack56
+
+fadeoutandrun:	ld	a,25
+.loop:		ei
+		halt
+		halt
+		ex	af,af'
+		call	attrhide
+		ex	af,af'
+		dec	a
+		jr	nz,.loop
+
+		ld	hl,kernel.lzx
+		ld	de,#8000
+		ld	bc,kernel
+		push	bc
+
+depack56 module __lzx56
 ;; Setting for depacker according to compression identification -tXYoAoB
 
 com	=	5	;; Compression type - one from TYPZX7 TYPBLK TYPBS1
 pos	=	6	;; Offset coding - one from POSOF4 POSOF1 POSOF2 POSOFD
 ofs1	=	10	;; Number of bits for 1st offset - required for POSOF1 POSOF2 POSOF4
 ofs2	=	12	;; Number of bits for 2nd offset - required for POSOF2 only
+
+;; This is needed to set according to compression ID string from name of compressed file:
+;;  -tXYoAoB ... means setting  com=X, pos=Y, ofs1=A, ofs2=B   (ofs1 ofs2 only when required)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Set optimization of depacker
+
+spd	=	2
+
+;; Possible values:
+;;  0 ... optimized for code length - short but slow
+;;  1 ... compromise between length and speed
+;;  2+ .. optimized for speed - but longer code
+
+		include "../kernel/lzx.a80"
+	endmod
+
+depack36 module __lzx36
+;; Setting for depacker according to compression identification -tXYoAoB
+
+com	=	3	;; Compression type - one from TYPZX7 TYPBLK TYPBS1
+pos	=	6	;; Offset coding - one from POSOF4 POSOF1 POSOF2 POSOFD
+ofs1	=	7	;; Number of bits for 1st offset - required for POSOF1 POSOF2 POSOF4
+ofs2	=	14	;; Number of bits for 2nd offset - required for POSOF2 only
 
 ;; This is needed to set according to compression ID string from name of compressed file:
 ;;  -tXYoAoB ... means setting  com=X, pos=Y, ofs1=A, ofs2=B   (ofs1 ofs2 only when required)
@@ -159,20 +141,227 @@ spd	=	2
 ;;  1 ... compromise between length and speed
 ;;  2+ .. optimized for speed - but longer code
 
-depack56:	include "../kernel/lzx.a80"
+		include "../kernel/lzx.a80"
+	endmod
 
-xchg.bnk:	ld	(act128page),a
-		ld	bc,page128
-		out	(c),a
+attrhide:	ld	hl,22528
+		ld	c,24
+.atthd2:	ld	b,32
+		push	bc
+.atthd3:	ld	a,(hl)
+		and	7
+		jr	z,.atthd4
+		dec	a
+.atthd4:	push	af
+		ld	a,(hl)
+		and	56
+		jr	z,.atthd5
+		ld	c,8
+		sub	c
+		ld	c,a
+		pop	af
+		or	c
+		jr	.atthd6
+.atthd5:	ld	a,(hl)
+		and	248
+		ld	c,a
+		pop	af
+		or	c
+.atthd6:	ld	(hl),a
+		inc	hl
+		djnz	.atthd3
+		pop	bc
+		dec	c
+		jr	nz,.atthd2
 		ret
 
-screen.lzx:	incbin "loading.pak"
-	dephase
+blocktable:	include "../haystack.inc"
+kernel.lzx:	incbin "final.pak"
 
-length = $-entry
+shift = $-begin
+screen.lzx:	incbin "loading.pak"
+
+total = $-begin
 	endmodule
 
-envlen = $ - envstart
-envtotal = $ - sign
 
+		include "sinclairBASIC.inc"
+
+		org	23755-17
+
+; BASIC header
+	tapout OUTPUT_TAP,0
+
+		db	0
+		db	'REGRESSION'
+		dw	bas.total
+		dw	1 ; start line
+		dw	bas.total
+
+	tapend
+
+; BASIC block
+	tapout OUTPUT_TAP
+
+	module bas
+line1:		db	0, 1
+		dw	line1.len
+line1.cmds	; POKE VAL "23624",NOT PI:
+		db	C_POKE
+		VAL	23624, ','
+		db	C_NOT, C_PI, ':'
+		; POKE VAL "23693",NOT PI:
+		db	C_POKE
+		VAL	23693, ','
+		db	C_NOT, C_PI, ':'
+		; CLEAR VAL "x":
+		db	C_CLEAR
+		VAL	loader.begin - 1, ':'
+		; POKE VAL "23739",CODE "o":
+		db	C_POKE
+		VAL	23739, ','
+		db	C_CODE, '"o":'
+		; POKE VAL "23388",VAL "16":
+		db	C_POKE
+		VAL	23388, ','
+		VAL	16, ':'
+		; OUT VAL "32765",VAL "16"
+		db	C_OUT
+		VAL	32765, ','
+		VAL	16, ':'
+		; LOAD "loader" CODE:
+		db	C_LOAD, '"loader"', C_CODE, ':'
+		; RANDOMIZE USR VAL "x"
+		db	C_RANDOMIZE, C_USR
+		VAL	loader.begin, EOL
+line1.len = $ - line1.cmds
+
+line2:		db	0, 2
+		dw	line2.len
+line2.cmds	; FOR i=NOT PI TO VAL "8":
+		db	C_FOR, 'i=', C_NOT, C_PI, C_TO
+		VAL	8, ':'
+		; LOAD "data0"+(STR$ i) CODE:
+		db	C_LOAD, '"data0"+(', C_STRS, 'i)', C_CODE, ':'
+		; RANDOMIZE USR VAL "x":
+		db	C_RANDOMIZE, C_USR
+		VAL	loader.processblock, ':'
+		; NEXT i
+		db	C_NEXT, 'i', EOL
+line2.len = $ - line2.cmds
+
+line3:		db	0, 3
+		dw	line3.len
+line3.cmds	; READ s
+		db	C_READ, 's:'
+		; POKE VAL "23388",s:
+		db	C_POKE
+		VAL	23388, ','
+		db	's:'
+		; OUT VAL "32765",s:
+		db	C_OUT
+		VAL	32765, ','
+		db	's:'
+		; LOAD "page"+(STR$ s) CODE:
+		db	C_LOAD, '"page"+(', C_STRS, 's)', C_CODE, ':'
+		; RANDOMIZE USR VAL "x":
+		db	C_RANDOMIZE, C_USR
+		VAL	loader.unpackpage, ':'
+		; IF s <> VAL "23" THEN
+		db	C_IF, 's', C_NOTEQ
+		VAL	23, C_THEN
+		; GO TO PI
+		db	C_GOTO, C_PI, EOL
+line3.len = $ - line3.cmds
+
+line4:		db	0, 4
+		dw	line4.len
+line4.cmds	; RANDOMIZE USR VAL "x"
+		db	C_RANDOMIZE, C_USR
+		VAL	loader.fadeoutandrun, EOL
+line4.len = $ - line4.cmds
+
+line9:		db	0, 9
+		dw	.len
+line9.cmds	; DATA...
+		db	C_DATA
+		VAL	needle1, ','
+		VAL	needle3, ','
+		VAL	needle4, ','
+		VAL	needle6, ','
+		VAL	needle7, EOL
+line9.len = $ - line9.cmds
+
+total = $ - line1
+	endmodule
+	tapend
+
+; loader block
+		savetap OUTPUT_TAP, CODE, "loader", loader.begin, loader.total
+
+
+;;-----------------------------------------------------------------------------
+	macro putHaystack number?
+@__putHaystack_number = number?
+		lua allpass
+			_pl("putHaystack"..tostring(_c('__putHaystack_number')))
+		endlua
+
+		tapout OUTPUT_TAP,0
+			db	3 ;; BYTES
+		lua allpass
+			_pc("db 'data0"..tostring(_c('__putHaystack_number')).."    '")
+		endlua
+			dw	.filelength
+			dw	0x8000	;; start address
+			dw	0x8000
 		tapend
+
+		tapout OUTPUT_TAP
+			org #8000
+		lua allpass
+			_pl(".filedata: incbin 'haystack.pg"..tostring(_c('__putHaystack_number'))..".pak'")
+		endlua
+.filelength = $-.filedata
+		tapend
+	endm
+
+	macro putNeedle number?, filename?
+@__putNeedle_number = number?
+		lua allpass
+			_pl("putNeedle"..tostring(_c('__putNeedle_number')))
+		endlua
+
+		tapout OUTPUT_TAP,0
+			db	3 ;; BYTES
+		lua allpass
+			_pc("db 'page"..tostring(_c('__putNeedle_number')).."    '")
+		endlua
+			dw	.filelength
+			dw	0x8000	;; start address
+			dw	0x8000
+		tapend
+
+		tapout OUTPUT_TAP
+			org #8000
+.filedata		incbin filename?
+.filelength = $-.filedata
+		tapend
+	endm
+;;-----------------------------------------------------------------------------
+
+		putHaystack 0
+		putHaystack 1
+		putHaystack 2
+		putHaystack 3
+		putHaystack 4
+		putHaystack 5
+		putHaystack 6
+		putHaystack 7
+		putHaystack 8
+
+		putNeedle needle1,"needle1.pak"
+		putNeedle needle3,"needle3.pak"
+		putNeedle needle4,"needle4.pak"
+		putNeedle needle6,"needle6.pak"
+		putNeedle needle7,"needle7.pak"
