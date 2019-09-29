@@ -2,7 +2,7 @@
 @__VAL_number = number?
 @__VAL_appendix = appendix?
 	lua allpass
-_pc("		db	#B0, '\""..tostring(_c('__VAL_number')).."\"', ".._c('__VAL_appendix'))
+_pc("		db	C_VAL, '\""..tostring(_c('__VAL_number')).."\"', ".._c('__VAL_appendix'))
 	endlua
 	endm
 

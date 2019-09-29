@@ -1,6 +1,6 @@
 		device	zxspectrum128
 
-		define TAP_KERNEL_BLOCK "../alternatape/final.bin"
+		define TAP_KERNEL_BLOCK "../kernel.tape/final.bin"
 
 	output TAP_KERNEL_BLOCK
 		block	(xchg.vram - start), 0

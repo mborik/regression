@@ -9,8 +9,8 @@ needle7 	= 7 + #10
 numberOfNeedles	= 5
 
 
-		emptytap "REGRESSION.tap"
-		define OUTPUT_TAP "REGRESSION.tap"
+		define OUTPUT_TAP "../build/REGRESSION.tap"
+		emptytap OUTPUT_TAP
 
 
 	module loader

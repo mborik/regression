@@ -12,6 +12,6 @@ NODE="node --no-deprecation"
 ### build whole demo first...
 . builder.sh
 
-cd alternatape
+cd kernel.tape
 ${NODE} blockpacker.js
 ${ASM} --lst=maketap.lst maketap.a80
