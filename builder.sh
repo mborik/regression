@@ -10,6 +10,10 @@
 outputfn="REGRESSION.mbd"
 
 ASM="sjasmplus"
+if [ "$1" == "next" ]; then
+	ASM+=" --zxnext -DNEXT"
+fi
+
 function LZX() {
 	rm -f $2
 	lzxpack -t36o7o14 $1

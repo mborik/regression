@@ -31,7 +31,11 @@
 		org	RUNZONE
 
 start:		ld	a,#58	; SRAM page (RO)
+	ifdef NEXT
+		call	xchg.next
+	else
 		out	(mb02ram),a
+	endif
 
 .loop:		ei
 		halt
@@ -41,13 +45,25 @@ start:		ld	a,#58	; SRAM page (RO)
 .pass2end	jr	.loop
 
 		ld	a,#5E
+	ifdef NEXT
+		call	xchg.next
+	else
 		out	(mb02ram),a
+	endif
 		call	animator
 		ld	a,#5F
+	ifdef NEXT
+		call	xchg.next
+	else
 		out	(mb02ram),a
+	endif
 		call	animator
+	ifdef NEXT
+		call	xchg.nextrom
+	else
 		ld	a,#40 ; back to ROM
 		out	(mb02ram),a
+	endif
 
 		ei
 		ld	hl,stvorcek.pack

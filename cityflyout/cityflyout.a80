@@ -236,7 +236,7 @@ waitrender:	push	bc
 
 shakinRender:	ld	hl,0
 		ld	(render+1),hl
-		ld	(render.mb02pg+1),a
+		ld	(render.actpg+1),a
 		ld	a,12
 		ld	(render.pgcounter+1),a
 		ret
@@ -416,8 +416,12 @@ fillattrs:	ld	l,7
 		ld	l,5
 .pg7:		or	l
 		ld	h,a
+	ifdef NEXT
+		call	xchg.bnk+3
+	else
 		ld	bc,page128
 		out	(c),a
+	endif
 .clean:		di
 		ld	(.rstsp+1),sp
 		ld	sp,#DB00
@@ -435,7 +439,11 @@ fillattrs:	ld	l,7
 		ei
 		halt
 		xor	#0A
+	ifdef NEXT
+		call	xchg.bnk+3
+	else
 		out	(c),a
+	endif
 		push	af
 		push	de
 		push	hl
@@ -466,9 +474,13 @@ flakacfarieb:	push	de
 		ret
 
 render:		ld	hl,0
-.mb02pg:	ld	a,0
+.actpg:		ld	a,0
 		add	a,#44
+	ifdef NEXT
+		call	xchg.next
+	else
 		out	(mb02ram),a
+	endif
 		di
 		ld	(.restoresp+1),sp
 		ld	sp,hl
@@ -489,10 +501,10 @@ render:		ld	hl,0
 .restoresp:	ld	sp,0
 		ret
 
-.nextpg:	ld	a,(.mb02pg+1)
+.nextpg:	ld	a,(.actpg+1)
 		inc	a
 .resetloop:	and	15
-		ld	(.mb02pg+1),a
+		ld	(.actpg+1),a
 .resetconst:	ld	a,6
 		ld	hl,0
 		jr	.storeptrs

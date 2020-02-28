@@ -3,7 +3,7 @@
 		define TAP_KERNEL_BLOCK "../kernel.tape/final.bin"
 
 	output TAP_KERNEL_BLOCK
-		block	(xchg.vram - start), 0
+		block	(TAP_KERNEL_GAP - start), 0
 	outend
 
 
@@ -181,6 +181,28 @@ error:		ld	hl,txterr
 		rst	0
 
 	output TAP_KERNEL_BLOCK,a
+	ifdef NEXT
+		org	#8128 - (TAP_KERNEL_GAP_END - TAP_KERNEL_GAP)
+	endif
+
+@TAP_KERNEL_GAP
+
+	ifdef NEXT
+xchg.next:	and	#1F
+		sub	4
+		jr	c,xchg.nextrom
+		rlca
+		add	a,40
+		ld	(xchg.next.pg1+3),a
+		inc	a
+		ld	(xchg.next.pg2+3),a
+		jr	xchg.next.pg1
+
+xchg.nextrom:	or	-1
+		ld	(xchg.next.pg1+3),a
+		ld	(xchg.next.pg2+3),a
+		jr	xchg.next.pg1
+	endif
 
 xchg.vram:	ld	a,#1D
 		xor	#0A
@@ -188,8 +210,14 @@ xchg.vram:	ld	a,#1D
 xchg.bnk:	ld	(act128page),a
 		ld	bc,page128
 		out	(c),a
-		ret
 
+	ifdef NEXT
+xchg.next.pg1:	nextreg	#50,#FF
+xchg.next.pg2:	nextreg	#51,#FF
+	endif
+
+		ret
+@TAP_KERNEL_GAP_END
 
 	if $ > #8128
 		display "Too long! ",/D,($-#8128)," bytes out!"
@@ -246,12 +274,20 @@ interrupt:	push	af		; zakladne osetrenie prerusenia
 		push	af
 		and	$F8		; ponechame nastavenu vram
 		or	MUSIC.page	; a prestrankujeme na banku s muzikou
+	ifdef NEXT
+		call	xchg.bnk+3
+	else
 		ld	bc,page128
 		out	(c),a
+	endif
 		call	MUSIC.play
 		pop	af
+	ifdef NEXT
+		call	xchg.bnk+3
+	else
 		ld	bc,page128
 		out	(c),a
+	endif
 
 		ld	hl,(FRAMES)
 		inc	hl
@@ -426,18 +462,13 @@ kernel:		di
 		and	#F8
 		push	af
 		or	b
-		ld	bc,page128
-		ld	(act128page),a
-		out	(c),a
+		call	xchg.bnk
 		bit	7,e
 		jr	nz,.ldir
-		push	bc
 		ld	de,RUNZONE
 		call	depack
-		pop	bc
 		pop	af
-		ld	(act128page),a
-		out	(c),a
+		call	xchg.bnk
 		pop	hl
 		inc	l
 		ld	e,(hl)
@@ -460,9 +491,7 @@ kernel:		di
 		ex	de,hl
 		ld	de,RUNZONE
 		ldir
-		ld	bc,page128
-		ld	(act128page),a
-		out	(c),a
+		call	xchg.bnk
 		call	RUNZONE
 		jr	.run
 
@@ -499,3 +528,7 @@ screen.lzx:	incbin "loading.lzx"
 		export depack
 		export xchg.vram
 		export xchg.bnk
+	ifdef NEXT
+		export xchg.next
+		export xchg.nextrom
+	endif

@@ -16,6 +16,7 @@ const toHex = (num, width) => {
 }
 
 const fd = fs.openSync('haystack', 'w');
+const fx = fs.openSync('haystack.next', 'w');
 
 let bin;
 let a80 = ';; haystack block table (pointers and counts)\n\n';
@@ -37,6 +38,10 @@ const pages = [
 
 for (i = 0, j = 0, l = 0, c = 0; i < pages.length; i++, c++) {
 	a = path.normalize(pages[i]);
+
+	bin = fs.readFileSync(a);
+	fs.writeSync(fx, bin, 0, 16384, i * 16384);
+
 	console.log(`~ compressing '${a}'...`);
 
 	spawnSync('lzxpack', [mode, a],
@@ -71,6 +76,7 @@ console.log(`~ finishig after ${c} pages (${pg - j} bytes excess)...`);
 
 fs.writeSync(fd, Buffer.from([0]), 0, 1, pg - 1);
 fs.closeSync(fd);
+fs.closeSync(fx);
 
 counts.push(c, 0);
 a80 += `\n.firstct:\t	equ	${counts.shift()}`;

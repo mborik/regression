@@ -130,11 +130,17 @@ begin:		ei
 animate:	ld	hl,animate.table
 .hl		ld	a,(hl)
 		or	a
-		jr	nz,.next
+		jr	nz,.nextpg
 		ld	hl,animate.table
 		ld	(animate+1),hl
 		ld	a,(hl)
-.next		out	(mb02ram),a
+.nextpg:
+	ifdef NEXT
+		call	xchg.next
+	else
+		out	(mb02ram),a
+	endif
+
 		inc	hl
 		ld	e,(hl)
 		inc	hl

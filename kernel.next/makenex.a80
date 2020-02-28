@@ -1,0 +1,92 @@
+		device	zxspectrumnext
+		include "../kernel/constants.inc"
+
+
+;;-----------------------------------------------------------------------------
+		slot	2
+		org	#4000,10
+
+		incbin "../kernel.tape/loading.scr"
+
+;;-----------------------------------------------------------------------------
+		slot	4
+		org	#8000,4
+
+		incbin "../kernel.tape/final.bin"
+
+;;-----------------------------------------------------------------------------
+		slot	4
+		org	#8000,4
+
+start:		di
+		nextreg #07,0
+		call	xchg.nextrom
+		ld	a,25
+.loop:		ei
+		halt
+		halt
+		ex	af,af'
+		call	attrhide
+		ex	af,af'
+		dec	a
+		jr	nz,.loop
+		jp	kernel
+
+attrhide:	ld	hl,22528
+		ld	c,24
+.atthd2:	ld	b,32
+		push	bc
+.atthd3:	ld	a,(hl)
+		and	7
+		jr	z,.atthd4
+		dec	a
+.atthd4:	push	af
+		ld	a,(hl)
+		and	56
+		jr	z,.atthd5
+		ld	c,8
+		sub	c
+		ld	c,a
+		pop	af
+		or	c
+		jr	.atthd6
+.atthd5:	ld	a,(hl)
+		and	248
+		ld	c,a
+		pop	af
+		or	c
+.atthd6:	ld	(hl),a
+		inc	hl
+		djnz	.atthd3
+		pop	bc
+		dec	c
+		jr	nz,.atthd2
+		ret
+
+;;-----------------------------------------------------------------------------
+		defarray needleBanks 1,3,4,6,7
+		defarray needleFiles "../needle1","../needle3","../needle4","../needle6","../needle7"
+needleIdx = 0
+	dup 5
+		mmu	6 7, 2 * needleBanks[needleIdx]
+		org	#C000
+		incbin	needleFiles[needleIdx]
+needleIdx = needleIdx + 1
+	edup
+
+;;-----------------------------------------------------------------------------
+haystackIdx = 0
+	dup 28
+		mmu	0 1, 40 + (2 * haystackIdx)
+		org	#0000
+		incbin	"../haystack.next",(haystackIdx * #4000),#4000
+haystackIdx = haystackIdx + 1
+	edup
+
+;;-----------------------------------------------------------------------------
+		SAVENEX OPEN "../build/REGRESSION.nex",start,RUNZONE,0,2
+		SAVENEX CORE 2,0,0
+		SAVENEX CFG 0,0
+		SAVENEX SCREEN SCR
+		SAVENEX AUTO
+		SAVENEX CLOSE

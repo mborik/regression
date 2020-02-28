@@ -57,25 +57,41 @@
 		djnz	.reglogo_red
 
 		ld	a,#64
+	ifdef NEXT
+		call	xchg.next
+	else
 		out	(mb02ram),a
+	endif
 		ld	hl,ripple.page1
 		ld	de,0
 		push	de
 		call	depack36
 		ld	a,#65
+	ifdef NEXT
+		call	xchg.next
+	else
 		out	(mb02ram),a
+	endif
 		ld	hl,ripple.page2
 		pop	de
 		push	de
 		call	depack36
 		ld	a,#66
+	ifdef NEXT
+		call	xchg.next
+	else
 		out	(mb02ram),a
+	endif
 		ld	hl,ripple.page3
 		pop	de
 		push	de
 		call	depack36
 		ld	a,#67
+	ifdef NEXT
+		call	xchg.next
+	else
 		out	(mb02ram),a
+	endif
 		ld	hl,ripple.page4
 		pop	de
 		call	depack36
