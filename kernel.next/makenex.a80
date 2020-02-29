@@ -6,7 +6,7 @@
 		slot	2
 		org	#4000,10
 
-		incbin "../kernel.tape/loading.scr"
+		incbin "loading.scr"
 
 ;;-----------------------------------------------------------------------------
 		slot	4
@@ -18,11 +18,9 @@
 		slot	4
 		org	#8000,4
 
-start:		di
-		nextreg #07,0
-		call	xchg.nextrom
-		ld	a,25
+start:		ld	a,25
 .loop:		ei
+		halt
 		halt
 		halt
 		ex	af,af'
@@ -30,6 +28,12 @@ start:		di
 		ex	af,af'
 		dec	a
 		jr	nz,.loop
+		di
+		nextreg #03,0b10100010	; 128k timing
+		nextreg #06,1		; disable turbo, set AY
+		nextreg #07,0		; 3.5MHz
+		nextreg #08,0b10100000	; ACB stereo, 128k paging
+		call	xchg.nextrom
 		jp	kernel
 
 attrhide:	ld	hl,22528
@@ -75,13 +79,9 @@ needleIdx = needleIdx + 1
 	edup
 
 ;;-----------------------------------------------------------------------------
-haystackIdx = 0
-	dup 28
-		mmu	0 1, 40 + (2 * haystackIdx)
+		mmu	0 n, 40
 		org	#0000
-		incbin	"../haystack.next",(haystackIdx * #4000),#4000
-haystackIdx = haystackIdx + 1
-	edup
+		incbin	"../haystack.next"
 
 ;;-----------------------------------------------------------------------------
 		SAVENEX OPEN "../build/REGRESSION.nex",start,RUNZONE,0,2
