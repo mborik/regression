@@ -1,59 +1,63 @@
 #!/bin/bash
 
-# REGRESSION builder (c) 2019 mborik / NAG^RM-TEAM^SinDiKat / sk
+# REGRESSION builder (c) 2019-2025 mborik/SinDiKat/sk
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Utils required in PATH to successful build:
 # latest `sjasmplus` from https://github.com/z00m128/sjasmplus
 # `mbdnew`, `tap2mbd`, `bin2mbd` from https://sf.net/projects/zxspectrumutils/
-# `lzxpack` from https://busy.speccy.cz/download/lzxpack01.rar
+# `salvador` based on ZX0 from https://github.com/emmanuel-marty/salvador
 
-outputfn="REGRESSION.mbd"
-
+export NODE_PATH=$(npm root --quiet -g)
+NODE="node --no-deprecation"
+PACKER="salvador"
 ASM="sjasmplus"
-if [ "$1" == "next" ]; then
-	ASM+=" --zxnext -DNEXT"
+
+if [ "$1" == "mb02" ]; then
+	outputfn="REGRESSION.mbd"
+	ASM+=" -DMB02"
 fi
 
-function LZX() {
+function PACK() {
 	rm -f $2
-	lzxpack -t36o7o14 $1
-	mv -f ${2%.*}-t36o7o14.lzx $2
+	${PACKER} $1 $2
 }
 
 cd build
 rm -f ${outputfn}
-mbdnew ${outputfn} 82 11 "REGRESSION demo by NAG/svk"
+if [ "$1" == "mb02" ]; then
+	mbdnew ${outputfn} 82 11 "REGRESSION demo by NAG/svk"
+fi
 
 cd ../cityflyout
 ${ASM} -DisFX --lst=cityflyout.lst cityflyout.a80
-LZX final.bin final.pak
+PACK final.bin final.pak
 
 cd ../reglogo
 ${ASM} -DisFX --lst=reglogo.lst reglogo.a80
-LZX final.bin final.pak
+PACK final.bin final.pak
 
 cd ../oneplus
 ${ASM} oneplusani.a80
 ${ASM} -DisFX --lst=oneplus.lst oneplus.a80
-LZX final.bin final.pak
+PACK final.bin final.pak
 
 cd ../surprise
 ${ASM} -DisFX --lst=surprise.lst surprise.a80
-LZX final.bin final.pak
+PACK final.bin final.pak
 
 cd ../transformy
 ${ASM} trafoutro.a80
 ${ASM} -DisFX --lst=transformy.lst transformy.a80
-LZX final.bin final.pak
+PACK final.bin final.pak
 
 cd ../greetings
 ${ASM} -DisFX --lst=greetings.lst greetings.a80
-LZX final.bin final.pak
+PACK final.bin final.pak
 
 cd ../ripple
 ${ASM} rippleani.a80 --exp=rippleani.inc
 ${ASM} -DisFX --lst=ripple.lst ripple.a80
-LZX final.bin final.pak
+PACK final.bin final.pak
 
 cd ../turndisk
 ${ASM} -DisFX --lst=turndisk.lst turndisk.a80
@@ -61,7 +65,7 @@ ${ASM} -DisFX --lst=turndisk.lst turndisk.a80
 cd ../finalpart
 ${ASM} finalpart.data.a80 --lst=finalpart.data.lst --exp=finalpart.data.inc
 ${ASM} -DisFX --lst=finalpart.lst finalpart.a80
-LZX final.bin final.pak
+PACK final.bin final.pak
 
 cd ..
 rm -f output needle*
@@ -72,15 +76,23 @@ ${ASM} pg6fx.a80 --lst=kernel/pg6fx.lst --exp=kernel/pg6fx.inc
 ${ASM} pg7fx.a80 --lst=kernel/pg7fx.lst --exp=kernel/pg7fx.inc
 
 cd kernel
-LZX loading.scr loading.lzx
+PACK loading.scr loading.pak
 ${ASM} --lst=kernel.lst --exp=constants.inc kernel.a80
-tap2mbd REGRESSION.tap 0 "../build/${outputfn}"
-rm -f REGRESSION.tap
 
-cd ..
-bin2mbd haystack -a 0 -o "build/${outputfn}"
-bin2mbd needle1 -a 49152 -o "build/${outputfn}"
-bin2mbd needle3 -a 49152 -o "build/${outputfn}"
-bin2mbd needle4 -a 49152 -o "build/${outputfn}"
-bin2mbd needle6 -a 49152 -o "build/${outputfn}"
-bin2mbd needle7 -a 49152 -o "build/${outputfn}"
+if [ "$1" == "mb02" ]; then
+	tap2mbd REGRESSION.tap 0 "../build/${outputfn}"
+	rm -f REGRESSION.tap
+	cd ..
+
+	bin2mbd haystack -a 0 -o "build/${outputfn}"
+	bin2mbd needle1 -a 49152 -o "build/${outputfn}"
+	bin2mbd needle3 -a 49152 -o "build/${outputfn}"
+	bin2mbd needle4 -a 49152 -o "build/${outputfn}"
+	bin2mbd needle6 -a 49152 -o "build/${outputfn}"
+	bin2mbd needle7 -a 49152 -o "build/${outputfn}"
+
+else
+	cd ../kernel.tape
+	${NODE} blockpacker.js
+	${ASM} --lst=maketap.lst maketap.a80
+fi

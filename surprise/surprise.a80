@@ -325,7 +325,7 @@ flakejbarvy	border	2
 		border	0
 		ret
 
-attr_story_pak:	incbin "atributy.story.lzx"
+attr_story_pak:	incbin "atributy.story.pak"
 
 
 		align	256

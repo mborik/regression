@@ -529,7 +529,7 @@ nogrtz2gmb1 = #6000
 nogrtz2gmb2 = #6800
 nogrtz2gmb3 = #7000
 void = #7800
-nogrtz2gmb.src	incbin "gfx/nogrtz2gemba.lzx"
+nogrtz2gmb.src	incbin "gfx/nogrtz2gemba.pak"
 	endmodule
 
 ;;-----------------------------------------------------------------------------

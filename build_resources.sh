@@ -1,18 +1,21 @@
 #!/bin/bash
 
-# REGRESSION haystack (c) 2019 mborik / NAG^RM-TEAM^SinDiKat / sk
+# REGRESSION haystack builder (c) 2019-2025 mborik/SinDiKat/sk
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Node.js is required to successful build (v6.9.0 at least)
 # `glob` package installed globally and utils in PATH to successful build:
-# - latest `sjasmplus` from https://github.com/z00m128/sjasmplus
-# - `lzxpack` from https://busy.speccy.cz/download/lzxpack01.rar
+#    `npm i -g glob@10`
+# latest `sjasmplus` from https://github.com/z00m128/sjasmplus
+# `salvador` based on ZX0 from https://github.com/emmanuel-marty/salvador
 
-ASM="sjasmplus"
+export NODE_PATH=$(npm root --quiet -g)
 NODE="node --no-deprecation"
-function LZX() {
+PACKER="salvador"
+ASM="sjasmplus"
+
+function PACK() {
 	rm -f $2
-	lzxpack -t36o7o14 $1
-	mv -f ${2%.*}-t36o7o14.lzx $2
+	${PACKER} $1 $2
 }
 
 pushd cityflyout
@@ -24,12 +27,22 @@ pushd reglogo
 ${NODE} process.data.js
 cd gfx
 ${NODE} process.vertical.js
+PACK stvorcek.scr stvorcek.pak
+PACK vyblikator.scr vyblikator.pak
 
 popd
 pushd surprise
 ${NODE} makeblitter.js
 ${ASM} atributy.story.a80
-LZX atributy.story.bin atributy.story.lzx
+PACK atributy.story.bin atributy.story.pak
+
+popd
+pushd oneplus
+PACK oneplusani.ani.bin oneplusani.ani.pak
+cd gfx
+for img in credit_mbr credit_mbr_flash credit_n1ko credit_n1ko_flash credit_support credit_support_flash oneplusani000; do
+	PACK $img.scr $img.pak
+done
 
 popd
 pushd transformy
@@ -37,13 +50,22 @@ ${NODE} process.stripes.js
 ${ASM} transformy.generator.a80
 
 popd
+pushd greetings/gfx
+PACK nogrtz2gemba.scr nogrtz2gemba.pak
+
+popd
 pushd ripple/gfx
 ${NODE} ripple.generator.js
 ${NODE} pattern.mapper.js
 
-npm i -g glob
 cd ../mandaly
-. _compile.sh
+${ASM} build.a80 --exp=build.inc
+PACK build.bin build.pak
+${NODE} pattern.generator.js
+
+popd
+pushd finalpart
+${NODE} finalpart.generator.js
 
 popd
 ${NODE} haystack.builder.js

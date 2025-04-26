@@ -1,6 +1,7 @@
 const fs = require('fs');
 const { spawnSync } = require('child_process');
 
+const PACKER = 'salvador';
 const WAVE1 = 2048;
 const WAVE2 = 246;
 const WAVE3 = Math.PI;
@@ -47,7 +48,6 @@ for (let it = 0; it < 768; it += 2) {
 
 console.log(srcframes.length);
 
-const LZXmode = '-t36o8o11';
 const xorer = new Buffer(176);
 const page  = new Buffer(16384);
 
@@ -79,13 +79,10 @@ for (s = 0; s < 2; s++) {
 			fs.writeFileSync(fn, page);
 
 			console.log(`~ compressing '${fn}'...`);
-			spawnSync('lzxpack', [LZXmode, fn],
-				{ cwd: '.', shell: true, windowsHide: true });
 
-			const lzxn = `ripple${LZXmode}.lzx`;
-			const bin = fs.readFileSync(lzxn);
-			fs.unlinkSync(lzxn);
-			fs.writeFileSync(fn + '.lzx', bin);
+			const pak = fn + '.pak';
+			spawnSync(PACKER, [fn, pak],
+				{ cwd: '.', shell: true, windowsHide: true });
 
 			page.fill(0);
 			ptr = cptr = pg;

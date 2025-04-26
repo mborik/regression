@@ -449,15 +449,15 @@ stvorcekani.table:
 		include "stvorcek.path.inc"
 		dw	0
 
-vyblikator.gfx:	incbin "../reglogo/gfx/vyblikator.lzx"
+vyblikator.gfx:	incbin "../reglogo/gfx/vyblikator.pak"
 
 credit:
-.n1ko:		incbin "gfx/credit_n1ko.lzx"
-.n1ko.flash:	incbin "gfx/credit_n1ko_flash.lzx"
-.support:	incbin "gfx/credit_support.lzx"
-.support.flash:	incbin "gfx/credit_support_flash.lzx"
-.mbr:		incbin "gfx/credit_mbr.lzx"
-.mbr.flash:	incbin "gfx/credit_mbr_flash.lzx"
+.n1ko:		incbin "gfx/credit_n1ko.pak"
+.n1ko.flash:	incbin "gfx/credit_n1ko_flash.pak"
+.support:	incbin "gfx/credit_support.pak"
+.support.flash:	incbin "gfx/credit_support_flash.pak"
+.mbr:		incbin "gfx/credit_mbr.pak"
+.mbr.flash:	incbin "gfx/credit_mbr_flash.pak"
 
 		align	256
 scradrtab:
@@ -476,7 +476,7 @@ scradrtab:
 ;;-----------------------------------------------------------------------------
 
 	ifndef isFX
-initscreen:	incbin "gfx/oneplusani000.scr.lzx"
+initscreen:	incbin "gfx/oneplusani000.scr.pak"
 	else
 		savebin "final.bin",begin,$-begin
 	endif

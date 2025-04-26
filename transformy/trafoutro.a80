@@ -9,6 +9,6 @@ start:		ld	hl,bufdat.packed
 		ld	de,bufdat
 		jp	depack
 
-bufdat.packed:	incbin "pg/trafo.outro.lzx"
+bufdat.packed:	incbin "pg/trafo.outro.pak"
 
 		savebin "trafoutro.pak",start,$-start

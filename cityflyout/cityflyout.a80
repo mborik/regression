@@ -416,12 +416,8 @@ fillattrs:	ld	l,7
 		ld	l,5
 .pg7:		or	l
 		ld	h,a
-	ifdef NEXT
-		call	xchg.bnk+3
-	else
 		ld	bc,page128
 		out	(c),a
-	endif
 .clean:		di
 		ld	(.rstsp+1),sp
 		ld	sp,#DB00
@@ -439,11 +435,7 @@ fillattrs:	ld	l,7
 		ei
 		halt
 		xor	#0A
-	ifdef NEXT
-		call	xchg.bnk+3
-	else
 		out	(c),a
-	endif
 		push	af
 		push	de
 		push	hl
@@ -475,10 +467,8 @@ flakacfarieb:	push	de
 
 render:		ld	hl,0
 .actpg:		ld	a,0
+	ifdef MB02
 		add	a,#44
-	ifdef NEXT
-		call	xchg.next
-	else
 		out	(mb02ram),a
 	endif
 		di

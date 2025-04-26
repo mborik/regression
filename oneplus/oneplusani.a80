@@ -11,6 +11,6 @@ start:		ld	a,#10
 		ld	de,bufdat
 		jp	depack
 
-bufdat.packed:	incbin "oneplusani.ani.lzx"
+bufdat.packed:	incbin "oneplusani.ani.pak"
 
 		savebin "oneplusani.pak",start,$-start

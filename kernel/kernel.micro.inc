@@ -58,28 +58,7 @@
 
 		org	#8128
 
-;; Setting for depacker according to compression identification -tXYoAoB
-
-com	=	3	;; Compression type - one from TYPZX7 TYPBLK TYPBS1
-pos	=	6	;; Offset coding - one from POSOF4 POSOF1 POSOF2 POSOFD
-ofs1	=	7	;; Number of bits for 1st offset - required for POSOF1 POSOF2 POSOF4
-ofs2	=	14	;; Number of bits for 2nd offset - required for POSOF2 only
-
-;; This is needed to set according to compression ID string from name of compressed file:
-;;  -tXYoAoB ... means setting  com=X, pos=Y, ofs1=A, ofs2=B   (ofs1 ofs2 only when required)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; Set optimization of depacker
-
-spd	=	2
-
-;; Possible values:
-;;  0 ... optimized for code length - short but slow
-;;  1 ... compromise between length and speed
-;;  2+ .. optimized for speed - but longer code
-
-		include "../kernel/lzx.a80"
+		include "../kernel/dzx0.a80"
 
 ;;- INTERRUPT -----------------------------------------------------------------
 ;		org	#8181

@@ -2,13 +2,11 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
+const PACKER = 'salvador';
 const MB02_1ST_SAFE_PG = 4;
 
-const mode = '-t36o7o14';
 const cityflyPath =
 	(n => `cityflyout/pg/cityfly.${('00' + n.toString(10)).substr(-3)}`);
-
-const lzxName = (a => a.substr(0, a.lastIndexOf('.')) + mode + '.lzx');
 
 const toHex = (num, width) => {
 	let a = num.toString(16);
@@ -16,13 +14,12 @@ const toHex = (num, width) => {
 }
 
 const fd = fs.openSync('haystack', 'w');
-const fx = fs.openSync('haystack.next', 'w');
 
 let bin;
 let a80 = ';; haystack block table (pointers and counts)\n\n';
 let counts = [];
 let pg = 16384; // page limit
-let a, b, c, i, j, l;
+let a, b, c, i, j, l, out;
 
 const pages = [
 	...[...Array(20).keys()].map(cityflyPath),
@@ -40,16 +37,15 @@ for (i = 0, j = 0, l = 0, c = 0; i < pages.length; i++, c++) {
 	a = path.normalize(pages[i]);
 
 	bin = fs.readFileSync(a);
-	fs.writeSync(fx, bin, 0, 16384, i * 16384);
 
 	console.log(`~ compressing '${a}'...`);
 
-	spawnSync('lzxpack', [mode, a],
+	out = path.basename(a, path.extname(a)) + '.pak';
+	spawnSync(PACKER, [a, out],
 		{ cwd: '.', shell: true, windowsHide: true });
 
-	a = lzxName(a);
-	bin = fs.readFileSync(a);
-	fs.unlinkSync(a);
+	bin = fs.readFileSync(out);
+	fs.unlinkSync(out);
 
 	b = j + bin.length;
 	if (b > pg) {
@@ -76,7 +72,6 @@ console.log(`~ finishig after ${c} pages (${pg - j} bytes excess)...`);
 
 fs.writeSync(fd, Buffer.from([0]), 0, 1, pg - 1);
 fs.closeSync(fd);
-fs.closeSync(fx);
 
 counts.push(c, 0);
 a80 += `\n.firstct:\t	equ	${counts.shift()}`;

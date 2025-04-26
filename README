@@ -7,11 +7,9 @@
 |                   .. ideas:     ellvis ..   |
 '                   .. support:   busy   ..   '
 .                                             .
-|    design demo for ZX-Spectrum 128k with    |
-|    512kB SRAM allram paging on port #17     |
-|        in supported disk-interfaces:        |
-|       MB-02+, MB03+ Ultimate, DivIDE+       |
-'        or ZX-Spectrum Next natively!        '
-.                                             .
-
+|      design demo for ZX-Spectrum 128k       |
+|     and disk-interfaces with 512kB RAM      |
+|     (supported Speccy disk-interfaces       |
+|  MB-02+, MB03+ Ultimate, DivIDE+, DivMMC).  |
+'                                             '
 .                                             .

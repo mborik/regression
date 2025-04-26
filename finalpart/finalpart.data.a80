@@ -9,7 +9,7 @@ hilitewords.len = $-hilitewords
 
 		org	hilitewords - finalwords.len
 
-finalwords:	incbin "finalwords.scr.lzx"
+finalwords:	incbin "finalwords.scr.pak"
 finalwords.len = $-finalwords
 
 

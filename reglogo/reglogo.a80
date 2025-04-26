@@ -30,10 +30,9 @@
 ;;-----------------------------------------------------------------------------
 		org	RUNZONE
 
-start:		ld	a,#58	; SRAM page (RO)
-	ifdef NEXT
-		call	xchg.next
-	else
+start:
+	ifdef MB02
+		ld	a,#58	; SRAM page (RO)
 		out	(mb02ram),a
 	endif
 
@@ -44,28 +43,23 @@ start:		ld	a,#58	; SRAM page (RO)
 		call	render
 .pass2end	jr	.loop
 
+	ifdef MB02
 		ld	a,#5E
-	ifdef NEXT
-		call	xchg.next
-	else
 		out	(mb02ram),a
 	endif
 		call	animator
+	ifdef MB02
 		ld	a,#5F
-	ifdef NEXT
-		call	xchg.next
-	else
 		out	(mb02ram),a
 	endif
 		call	animator
-	ifdef NEXT
-		call	xchg.nextrom
-	else
+	ifdef MB02
 		ld	a,#40 ; back to ROM
 		out	(mb02ram),a
 	endif
 
 		ei
+		halt
 		ld	hl,stvorcek.pack
 		ld	de,#C000
 		call	depack
@@ -74,6 +68,7 @@ start:		ld	a,#58	; SRAM page (RO)
 		ld	hl,vyblik.pack
 		ld	de,#C000
 		call	depack
+		halt
 		ld	a,#10
 		call	xchg.bnk
 .squarer:	ei
@@ -430,8 +425,8 @@ maznak.addrs:	include "tables/maznak.a80"
 
 squarer.data:	include "tables/squarer.a80"
 
-stvorcek.pack:	incbin "gfx/stvorcek.lzx"
-vyblik.pack:	incbin "gfx/vyblikator.lzx"
+stvorcek.pack:	incbin "gfx/stvorcek.pak"
+vyblik.pack:	incbin "gfx/vyblikator.pak"
 
 ;;-----------------------------------------------------------------------------
 		align	256

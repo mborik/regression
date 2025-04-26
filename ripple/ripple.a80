@@ -45,9 +45,7 @@ loop:		ei
 render:		ld	a,#44
 .ptr		ld	de,#0000
 .xor		ld	hl,xorbuffer
-	ifdef NEXT
-		call	xchg.next
-	else
+	ifdef MB02
 		out	(mb02ram),a
 	endif
 
@@ -163,18 +161,12 @@ fillattrs:	ld	a,b
 		ld	(actborder),a
 		out	(254),a
 		ld	a,(act128page)
-	ifndef NEXT
 		ld	bc,page128
 		push	bc
-	endif
 		push	af
 		and	#F8
 		or	7
-	ifdef NEXT
-		call	xchg.bnk+3
-	else
 		out	(c),a
-	endif
 		di
 		ld	(.rstsp+1),sp
 		ld	hl,#D880
@@ -191,12 +183,8 @@ fillattrs:	ld	a,b
 		jr	c,.secvram
 .rstsp:		ld	sp,0
 		pop	af
-	ifdef NEXT
-		call	xchg.bnk+3
-	else
 		pop	bc
 		out	(c),a
-	endif
 		ei
 		ret
 
@@ -273,18 +261,12 @@ blitattrs:	ld	a,(hl)
 		ld	(actborder),a
 		out	(254),a
 		ld	a,(act128page)
-	ifndef NEXT
 		ld	bc,page128
 		push	bc
-	endif
 		push	af
 		and	#F8
 		or	7
-	ifdef NEXT
-		call	xchg.bnk+3
-	else
 		out	(c),a
-	endif
 		di
 		push	hl
 		ld	de,#D800
@@ -295,12 +277,8 @@ blitattrs:	ld	a,(hl)
 		ld	bc,768
 		ldir
 		pop	af
-	ifdef NEXT
-		call	xchg.bnk+3
-	else
 		pop	bc
 		out	(c),a
-	endif
 		ei
 		halt
 		ret

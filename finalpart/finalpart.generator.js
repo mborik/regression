@@ -1,9 +1,9 @@
 const fs = require('fs');
 const { spawnSync } = require('child_process');
 
+const PACKER = 'salvador';
 let fn = 'finalwords.scr';
 
-const LZXmode = '-t34o3';
 const buf = fs.readFileSync(fn);
 const pixels = buf.slice(0, 6144);
 const attrs = buf.slice(6144);
@@ -40,11 +40,8 @@ fs.writeFileSync(fn, generators.join('\n\n'));
 fn = 'finalwords.tmp';
 fs.writeFileSync(fn, pixels);
 
-spawnSync('lzxpack', [LZXmode, fn],
+const pak = `finalwords.scr.pak`;
+spawnSync(PACKER, [fn, pak],
 	{ windowsHide: true, shell: true, cwd: '.' });
 
-const lzxn = `finalwords${LZXmode}.lzx`;
-const bin = fs.readFileSync(lzxn);
-fs.unlinkSync(lzxn);
 fs.unlinkSync(fn);
-fs.writeFileSync('finalwords.scr.lzx', bin);

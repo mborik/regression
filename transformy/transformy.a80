@@ -135,9 +135,7 @@ animate:	ld	hl,animate.table
 		ld	(animate+1),hl
 		ld	a,(hl)
 .nextpg:
-	ifdef NEXT
-		call	xchg.next
-	else
+	ifdef MB02
 		out	(mb02ram),a
 	endif
 

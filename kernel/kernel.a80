@@ -31,7 +31,7 @@ mb02ram		equ	#17
 		ld	(actborder),a
 		ld	a,#10
 		call	xchg.bnk
-restart:	ld	hl,screen.lzx
+restart:	ld	hl,screen.pak
 		ld	de,#4000
 		call	depack
 
@@ -103,106 +103,34 @@ loader:		ld	e,0	; (0 = root)
 		ld	hl,(.prgptr+1)
 .fullfilprg:	ld	a,l
 		cp	#BF
-		jr	z,needle
+		jp	z,needle
 		ld	(hl),#FF
 		inc	l
 		jr	.fullfilprg
 
-needle:		ld	a,#61
-		out	(mb02ram),a
-		ld	a,numberOfNeedles
-.loop:		push	af
-.fcursor:	ld	bc,0
-		inc	bc
-		ld	(.fcursor+1),bc
-		push	bc
-		ld	ix,direntrybuf
-		ld	a,#16	; GETSUB
-		rst	#20
-		jr	z,error
-
-		ld	a,(ix+0)
-		cp	#B0
-		jr	nz,.invalidfile
-		ld	xl,6
-		ld	de,fn.needle
-.fncompare:	ld	a,(de)
-		or	a
-		jr	z,.rightname
-		cp	(ix+0)
-		jr	nz,.invalidfile
-		inc	e
-		inc	xl
-		jr	.fncompare
-
-.invalidfile:	pop	af
-		pop	af
-		jr	.loop
-
-.rightname:	ld	a,(ix+0)
-		sub	('0' - #10)
-		ld	(.targetpg+1),a
-		ld	a,(ix+1)
-		sub	' '
-		jr	nz,error
-.targetpg:	ld	a,0
-		call	xchg.bnk
-		ld	e,16
-		ld	bc,0
-		pop	hl
-		ld	ix,#C000
-		ld	a,#23	; LOA2X
-		rst	#20
-
-.prgptr:	ld	hl,#56A1 ; #5AA1
+needleprg:	ld	hl,#56A1 ; #5AA1
 		ld	bc,((30 / numberOfNeedles) << 8) | #FF
-.pgprog:	ld	(hl),c	; draw 2nd progress
+.loop:		ld	(hl),c	; draw 2nd progress
 		inc	l
-		djnz	.pgprog
-		ld	(.prgptr+1),hl
-
+		djnz	.loop
+		ld	(needleprg+1),hl
 		pop	af
 		dec	a
-		jr	nz,.loop
-		ld	b,25
-.fadeout:	ei
+		jp	nz,needle.loop
+
+fadeout		ld	b,25
+.loop:		ei
 		halt
 		halt
 		push	bc
 		call	attrhide
 		pop	bc
-		djnz	.fadeout
+		djnz	.loop
 		jp	kernel
 
-error:		ld	hl,txterr
-		ld	a,#34	;; MESSX
-		rst	#20
-		jp	c,restart
-		rst	0
-
 	output TAP_KERNEL_BLOCK,a
-	ifdef NEXT
-		org	#8128 - (TAP_KERNEL_GAP_END - TAP_KERNEL_GAP)
-	endif
 
 @TAP_KERNEL_GAP
-
-	ifdef NEXT
-xchg.next:	and	#1F
-		sub	4
-		jr	c,xchg.nextrom
-		rlca
-		add	a,40
-		ld	(xchg.next.pg1+3),a
-		inc	a
-		ld	(xchg.next.pg2+3),a
-		jr	xchg.next.pg1
-
-xchg.nextrom:	or	-1
-		ld	(xchg.next.pg1+3),a
-		ld	(xchg.next.pg2+3),a
-		jr	xchg.next.pg1
-	endif
 
 xchg.vram:	ld	a,#1D
 		xor	#0A
@@ -210,51 +138,27 @@ xchg.vram:	ld	a,#1D
 xchg.bnk:	ld	(act128page),a
 		ld	bc,page128
 		out	(c),a
-
-	ifdef NEXT
-xchg.next.pg1:	nextreg	#50,#FF
-xchg.next.pg2:	nextreg	#51,#FF
-	endif
-
 		ret
+
 @TAP_KERNEL_GAP_END
 
-	if $ > #8128
-		display "Too long! ",/D,($-#8128)," bytes out!"
+	if $ > #80C6
+		display "Too long! ",/D,($-#80C6)," bytes out!"
 	else
-		display /D,(#8128-$)," bytes free..."
+		display /D,(#80C6-$)," bytes free..."
 	endif
 
-		ds	(#8128-$)
+		ds	(#80C6-$)
 
-;; Setting for depacker according to compression identification -tXYoAoB
-
-com	=	3	;; Compression type - one from TYPZX7 TYPBLK TYPBS1
-pos	=	6	;; Offset coding - one from POSOF4 POSOF1 POSOF2 POSOFD
-ofs1	=	7	;; Number of bits for 1st offset - required for POSOF1 POSOF2 POSOF4
-ofs2	=	14	;; Number of bits for 2nd offset - required for POSOF2 only
-
-;; This is needed to set according to compression ID string from name of compressed file:
-;;  -tXYoAoB ... means setting  com=X, pos=Y, ofs1=A, ofs2=B   (ofs1 ofs2 only when required)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; Set optimization of depacker
-
-spd	=	2
-
-;; Possible values:
-;;  0 ... optimized for code length - short but slow
-;;  1 ... compromise between length and speed
-;;  2+ .. optimized for speed - but longer code
-
-depack:		include "lzx.a80"
+depack:	module dzx0
+		include "dzx0.a80"
+	endmod
 
 ;;- INTERRUPT -----------------------------------------------------------------
 ;		org	#8181
 
-interrupt:	push	af		; zakladne osetrenie prerusenia
-		ld	a,(actborder)	; s volanim hudobneho hradla
+interrupt:	push	af		; demo-wide interrupt handler
+		ld	a,(actborder)
 		out	(254),a
 		push	bc
 		push	de
@@ -272,22 +176,14 @@ interrupt:	push	af		; zakladne osetrenie prerusenia
 
 		ld	a,(act128page)
 		push	af
-		and	$F8		; ponechame nastavenu vram
-		or	MUSIC.page	; a prestrankujeme na banku s muzikou
-	ifdef NEXT
-		call	xchg.bnk+3
-	else
+		and	$F8		; we keep active VRAM paged
+		or	MUSIC.page	; and switch bank just for music
 		ld	bc,page128
 		out	(c),a
-	endif
 		call	MUSIC.play
 		pop	af
-	ifdef NEXT
-		call	xchg.bnk+3
-	else
 		ld	bc,page128
 		out	(c),a
-	endif
 
 		ld	hl,(FRAMES)
 		inc	hl
@@ -363,16 +259,70 @@ im2vector:	block	257, 0
 	outend
 
 		org	im2vector
-direntrybuf:	block	256 - (attrhide.end - txterr), 0
+
+	block	256 - (attrhide.end - txterr), 0
 
 @tempsp
-txterr		db	"DEMO-KERNEL LOADING FAILED!"
+txterr		db	"LOADING FAILED!"
 		dw	#C900
 
+direntrybuf	equ	start
 fn.needle:	db	"needle",0
 fn.haystack:	db	"haystack  "
 blocktable:	include "../haystack.inc"
 
+needle:		ld	a,#61
+		out	(mb02ram),a
+		ld	a,numberOfNeedles
+.loop:		push	af
+.fcursor:	ld	bc,0
+		inc	bc
+		ld	(.fcursor+1),bc
+		push	bc
+		ld	ix,direntrybuf
+		ld	a,#16	; GETSUB
+		rst	#20
+		jr	z,error
+
+		ld	a,(ix+0)
+		cp	#B0
+		jr	nz,.invalidfile
+		ld	xl,6
+		ld	de,fn.needle
+.fncompare:	ld	a,(de)
+		or	a
+		jr	z,.rightname
+		cp	(ix+0)
+		jr	nz,.invalidfile
+		inc	e
+		inc	xl
+		jr	.fncompare
+
+.invalidfile:	pop	af
+		pop	af
+		jr	.loop
+
+.rightname:	ld	a,(ix+0)
+		sub	('0' - #10)
+		ld	(.targetpg+1),a
+		ld	a,(ix+1)
+		sub	' '
+		jr	nz,error
+.targetpg:	ld	a,0
+		call	xchg.bnk
+		ld	e,16
+		ld	bc,0
+		pop	hl
+		ld	ix,#C000
+		ld	a,#23	; LOA2X
+		rst	#20
+		jp	needleprg
+
+error:		ld	hl,txterr
+		ld	a,#34	;; MESSX
+		rst	#20
+		jp	c,restart
+		rst	0
 
 attrhide:	ld	hl,22528
 		ld	c,24
@@ -507,7 +457,7 @@ basesp
 
 		org	kernend
 
-screen.lzx:	incbin "loading.lzx"
+screen.pak:	incbin "loading.pak"
 
 
 		emptytap "REGRESSION.tap"
@@ -528,7 +478,3 @@ screen.lzx:	incbin "loading.lzx"
 		export depack
 		export xchg.vram
 		export xchg.bnk
-	ifdef NEXT
-		export xchg.next
-		export xchg.nextrom
-	endif
