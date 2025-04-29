@@ -58,8 +58,9 @@ start:
 		out	(mb02ram),a
 	endif
 
+		ld	a,#1D
+		call	xchg.bnk-3
 		ei
-		halt
 		ld	hl,stvorcek.pack
 		ld	de,#C000
 		call	depack
@@ -68,7 +69,6 @@ start:
 		ld	hl,vyblik.pack
 		ld	de,#C000
 		call	depack
-		halt
 		ld	a,#10
 		call	xchg.bnk
 .squarer:	ei

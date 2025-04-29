@@ -10,6 +10,6 @@ fx_trafoutro.length: EQU 0x000009AF
 fx_greetings: EQU 0x0000DD34
 fx_greetings.pg: EQU 0x00000011
 fx_greetings.sync: EQU 0x00001202
-fx_turndisk: EQU 0x0000E70A
+fx_turndisk: EQU 0x0000E70F
 fx_turndisk.pg: EQU 0x00000091
 fx_turndisk.length: EQU 0x000010FD

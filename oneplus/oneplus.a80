@@ -25,6 +25,14 @@
 @odkalisko = bufdat - 6912
 
 begin:
+		ld	bc,1417
+.waitfor:	ei
+		halt
+		ld	hl,(FRAMES)
+		xor	a
+		sbc	hl,bc
+		jr	c,.waitfor
+
 	ifndef isFX
 		ld	hl,initscreen
 		ld	de,#4000

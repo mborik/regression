@@ -1,7 +1,7 @@
-fx_finalpart: EQU 0x0000E64F
+fx_finalpart: EQU 0x0000E646
 fx_finalpart.pg: EQU 0x00000017
 fx_finalpart.sync: EQU 0x00001DA2
-fx_oneplus: EQU 0x0000E6F0
+fx_oneplus: EQU 0x0000E6E7
 fx_oneplus.pg: EQU 0x00000017
 fx_oneplus.sync: EQU 0x00000589
 fx_ripple: EQU 0x0000F4D3

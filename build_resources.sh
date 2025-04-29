@@ -48,10 +48,15 @@ popd
 pushd transformy
 ${NODE} process.stripes.js
 ${ASM} transformy.generator.a80
+cd pg
+PACK trafo.outro.bin trafo.outro.pak
 
 popd
 pushd greetings/gfx
-PACK nogrtz2gemba.scr nogrtz2gemba.pak
+cp nogrtz2gemba.scr nogrtz2gemba.tmp
+truncate -s +2048 nogrtz2gemba.tmp
+PACK nogrtz2gemba.tmp nogrtz2gemba.pak
+rm nogrtz2gemba.tmp
 
 popd
 pushd ripple/gfx
