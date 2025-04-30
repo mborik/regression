@@ -9,8 +9,8 @@
 **/frames/
 
 /needle*
-/output
-/haystack
+/output*
+/haystack*
 
 final.bin
 *.pak

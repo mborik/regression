@@ -4,6 +4,7 @@ const { spawnSync } = require('child_process');
 
 const PACKER = 'salvador';
 const MB02_1ST_SAFE_PG = 4;
+const HAYSTACK_FULL = 'haystack.full';
 
 const cityflyPath =
 	(n => `cityflyout/pg/cityfly.${('00' + n.toString(10)).substr(-3)}`);
@@ -14,9 +15,10 @@ const toHex = (num, width) => {
 }
 
 const fd = fs.openSync('haystack', 'w');
+fs.writeFileSync(HAYSTACK_FULL, '', { flag: 'w' });
 
 let bin;
-let a80 = ';; haystack block table (pointers and counts)\n\n';
+let mb02inc = ';; haystack block table (pointers and counts)\n\n';
 let counts = [];
 let pg = 16384; // page limit
 let a, b, c, i, j, l, out;
@@ -37,6 +39,7 @@ for (i = 0, j = 0, l = 0, c = 0; i < pages.length; i++, c++) {
 	a = path.normalize(pages[i]);
 
 	bin = fs.readFileSync(a);
+	fs.appendFileSync(`haystack.full`, bin);
 
 	console.log(`~ compressing '${a}'...`);
 
@@ -62,7 +65,7 @@ for (i = 0, j = 0, l = 0, c = 0; i < pages.length; i++, c++) {
 	fs.writeSync(fd, bin, 0, bin.length, j);
 
 	b = 0xC000 + (j - l);
-	a80 += `.pg${toHex(i + MB02_1ST_SAFE_PG, 2)}:\t	dw	#${toHex(b)}	; (${bin.length})\n`;
+	mb02inc += `.pg${toHex(i + MB02_1ST_SAFE_PG, 2)}:\t	dw	#${toHex(b)}	; (${bin.length})\n`;
 	console.log(`~ compressed to ${bin.length} bytes (stored on #${toHex(b)})...`);
 
 	j += bin.length;
@@ -74,7 +77,7 @@ fs.writeSync(fd, Buffer.from([0]), 0, 1, pg - 1);
 fs.closeSync(fd);
 
 counts.push(c, 0);
-a80 += `\n.firstct:\t	equ	${counts.shift()}`;
-a80 += `\n.counts:\t	db	${counts.join(',')}\n`;
+mb02inc += `\n.firstct:\t	equ	${counts.shift()}`;
+mb02inc += `\n.counts:\t	db	${counts.join(',')}\n`;
 
-fs.writeFileSync('haystack.inc', a80, { flag: 'w' });
+fs.writeFileSync('haystack.mb02.inc', mb02inc, { flag: 'w' });

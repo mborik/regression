@@ -1,12 +1,11 @@
 		device	zxspectrum128
 
-		define TAP_KERNEL_BLOCK "../kernel.tape/final.bin"
 
-	output TAP_KERNEL_BLOCK
-		block	(TAP_KERNEL_GAP - start), 0
-	outend
-
-
+needle1 	= 1 + #10
+needle3 	= 3 + #10
+needle4 	= 4 + #10
+needle6 	= 6 + #10
+needle7 	= 7 + #10
 numberOfNeedles = 5
 		include "pg1fx.inc"
 		include "pg3fx.inc"
@@ -20,11 +19,23 @@ act128page	equ	#5B5C
 actborder	equ	#5C48
 FRAMES		equ	23672
 mb02ram		equ	#17
+divmmcpg	equ	#E3
+
+
+		define OUTPUT_TAP "../build/REGRESSION.tap"
+		emptytap OUTPUT_TAP
 
 
 		org	#8000
 
-@start:		di
+	module loader
+@start
+
+	ifdef MB02
+
+;; MB02 loader (first code block runnable with `NEW 1`)
+;;-----------------------------------------------------------------------------
+		di
 		ld	sp,tempsp
 		xor	a
 		out	(254),a
@@ -118,7 +129,76 @@ needleprg:	ld	hl,#56A1 ; #5AA1
 		dec	a
 		jp	nz,needle.loop
 
-fadeout		ld	b,25
+	else
+
+;; TAPE LOADER
+;;-----------------------------------------------------------------------------
+begin:		ld	hl,screen.pak
+		ld	de,#4000
+		jp	depack
+
+processblock:	di
+		ld	hl,#8000
+		ld	de,#C000
+		call	depack
+.blktabptr:	ld	hl,blocktable
+.targetpg:	ld	bc,(blocktable.firstct << 8) | 8 ; DivMMC page 8
+.depk6:		ld	e,(hl)
+		inc	hl
+		ld	d,(hl)
+		inc	hl
+		push	hl
+		ex	hl,de
+		ld	de,0
+		ld	a,c
+		inc	c
+		push	bc
+		out	(mb02ram),a	; switch bank
+		call	depack
+
+.prgptr:	ld	hl,#50A1
+		ld	(hl),#FF	; draw progress
+		inc	l
+		ld	(.prgptr+1),hl
+
+		pop	bc
+		pop	hl
+		djnz	.depk6
+		ld	(.blktabptr+1),hl
+
+.countptr:	ld	hl,blocktable.counts
+		ld	b,(hl)
+		inc	hl
+		ld	(.countptr+1),hl
+		xor	a
+		out	(mb02ram),a
+		or	b
+		jr	z,fullfilprg
+		ld	(.targetpg+1),bc
+		ret
+
+fullfilprg:	ld	hl,(processblock.prgptr+1)
+.loop:		ld	a,l
+		cp	#BF
+		ret	z
+		ld	(hl),#FF
+		inc	l
+		jr	.loop
+
+unpackpage:	ld	hl,#51A1
+		ld	bc,((30 / numberOfNeedles) << 8) | #FF
+.pgprog:	ld	(hl),c	; draw progress
+		inc	l
+		djnz	.pgprog
+		ld	(unpackpage+1),hl
+		di
+		ld	hl,#8000
+		ld	de,#C000
+		jr	depack
+
+	endif
+
+fadeoutandrun	ld	b,25
 .loop:		ei
 		halt
 		halt
@@ -128,34 +208,29 @@ fadeout		ld	b,25
 		djnz	.loop
 		jp	kernel
 
-	output TAP_KERNEL_BLOCK,a
 
-@TAP_KERNEL_GAP
+	if $ > #80B5
+		display "Too long! ",/D,($-#80B5)," bytes out!"
+	else
+		display /D,(#80B5-$)," bytes free..."
+	endif
 
-xchg.vram:	ld	a,#1D
+@xchg.vram:	ld	a,#1D
 		xor	#0A
 		ld	(xchg.vram+1),a
-xchg.bnk:	ld	(act128page),a
+@xchg.bnk:	ld	(act128page),a
 		ld	bc,page128
 		out	(c),a
 		ret
 
-@TAP_KERNEL_GAP_END
-
-	if $ > #80C6
-		display "Too long! ",/D,($-#80C6)," bytes out!"
-	else
-		display /D,(#80C6-$)," bytes free..."
-	endif
-
-		ds	(#80C6-$)
-
-depack:	module dzx0
+@depack:	module dzx0
+		opt push listoff
 		include "dzx0.a80"
-	endmod
+		opt pop
+		endmod
 
 ;;- INTERRUPT -----------------------------------------------------------------
-;		org	#8181
+		org	#8181
 
 interrupt:	push	af		; demo-wide interrupt handler
 		ld	a,(actborder)
@@ -256,20 +331,24 @@ fxtable:	db	fx_city.pg
 
 im2vector:	block	257, 0
 
-	outend
 
 		org	im2vector
 
-	block	256 - (attrhide.end - txterr), 0
+	block	256 - (attrhide.end - tempsp), 0
 
 @tempsp
+
+	ifdef MB02
+
+;; MB02 loader addition code
+;;-----------------------------------------------------------------------------
 txterr		db	"LOADING FAILED!"
 		dw	#C900
 
 direntrybuf	equ	start
 fn.needle:	db	"needle",0
 fn.haystack:	db	"haystack  "
-blocktable:	include "../haystack.inc"
+blocktable:	include "../haystack.mb02.inc"
 
 needle:		ld	a,#61
 		out	(mb02ram),a
@@ -324,6 +403,13 @@ error:		ld	hl,txterr
 		jp	c,restart
 		rst	0
 
+	else
+
+blocktable:	include "../haystack.inc"
+
+	endif
+
+
 attrhide:	ld	hl,22528
 		ld	c,24
 .atthd2:	ld	b,32
@@ -361,9 +447,7 @@ attrhide:	ld	hl,22528
 
 		nop
 
-	output TAP_KERNEL_BLOCK,a
-
-kernel:		di
+@kernel:	di
 		ld	sp,basesp
 		ld	hl,im2vector
 		ld	a,h
@@ -453,16 +537,201 @@ kernel:		di
 		align	256
 @RUNZONE	equ	$
 basesp
-	outend
 
 		org	kernend
 
 screen.pak:	incbin "loading.pak"
 
+total = $-start
 
-		emptytap "REGRESSION.tap"
-		savetap  "REGRESSION.tap",CODE,"REGRESSION",start,$-start
+	endmodule ; loader
 
+	ifdef MB02
+		savetap OUTPUT_TAP, CODE, "REGRESSION", start, $-start
+	else
+
+		include "sinclairBASIC.inc"
+
+		org	23755-17
+
+; BASIC header
+	tapout OUTPUT_TAP,0
+
+		db	0
+		db	'REGRESSION'
+		dw	bas.total
+		dw	1 ; start line
+		dw	bas.total
+
+	tapend
+
+; BASIC block
+	tapout OUTPUT_TAP
+
+	module bas
+line1:		db	0, 1
+		dw	line1.len
+line1.cmds	; POKE VAL "23624",NOT PI:
+		db	C_POKE
+		VAL	23624, ','
+		db	C_NOT, C_PI, ':'
+		; POKE VAL "23693",NOT PI:
+		db	C_POKE
+		VAL	23693, ','
+		db	C_NOT, C_PI, ':'
+		; CLEAR VAL "x":
+		db	C_CLEAR
+		VAL	loader.begin - 1, ':'
+		; POKE VAL "23739",CODE "o":
+		db	C_POKE
+		VAL	23739, ','
+		db	C_CODE, '"o":'
+		; POKE VAL "23388",VAL "16":
+		db	C_POKE
+		VAL	23388, ','
+		VAL	16, ':'
+		; OUT VAL "32765",VAL "16"
+		db	C_OUT
+		VAL	32765, ','
+		VAL	16, ':'
+		; LOAD "loader" CODE:
+		db	C_LOAD, '"loader"', C_CODE, ':'
+		; RANDOMIZE USR VAL "x"
+		db	C_RANDOMIZE, C_USR
+		VAL	loader.begin, EOL
+line1.len = $ - line1.cmds
+
+line2:		db	0, 2
+		dw	line2.len
+line2.cmds	; FOR i=NOT PI TO VAL "8":
+		db	C_FOR, 'i=', C_NOT, C_PI, C_TO
+		VAL	8, ':'
+		; LOAD "data0"+(STR$ i) CODE:
+		db	C_LOAD, '"data0"+(', C_STRS, 'i)', C_CODE, ':'
+		; RANDOMIZE USR VAL "x":
+		db	C_RANDOMIZE, C_USR
+		VAL	loader.processblock, ':'
+		; NEXT i
+		db	C_NEXT, 'i', EOL
+line2.len = $ - line2.cmds
+
+line3:		db	0, 3
+		dw	line3.len
+line3.cmds	; READ s
+		db	C_READ, 's:'
+		; POKE VAL "23388",s:
+		db	C_POKE
+		VAL	23388, ','
+		db	's:'
+		; OUT VAL "32765",s:
+		db	C_OUT
+		VAL	32765, ','
+		db	's:'
+		; LOAD "page"+(STR$ s) CODE:
+		db	C_LOAD, '"page"+(', C_STRS, 's)', C_CODE, ':'
+		; RANDOMIZE USR VAL "x":
+		db	C_RANDOMIZE, C_USR
+		VAL	loader.unpackpage, ':'
+		; IF s <> VAL "23" THEN
+		db	C_IF, 's', C_NOTEQ
+		VAL	23, C_THEN
+		; GO TO PI
+		db	C_GOTO, C_PI, EOL
+line3.len = $ - line3.cmds
+
+line4:		db	0, 4
+		dw	line4.len
+line4.cmds	; RANDOMIZE USR VAL "x"
+		db	C_RANDOMIZE, C_USR
+		VAL	loader.fadeoutandrun, EOL
+line4.len = $ - line4.cmds
+
+line9:		db	0, 9
+		dw	.len
+line9.cmds	; DATA...
+		db	C_DATA
+		VAL	needle1, ','
+		VAL	needle3, ','
+		VAL	needle4, ','
+		VAL	needle6, ','
+		VAL	needle7, EOL
+line9.len = $ - line9.cmds
+
+total = $ - line1
+	endmodule
+	tapend
+
+; loader block
+		savetap OUTPUT_TAP, CODE, "loader", loader.begin, loader.total
+
+
+;;-----------------------------------------------------------------------------
+	macro putHaystack number?
+@__putHaystack_number = number?
+		lua allpass
+			_pl("putHaystack"..tostring(_c('__putHaystack_number')))
+		endlua
+
+		tapout OUTPUT_TAP,0
+			db	3 ;; BYTES
+		lua allpass
+			_pc("db 'data0"..tostring(_c('__putHaystack_number')).."    '")
+		endlua
+			dw	.filelength
+			dw	0x8000	;; start address
+			dw	0x8000
+		tapend
+
+		tapout OUTPUT_TAP
+			org #8000
+		lua allpass
+			_pl(".filedata: incbin 'haystack.pg"..tostring(_c('__putHaystack_number'))..".pak'")
+		endlua
+.filelength = $-.filedata
+		tapend
+	endm
+
+	macro putNeedle number?, filename?
+@__putNeedle_number = number?
+		lua allpass
+			_pl("putNeedle"..tostring(_c('__putNeedle_number')))
+		endlua
+
+		tapout OUTPUT_TAP,0
+			db	3 ;; BYTES
+		lua allpass
+			_pc("db 'page"..tostring(_c('__putNeedle_number')).."    '")
+		endlua
+			dw	.filelength
+			dw	0x8000	;; start address
+			dw	0x8000
+		tapend
+
+		tapout OUTPUT_TAP
+			org #8000
+.filedata		incbin filename?
+.filelength = $-.filedata
+		tapend
+	endm
+
+		putHaystack 0
+		putHaystack 1
+		putHaystack 2
+		putHaystack 3
+		putHaystack 4
+		putHaystack 5
+		putHaystack 6
+		putHaystack 7
+		putHaystack 8
+
+		putNeedle needle1,"../needle1.pak"
+		putNeedle needle3,"../needle3.pak"
+		putNeedle needle4,"../needle4.pak"
+		putNeedle needle6,"../needle6.pak"
+		putNeedle needle7,"../needle7.pak"
+
+;;-----------------------------------------------------------------------------
+	endif
 
 		export page128
 		export act128page

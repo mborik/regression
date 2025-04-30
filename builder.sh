@@ -15,6 +15,8 @@ ASM="sjasmplus"
 if [ "$1" == "mb02" ]; then
 	outputfn="REGRESSION.mbd"
 	ASM+=" -DMB02"
+else
+	outputfn="REGRESSION.tap"
 fi
 
 function PACK() {
@@ -76,11 +78,12 @@ ${ASM} pg6fx.a80 --lst=kernel/pg6fx.lst --exp=kernel/pg6fx.inc
 ${ASM} pg7fx.a80 --lst=kernel/pg7fx.lst --exp=kernel/pg7fx.inc
 
 cd kernel
-PACK loading.scr loading.pak
-${ASM} --lst=kernel.lst --exp=constants.inc kernel.a80
-
 if [ "$1" == "mb02" ]; then
-	tap2mbd REGRESSION.tap 0 "../build/${outputfn}"
+	PACK loading.mb02.scr loading.pak
+	${ASM} --lst=kernel.lst --exp=constants.inc kernel.a80
+
+	cd ../build
+	tap2mbd REGRESSION.tap 0 "${outputfn}"
 	rm -f REGRESSION.tap
 	cd ..
 
@@ -92,7 +95,6 @@ if [ "$1" == "mb02" ]; then
 	bin2mbd needle7 -a 49152 -o "build/${outputfn}"
 
 else
-	cd ../kernel.tape
 	${NODE} blockpacker.js
-	${ASM} --lst=maketap.lst maketap.a80
+	${ASM} --lst=kernel.lst --exp=constants.inc kernel.a80
 fi
