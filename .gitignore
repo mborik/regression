@@ -11,6 +11,8 @@
 /needle*
 /output*
 /haystack*
+!/haystack*.js
+!/haystack*.inc
 
 final.bin
 *.pak

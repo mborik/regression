@@ -77,8 +77,8 @@ ${ASM} pg4fx.a80 --lst=kernel/pg4fx.lst --exp=kernel/pg4fx.inc
 ${ASM} pg6fx.a80 --lst=kernel/pg6fx.lst --exp=kernel/pg6fx.inc
 ${ASM} pg7fx.a80 --lst=kernel/pg7fx.lst --exp=kernel/pg7fx.inc
 
-cd kernel
 if [ "$1" == "mb02" ]; then
+	cd kernel
 	PACK loading.mb02.scr loading.pak
 	${ASM} --lst=kernel.lst --exp=constants.inc kernel.a80
 
@@ -95,6 +95,8 @@ if [ "$1" == "mb02" ]; then
 	bin2mbd needle7 -a 49152 -o "build/${outputfn}"
 
 else
-	${NODE} blockpacker.js
+	${NODE} haystack.blockpacker.js $1 # expecting "-f" if force rebuild
+
+	cd kernel
 	${ASM} --lst=kernel.lst --exp=constants.inc kernel.a80
 fi

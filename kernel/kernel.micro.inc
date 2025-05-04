@@ -56,12 +56,21 @@
 		halt
 		jr	.deadend
 
-		org	#8128
+
+		org	#80B6
+
+vram:		ld	a,#1D
+		xor	#0A
+		ld	(xchg.vram+1),a
+bnk:		ld	(act128page),a
+		ld	bc,page128
+		out	(c),a
+		ret
 
 		include "../kernel/dzx0.a80"
 
 ;;- INTERRUPT -----------------------------------------------------------------
-;		org	#8181
+		org	#8181
 
 int:		push	af		; zakladne osetrenie prerusenia
 		ld	a,(actborder)	; s volanim hudobneho hradla
@@ -110,50 +119,10 @@ int:		push	af		; zakladne osetrenie prerusenia
 		ei
 		ret
 
-		ld	a,#1D
-		xor	#0A
-		ld	(xchg.vram+1),a
-bnk:		ld	(act128page),a
-		ld	bc,page128
-		out	(c),a
-		ret
-
-		ld	hl,22528
-		ld	c,24
-attrhide2:	ld	b,32
-		push	bc
-attrhide3:	ld	a,(hl)
-		and	7
-		jr	z,attrhide4
-		dec	a
-attrhide4:	push	af
-		ld	a,(hl)
-		and	56
-		jr	z,attrhide5
-		ld	c,8
-		sub	c
-		ld	c,a
-		pop	af
-		or	c
-		jr	attrhide6
-attrhide5:	ld	a,(hl)
-		and	248
-		ld	c,a
-		pop	af
-		or	c
-attrhide6:	ld	(hl),a
-		inc	hl
-		djnz	attrhide3
-		pop	bc
-		dec	c
-		jr	nz,attrhide2
-		ex	af,af'
-		ret
-
 ;;-----------------------------------------------------------------------------
 		align	256
 vector:
 
 
-		org	#C000
+		org	#C000, MUSIC.page
 		include "../music/pt3extra.a80"

@@ -4,12 +4,12 @@ fx_surprise.sync: EQU 0x000009EC
 fx_transformy: EQU 0x0000C815
 fx_transformy.pg: EQU 0x00000011
 fx_transformy.sync: EQU 0x00000FA0
-fx_trafoutro: EQU 0x0000D385
+fx_trafoutro: EQU 0x0000D383
 fx_trafoutro.pg: EQU 0x00000091
 fx_trafoutro.length: EQU 0x000009AF
-fx_greetings: EQU 0x0000DD34
+fx_greetings: EQU 0x0000DD32
 fx_greetings.pg: EQU 0x00000011
 fx_greetings.sync: EQU 0x00001202
-fx_turndisk: EQU 0x0000E70F
+fx_turndisk: EQU 0x0000E70D
 fx_turndisk.pg: EQU 0x00000091
-fx_turndisk.length: EQU 0x000010FD
+fx_turndisk.length: EQU 0x000010ED

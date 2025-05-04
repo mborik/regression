@@ -7,6 +7,7 @@ needle4 	= 4 + #10
 needle6 	= 6 + #10
 needle7 	= 7 + #10
 numberOfNeedles = 5
+
 		include "pg1fx.inc"
 		include "pg3fx.inc"
 		include "pg4fx.inc"
@@ -28,6 +29,7 @@ divmmcpg	equ	#E3
 
 		org	#8000
 
+	opt listact
 	module loader
 @start
 
@@ -138,7 +140,7 @@ begin:		ld	hl,screen.pak
 		jp	depack
 
 processblock:	di
-		ld	hl,#8000
+		ld	hl,#8400
 		ld	de,#C000
 		call	depack
 .blktabptr:	ld	hl,blocktable
@@ -149,17 +151,21 @@ processblock:	di
 		inc	hl
 		push	hl
 		ex	hl,de
-		ld	de,0
+		ld	de,#2000
 		ld	a,c
 		inc	c
 		push	bc
-		out	(mb02ram),a	; switch bank
+		out	(divmmcpg),a	; switch bank
 		call	depack
 
+.prgsx:		ld	a,1
+		xor	1
+		jr	z,.prgsxz
 .prgptr:	ld	hl,#50A1
 		ld	(hl),#FF	; draw progress
 		inc	l
 		ld	(.prgptr+1),hl
+.prgsxz:	ld	(.prgsx+1),a
 
 		pop	bc
 		pop	hl
@@ -171,7 +177,7 @@ processblock:	di
 		inc	hl
 		ld	(.countptr+1),hl
 		xor	a
-		out	(mb02ram),a
+		out	(divmmcpg),a
 		or	b
 		jr	z,fullfilprg
 		ld	(.targetpg+1),bc
@@ -192,7 +198,7 @@ unpackpage:	ld	hl,#51A1
 		djnz	.pgprog
 		ld	(unpackpage+1),hl
 		di
-		ld	hl,#8000
+		ld	hl,#8400
 		ld	de,#C000
 		jr	depack
 
@@ -209,11 +215,13 @@ fadeoutandrun	ld	b,25
 		jp	kernel
 
 
-	if $ > #80B5
-		display "Too long! ",/D,($-#80B5)," bytes out!"
+	if $ > #80B6
+		display "Too long! ",/D,($-#80B6)," bytes out!"
 	else
-		display /D,(#80B5-$)," bytes free..."
+		display /D,(#80B6-$)," bytes free..."
 	endif
+
+		org	#80B6
 
 @xchg.vram:	ld	a,#1D
 		xor	#0A
@@ -678,14 +686,14 @@ total = $ - line1
 			_pc("db 'data0"..tostring(_c('__putHaystack_number')).."    '")
 		endlua
 			dw	.filelength
-			dw	0x8000	;; start address
+			dw	0x8400	;; start address
 			dw	0x8000
 		tapend
 
 		tapout OUTPUT_TAP
 			org #8000
 		lua allpass
-			_pl(".filedata: incbin 'haystack.pg"..tostring(_c('__putHaystack_number'))..".pak'")
+			_pl(".filedata: incbin '../haystack.part"..tostring(_c('__putHaystack_number'))..".pak'")
 		endlua
 .filelength = $-.filedata
 		tapend
@@ -703,7 +711,7 @@ total = $ - line1
 			_pc("db 'page"..tostring(_c('__putNeedle_number')).."    '")
 		endlua
 			dw	.filelength
-			dw	0x8000	;; start address
+			dw	0x8400	;; start address
 			dw	0x8000
 		tapend
 
