@@ -467,10 +467,8 @@ flakacfarieb:	push	de
 
 render:		ld	hl,0
 .actpg:		ld	a,0
-	ifdef MB02
 		add	a,#44
 		out	(mb02ram),a
-	endif
 		di
 		ld	(.restoresp+1),sp
 		ld	sp,hl

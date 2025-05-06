@@ -1,12 +1,5 @@
 		device	zxspectrum128
 
-		define TAP_KERNEL_BLOCK "../kernel.tape/final.bin"
-
-	output TAP_KERNEL_BLOCK
-		block	(TAP_KERNEL_GAP - start), 0
-	outend
-
-
 numberOfNeedles = 5
 		include "pg1fx.inc"
 		include "pg3fx.inc"
@@ -128,10 +121,6 @@ fadeout		ld	b,25
 		djnz	.loop
 		jp	kernel
 
-	output TAP_KERNEL_BLOCK,a
-
-@TAP_KERNEL_GAP
-
 xchg.vram:	ld	a,#1D
 		xor	#0A
 		ld	(xchg.vram+1),a
@@ -139,8 +128,6 @@ xchg.bnk:	ld	(act128page),a
 		ld	bc,page128
 		out	(c),a
 		ret
-
-@TAP_KERNEL_GAP_END
 
 	if $ > #80C6
 		display "Too long! ",/D,($-#80C6)," bytes out!"
@@ -361,8 +348,6 @@ attrhide:	ld	hl,22528
 
 		nop
 
-	output TAP_KERNEL_BLOCK,a
-
 kernel:		di
 		ld	sp,basesp
 		ld	hl,im2vector
@@ -453,7 +438,6 @@ kernel:		di
 		align	256
 @RUNZONE	equ	$
 basesp
-	outend
 
 		org	kernend
 

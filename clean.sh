@@ -11,7 +11,6 @@ popd
 
 subdirs=(
 	kernel
-	kernel.tape
 	cityflyout
 	finalpart
 	greetings

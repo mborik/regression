@@ -30,11 +30,8 @@
 ;;-----------------------------------------------------------------------------
 		org	RUNZONE
 
-start:
-	ifdef MB02
-		ld	a,#58	; SRAM page (RO)
+start:		ld	a,#58	; SRAM page (RO)
 		out	(mb02ram),a
-	endif
 
 .loop:		ei
 		halt
@@ -43,20 +40,14 @@ start:
 		call	render
 .pass2end	jr	.loop
 
-	ifdef MB02
 		ld	a,#5E
 		out	(mb02ram),a
-	endif
 		call	animator
-	ifdef MB02
 		ld	a,#5F
 		out	(mb02ram),a
-	endif
 		call	animator
-	ifdef MB02
 		ld	a,#40 ; back to ROM
 		out	(mb02ram),a
-	endif
 
 		ld	a,#1D
 		call	xchg.bnk-3

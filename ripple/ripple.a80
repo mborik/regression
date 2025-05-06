@@ -45,9 +45,7 @@ loop:		ei
 render:		ld	a,#44
 .ptr		ld	de,#0000
 .xor		ld	hl,xorbuffer
-	ifdef MB02
 		out	(mb02ram),a
-	endif
 
 .core		di
 		ld	(.retsp+1),sp

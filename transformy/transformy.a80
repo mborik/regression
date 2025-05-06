@@ -134,11 +134,7 @@ animate:	ld	hl,animate.table
 		ld	hl,animate.table
 		ld	(animate+1),hl
 		ld	a,(hl)
-.nextpg:
-	ifdef MB02
-		out	(mb02ram),a
-	endif
-
+.nextpg:	out	(mb02ram),a
 		inc	hl
 		ld	e,(hl)
 		inc	hl

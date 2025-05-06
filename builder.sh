@@ -11,11 +11,7 @@ export NODE_PATH=$(npm root --quiet -g)
 NODE="node --no-deprecation"
 PACKER="salvador"
 ASM="sjasmplus"
-
-if [ "$1" == "mb02" ]; then
-	outputfn="REGRESSION.mbd"
-	ASM+=" -DMB02"
-fi
+outputfn="REGRESSION.mbd"
 
 function PACK() {
 	rm -f $2
@@ -24,9 +20,7 @@ function PACK() {
 
 cd build
 rm -f ${outputfn}
-if [ "$1" == "mb02" ]; then
-	mbdnew ${outputfn} 82 11 "REGRESSION demo by NAG/svk"
-fi
+mbdnew ${outputfn} 82 11 "REGRESSION demo by mborik"
 
 cd ../cityflyout
 ${ASM} -DisFX --lst=cityflyout.lst cityflyout.a80
@@ -79,20 +73,13 @@ cd kernel
 PACK loading.scr loading.pak
 ${ASM} --lst=kernel.lst --exp=constants.inc kernel.a80
 
-if [ "$1" == "mb02" ]; then
-	tap2mbd REGRESSION.tap 0 "../build/${outputfn}"
-	rm -f REGRESSION.tap
-	cd ..
+tap2mbd REGRESSION.tap 0 "../build/${outputfn}"
+rm -f REGRESSION.tap
+cd ..
 
-	bin2mbd haystack -a 0 -o "build/${outputfn}"
-	bin2mbd needle1 -a 49152 -o "build/${outputfn}"
-	bin2mbd needle3 -a 49152 -o "build/${outputfn}"
-	bin2mbd needle4 -a 49152 -o "build/${outputfn}"
-	bin2mbd needle6 -a 49152 -o "build/${outputfn}"
-	bin2mbd needle7 -a 49152 -o "build/${outputfn}"
-
-else
-	cd ../kernel.tape
-	${NODE} blockpacker.js
-	${ASM} --lst=maketap.lst maketap.a80
-fi
+bin2mbd haystack -a 0 -o "build/${outputfn}"
+bin2mbd needle1 -a 49152 -o "build/${outputfn}"
+bin2mbd needle3 -a 49152 -o "build/${outputfn}"
+bin2mbd needle4 -a 49152 -o "build/${outputfn}"
+bin2mbd needle6 -a 49152 -o "build/${outputfn}"
+bin2mbd needle7 -a 49152 -o "build/${outputfn}"
