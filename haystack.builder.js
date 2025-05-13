@@ -3,25 +3,35 @@ const path = require('path');
 const { spawnSync } = require('child_process');
 
 const PACKER = 'salvador';
-const MB02_1ST_SAFE_PG = 4;
-const HAYSTACK_FULL = 'haystack.full';
+const SPAWNCFG = { windowsHide: true, shell: true, cwd: '.' };
+const DIVMMC_1ST_SAFE_PG = 8;
+const DIVMCC_PAGE_LENGTH = 8192;
+const FORCE = process.argv.length > 2 && process.argv[2] === '-f';
+
+let asm = ';; haystack block table (pointers and counts)\n\n';
+let counts = [];
+let pg = 16384; // page limit
+let a, b, c, i, j, l, n = 0;
+let p, pak, ptr;
 
 const cityflyPath =
 	(n => `cityflyout/pg/cityfly.${('00' + n.toString(10)).substr(-3)}`);
+
+const haystackPartFn = (ext = 'tmp', x = n) => path.normalize(`./haystack.part${x}.${ext}`);
 
 const toHex = (num, width) => {
 	let a = num.toString(16);
 	return ('0000' + a).substr(-Math.max(width || 4, a.length)).toUpperCase();
 }
 
-const fd = fs.openSync('haystack', 'w');
-fs.writeFileSync(HAYSTACK_FULL, '', { flag: 'w' });
-
-let bin;
-let mb02inc = ';; haystack block table (pointers and counts)\n\n';
-let counts = [];
-let pg = 16384; // page limit
-let a, b, c, i, j, l, out;
+if (!FORCE && (
+	fs.existsSync(haystackPartFn('pak', 0)) &&
+	fs.existsSync(haystackPartFn('pak', 8)) &&
+	fs.existsSync(path.normalize('haystack.inc'))
+)) {
+	console.log(`~ haystack parts already packed...`);
+	process.exit(0);
+}
 
 const pages = [
 	...[...Array(20).keys()].map(cityflyPath),
@@ -35,22 +45,33 @@ const pages = [
 	'reglogo/gfx/squashy.pg1'
 ];
 
-for (i = 0, j = 0, l = 0, c = 0; i < pages.length; i++, c++) {
-	a = path.normalize(pages[i]);
+const bin = new Uint8Array(pages.length * 16384);
+pages.forEach((page, i) => {
+	const a = path.normalize(page);
+	if (!fs.existsSync(a)) {
+		console.error(`\n\nERROR: '${a}' not found!\n\n`);
+		return;
+	}
 
-	bin = fs.readFileSync(a);
-	fs.appendFileSync(`haystack.full`, bin);
+	bin.set(fs.readFileSync(a), i * 16384);
+});
 
-	console.log(`~ compressing '${a}'...`);
+let fd = fs.openSync(haystackPartFn(), 'w');
 
-	out = path.basename(a, path.extname(a)) + '.pak';
-	spawnSync(PACKER, [a, out],
-		{ cwd: '.', shell: true, windowsHide: true });
+for (i = 0, j = 0, l = 0, c = 0, ptr = 0; ptr < bin.length; ptr += DIVMCC_PAGE_LENGTH, i++, c++) {
+	console.log(`~ compressing haystack pg${i}...`);
 
-	bin = fs.readFileSync(out);
-	fs.unlinkSync(out);
+	a = `.haypg${i}.tmp`;
+	fs.writeFileSync(a, bin.slice(ptr, ptr + DIVMCC_PAGE_LENGTH));
 
-	b = j + bin.length;
+	p = path.basename(a, path.extname(a)) + '.pak';
+	spawnSync(PACKER, [a, p], SPAWNCFG);
+
+	pak = fs.readFileSync(p);
+	fs.unlinkSync(a);
+	fs.unlinkSync(p);
+
+	b = j + pak.length;
 	if (b > pg) {
 		console.log(`~ splitting after ${c} pages (${pg - j} bytes excess)...`);
 
@@ -60,24 +81,38 @@ for (i = 0, j = 0, l = 0, c = 0; i < pages.length; i++, c++) {
 
 		counts.push(c);
 		c = 0;
+
+		fs.writeSync(fd, Buffer.from([0]), 0, 1, 16383);
+		fs.closeSync(fd);
+
+		p = haystackPartFn();
+		spawnSync(PACKER, [p, p.replace('.tmp', '.pak')], SPAWNCFG);
+		fs.unlinkSync(p);
+
+		n++;
+		fd = fs.openSync(haystackPartFn(), 'w');
 	}
 
-	fs.writeSync(fd, bin, 0, bin.length, j);
+	fs.writeSync(fd, pak, 0, pak.length, j - l);
 
 	b = 0xC000 + (j - l);
-	mb02inc += `.pg${toHex(i + MB02_1ST_SAFE_PG, 2)}:\t	dw	#${toHex(b)}	; (${bin.length})\n`;
-	console.log(`~ compressed to ${bin.length} bytes (stored on #${toHex(b)})...`);
+	asm += `.pg${toHex(i + DIVMMC_1ST_SAFE_PG, 2)}:\t	dw	#${toHex(b)}	; (${pak.length})\n`;
+	console.log(`~ compressed to ${pak.length} bytes (stored on #${toHex(b)})...`);
 
-	j += bin.length;
+	j += pak.length;
 }
 
 console.log(`~ finishig after ${c} pages (${pg - j} bytes excess)...`);
 
-fs.writeSync(fd, Buffer.from([0]), 0, 1, pg - 1);
+fs.writeSync(fd, Buffer.from([0]), 0, 1, 16383);
 fs.closeSync(fd);
 
-counts.push(c, 0);
-mb02inc += `\n.firstct:\t	equ	${counts.shift()}`;
-mb02inc += `\n.counts:\t	db	${counts.join(',')}\n`;
+p = haystackPartFn();
+spawnSync(PACKER, [p, p.replace('.tmp', '.pak')], SPAWNCFG);
+fs.unlinkSync(p);
 
-fs.writeFileSync('haystack.mb02.inc', mb02inc, { flag: 'w' });
+counts.push(c, 0);
+asm += `\n.firstct:\t	equ	${counts.shift()}`;
+asm += `\n.counts:\t	db	${counts.join(',')}\n`;
+
+fs.writeFileSync('haystack.inc', asm, { flag: 'w' });

@@ -3,7 +3,7 @@
 # REGRESSION builder (c) 2019 mborik / NAG^RM-TEAM^SinDiKat / sk
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-rm -f output needle*
+rm -f output needle* haystack.part*
 
 pushd build
 rm -f REGRESSION*
@@ -11,7 +11,6 @@ popd
 
 subdirs=(
 	kernel
-	kernel.tape
 	cityflyout
 	finalpart
 	greetings

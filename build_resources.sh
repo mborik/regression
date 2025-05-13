@@ -71,6 +71,4 @@ ${NODE} pattern.generator.js
 popd
 pushd finalpart
 ${NODE} finalpart.generator.js
-
 popd
-${NODE} haystack.builder.js

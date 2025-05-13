@@ -18,8 +18,8 @@ for (; b < l; b++) {
 	fs.readSync(fd, scr, 0, 6144, 62);
 	fs.closeSync(fd);
 
-	pg = (b / 6) & 0x1F;
-	i = (pg * 16384) + ((b % 6) * 28 * 96);
+	pg = (b / 3) & 0x3F;
+	i = (pg * 8192) + ((b % 3) * 28 * 96);
 
 	for (j = 191; j > 0; j -= 2) {
 		for (k = 0; k < 32; k += 2) {

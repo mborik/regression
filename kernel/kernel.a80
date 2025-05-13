@@ -19,7 +19,6 @@ page128		equ	#7FFD
 act128page	equ	#5B5C
 actborder	equ	#5C48
 FRAMES		equ	23672
-mb02ram		equ	#17
 divmmcpg	equ	#E3
 
 
@@ -32,106 +31,6 @@ divmmcpg	equ	#E3
 	opt listact
 	module loader
 @start
-
-	ifdef MB02
-
-;; MB02 loader (first code block runnable with `NEW 1`)
-;;-----------------------------------------------------------------------------
-		di
-		ld	sp,tempsp
-		xor	a
-		out	(254),a
-		ld	(actborder),a
-		ld	a,#10
-		call	xchg.bnk
-restart:	ld	hl,screen.pak
-		ld	de,#4000
-		call	depack
-
-		ld	a,#61
-		out	(mb02ram),a
-
-loader:		ld	e,0	; (0 = root)
-		ld	a,#14	; SETDIR
-		rst	#20
-
-		ld	hl,fn.haystack
-		ld	e,#03
-		ld	a,#19	; SEASX
-		rst	#20
-		jp	nz,error ; not found!
-
-		ld	a,#12	; GETCST
-		rst	#20
-		ld	(.fcursor+1),hl
-		ld	(needle.fcursor+1),hl
-
-.fcursor:	ld	hl,0
-.fpos:		ld	bc,0
-		ld	ix,#C000
-		ld	e,16
-		ld	a,c
-		add	a,e
-		ld	(.fpos+1),a
-		ld	a,#23	; LOA2X
-		rst	#20
-
-.blktabptr:	ld	hl,blocktable
-.targetpg:	ld	bc,(blocktable.firstct << 8) | #64 ; SRAM page 4 (WR)
-.depk6:		ld	e,(hl)
-		inc	hl
-		ld	d,(hl)
-		inc	hl
-		push	hl
-		ex	hl,de
-		ld	de,0
-		ld	a,c
-		inc	c
-		push	bc
-		out	(mb02ram),a	; switch bank
-		call	depack
-
-.prgptr:	ld	hl,#55A1
-		ld	(hl),#FF	; draw progress
-		inc	l
-		ld	(.prgptr+1),hl
-
-		pop	bc
-		pop	hl
-		djnz	.depk6
-		ld	(.blktabptr+1),hl
-
-.countptr:	ld	hl,blocktable.counts
-		ld	b,(hl)
-		inc	hl
-		ld	(.countptr+1),hl
-		xor	a
-		or	b
-		jr	z,.fullfilprg-3
-		ld	(.targetpg+1),bc
-		ld	a,#61
-		out	(mb02ram),a
-		jr	.fcursor
-
-		ld	hl,(.prgptr+1)
-.fullfilprg:	ld	a,l
-		cp	#BF
-		jp	z,needle
-		ld	(hl),#FF
-		inc	l
-		jr	.fullfilprg
-
-needleprg:	ld	hl,#56A1 ; #5AA1
-		ld	bc,((30 / numberOfNeedles) << 8) | #FF
-.loop:		ld	(hl),c	; draw 2nd progress
-		inc	l
-		djnz	.loop
-		ld	(needleprg+1),hl
-		pop	af
-		dec	a
-		jp	nz,needle.loop
-
-	else
 
 ;; TAPE LOADER
 ;;-----------------------------------------------------------------------------
@@ -201,8 +100,6 @@ unpackpage:	ld	hl,#51A1
 		ld	hl,#8400
 		ld	de,#C000
 		jr	depack
-
-	endif
 
 fadeoutandrun	ld	b,25
 .loop:		ei
@@ -342,81 +239,11 @@ im2vector:	block	257, 0
 
 		org	im2vector
 
-	block	256 - (attrhide.end - tempsp), 0
+		block	257 - (attrhide.end - tempsp), 0
 
 @tempsp
 
-	ifdef MB02
-
-;; MB02 loader addition code
-;;-----------------------------------------------------------------------------
-txterr		db	"LOADING FAILED!"
-		dw	#C900
-
-direntrybuf	equ	start
-fn.needle:	db	"needle",0
-fn.haystack:	db	"haystack  "
-blocktable:	include "../haystack.mb02.inc"
-
-needle:		ld	a,#61
-		out	(mb02ram),a
-		ld	a,numberOfNeedles
-.loop:		push	af
-.fcursor:	ld	bc,0
-		inc	bc
-		ld	(.fcursor+1),bc
-		push	bc
-		ld	ix,direntrybuf
-		ld	a,#16	; GETSUB
-		rst	#20
-		jr	z,error
-
-		ld	a,(ix+0)
-		cp	#B0
-		jr	nz,.invalidfile
-		ld	xl,6
-		ld	de,fn.needle
-.fncompare:	ld	a,(de)
-		or	a
-		jr	z,.rightname
-		cp	(ix+0)
-		jr	nz,.invalidfile
-		inc	e
-		inc	xl
-		jr	.fncompare
-
-.invalidfile:	pop	af
-		pop	af
-		jr	.loop
-
-.rightname:	ld	a,(ix+0)
-		sub	('0' - #10)
-		ld	(.targetpg+1),a
-		ld	a,(ix+1)
-		sub	' '
-		jr	nz,error
-.targetpg:	ld	a,0
-		call	xchg.bnk
-		ld	e,16
-		ld	bc,0
-		pop	hl
-		ld	ix,#C000
-		ld	a,#23	; LOA2X
-		rst	#20
-		jp	needleprg
-
-error:		ld	hl,txterr
-		ld	a,#34	;; MESSX
-		rst	#20
-		jp	c,restart
-		rst	0
-
-	else
-
 blocktable:	include "../haystack.inc"
-
-	endif
-
 
 attrhide:	ld	hl,22528
 		ld	c,24
@@ -451,9 +278,7 @@ attrhide:	ld	hl,22528
 .end = $
 
 ;;-----------------------------------------------------------------------------
-		align	256
-
-		nop
+		org	im2vector + 257
 
 @kernel:	di
 		ld	sp,basesp
@@ -553,10 +378,6 @@ screen.pak:	incbin "loading.pak"
 total = $-start
 
 	endmodule ; loader
-
-	ifdef MB02
-		savetap OUTPUT_TAP, CODE, "REGRESSION", start, $-start
-	else
 
 		include "sinclairBASIC.inc"
 
@@ -739,13 +560,12 @@ total = $ - line1
 		putNeedle needle7,"../needle7.pak"
 
 ;;-----------------------------------------------------------------------------
-	endif
 
 		export page128
 		export act128page
 		export actborder
 		export FRAMES
-		export mb02ram
+		export divmmcpg
 		export MUSIC.page
 		export MUSIC.init
 		export MUSIC.play

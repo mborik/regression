@@ -4,20 +4,13 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Utils required in PATH to successful build:
 # latest `sjasmplus` from https://github.com/z00m128/sjasmplus
-# `mbdnew`, `tap2mbd`, `bin2mbd` from https://sf.net/projects/zxspectrumutils/
 # `salvador` based on ZX0 from https://github.com/emmanuel-marty/salvador
 
 export NODE_PATH=$(npm root --quiet -g)
 NODE="node --no-deprecation"
 PACKER="salvador"
 ASM="sjasmplus"
-
-if [ "$1" == "mb02" ]; then
-	outputfn="REGRESSION.mbd"
-	ASM+=" -DMB02"
-else
-	outputfn="REGRESSION.tap"
-fi
+outputfn="REGRESSION.tap"
 
 function PACK() {
 	rm -f $2
@@ -26,9 +19,6 @@ function PACK() {
 
 cd build
 rm -f ${outputfn}
-if [ "$1" == "mb02" ]; then
-	mbdnew ${outputfn} 82 11 "REGRESSION demo by NAG/svk"
-fi
 
 cd ../cityflyout
 ${ASM} -DisFX --lst=cityflyout.lst cityflyout.a80
@@ -77,26 +67,14 @@ ${ASM} pg4fx.a80 --lst=kernel/pg4fx.lst --exp=kernel/pg4fx.inc
 ${ASM} pg6fx.a80 --lst=kernel/pg6fx.lst --exp=kernel/pg6fx.inc
 ${ASM} pg7fx.a80 --lst=kernel/pg7fx.lst --exp=kernel/pg7fx.inc
 
-if [ "$1" == "mb02" ]; then
-	cd kernel
-	PACK loading.mb02.scr loading.pak
-	${ASM} --lst=kernel.lst --exp=constants.inc kernel.a80
+PACK needle1 needle1.pak
+PACK needle3 needle3.pak
+PACK needle4 needle4.pak
+PACK needle6 needle6.pak
+PACK needle7 needle7.pak
 
-	cd ../build
-	tap2mbd REGRESSION.tap 0 "${outputfn}"
-	rm -f REGRESSION.tap
-	cd ..
+${NODE} haystack.builder.js $1 # expecting "-f" if force rebuild
 
-	bin2mbd haystack -a 0 -o "build/${outputfn}"
-	bin2mbd needle1 -a 49152 -o "build/${outputfn}"
-	bin2mbd needle3 -a 49152 -o "build/${outputfn}"
-	bin2mbd needle4 -a 49152 -o "build/${outputfn}"
-	bin2mbd needle6 -a 49152 -o "build/${outputfn}"
-	bin2mbd needle7 -a 49152 -o "build/${outputfn}"
-
-else
-	${NODE} haystack.blockpacker.js $1 # expecting "-f" if force rebuild
-
-	cd kernel
-	${ASM} --lst=kernel.lst --exp=constants.inc kernel.a80
-fi
+cd kernel
+PACK loading.scr loading.pak
+${ASM} --lst=kernel.lst --exp=constants.inc kernel.a80

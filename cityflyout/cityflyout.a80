@@ -65,7 +65,7 @@ start		di
 		djnz	.introloop
 		ld	hl,28 * 96
 		ld	(render.addiconst+1),hl
-		ld	a,12
+		ld	a,6
 		ld	(render.pgcounter+1),a
 		ld	(render.resetconst+1),a
 		ld	a,#21 ; ld hl,*
@@ -234,10 +234,10 @@ waitrender:	push	bc
 		djnz	waitrender
 		ret
 
-shakinRender:	ld	hl,0
+shakinRender:	ld	hl,#2000
 		ld	(render+1),hl
 		ld	(render.actpg+1),a
-		ld	a,12
+		ld	a,6
 		ld	(render.pgcounter+1),a
 		ret
 
@@ -465,12 +465,10 @@ flakacfarieb:	push	de
 		pop	de
 		ret
 
-render:		ld	hl,0
+render:		ld	hl,#2000
 .actpg:		ld	a,0
-	ifdef MB02
-		add	a,#44
-		out	(mb02ram),a
-	endif
+		add	a,8
+		out	(divmmcpg),a
 		di
 		ld	(.restoresp+1),sp
 		ld	sp,hl
@@ -484,7 +482,7 @@ render:		ld	hl,0
 		jr	nz,.storeptrs+3
 
 		ld	hl,(render+1)
-.addiconst:	ld	de,2 * 28 * 96
+.addiconst:	ld	de,28 * 96
 		add	hl,de
 .storeptrs:	ld	(render+1),hl
 		ld	(.pgcounter+1),a
@@ -493,10 +491,10 @@ render:		ld	hl,0
 
 .nextpg:	ld	a,(.actpg+1)
 		inc	a
-.resetloop:	and	15
+.resetloop:	and	31
 		ld	(.actpg+1),a
 .resetconst:	ld	a,6
-		ld	hl,0
+		ld	hl,#2000
 		jr	.storeptrs
 
 
