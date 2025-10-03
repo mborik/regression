@@ -467,9 +467,9 @@ flakacfarieb:	push	de
 
 render:		ld	hl,#2000
 .actpg:		ld	a,0
-		add	a,8
-		out	(divmmcpg),a
+		add	a,#88
 		di
+		out	(divmmcpg),a
 		ld	(.restoresp+1),sp
 		ld	sp,hl
 .jmpptr:	jp	.routine

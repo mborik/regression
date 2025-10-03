@@ -43,7 +43,7 @@ processblock:	di
 		ld	de,#C000
 		call	depack
 .blktabptr:	ld	hl,blocktable
-.targetpg:	ld	bc,(blocktable.firstct << 8) | 8 ; DivMMC page 8
+.targetpg:	ld	bc,(blocktable.firstct << 8) | #88 ; DivMMC page 8
 .depk6:		ld	e,(hl)
 		inc	hl
 		ld	d,(hl)
@@ -77,6 +77,7 @@ processblock:	di
 		ld	(.countptr+1),hl
 		xor	a
 		out	(divmmcpg),a
+		ei
 		or	b
 		jr	z,fullfilprg
 		ld	(.targetpg+1),bc
@@ -90,16 +91,18 @@ fullfilprg:	ld	hl,(processblock.prgptr+1)
 		inc	l
 		jr	.loop
 
-unpackpage:	ld	hl,#51A1
+unpackpage:	di
+		ld	hl,#51A1
 		ld	bc,((30 / numberOfNeedles) << 8) | #FF
 .pgprog:	ld	(hl),c	; draw progress
 		inc	l
 		djnz	.pgprog
 		ld	(unpackpage+1),hl
-		di
 		ld	hl,#8400
 		ld	de,#C000
-		jr	depack
+		call	depack
+		ei
+		ret
 
 fadeoutandrun	ld	b,25
 .loop:		ei
